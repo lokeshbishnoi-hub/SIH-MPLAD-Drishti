@@ -327,6 +327,37 @@ def build_risk_report():
     yearly_trend["sanctioned_cr"] = yearly_trend["sanctioned_cr"].round(1)
     yearly_trend["expenditure_cr"] = yearly_trend["expenditure_cr"].round(1)
 
+    # --- Per-state and per-MP breakdowns, for the role-based views ---
+    # (Ministry view uses the national aggregates above; State/District
+    # Authority and MP views need their own scoped trend + category data
+    # rather than just a filtered table.)
+    state_yearly_trend = {}
+    state_category_summary = {}
+    for state, grp in works.groupby("state"):
+        yt = grp.groupby("year").agg(
+            sanctioned_cr=("sanctioned_amount_cr", "sum"),
+            expenditure_cr=("final_expenditure_cr", "sum"),
+        ).reset_index()
+        yt["sanctioned_cr"] = yt["sanctioned_cr"].round(1)
+        yt["expenditure_cr"] = yt["expenditure_cr"].round(1)
+        state_yearly_trend[state] = yt.to_dict(orient="records")
+
+        cat = grp.groupby("category").agg(
+            sanctioned_cr=("sanctioned_amount_cr", "sum")
+        ).reset_index().sort_values("sanctioned_cr", ascending=False)
+        cat["sanctioned_cr"] = cat["sanctioned_cr"].round(1)
+        state_category_summary[state] = cat.to_dict(orient="records")
+
+    mp_yearly_trend = {}
+    for mp_id, grp in works.groupby("mp_id"):
+        yt = grp.groupby("year").agg(
+            sanctioned_cr=("sanctioned_amount_cr", "sum"),
+            expenditure_cr=("final_expenditure_cr", "sum"),
+        ).reset_index()
+        yt["sanctioned_cr"] = yt["sanctioned_cr"].round(2)
+        yt["expenditure_cr"] = yt["expenditure_cr"].round(2)
+        mp_yearly_trend[mp_id] = yt.to_dict(orient="records")
+
     total_excess_cr = round(
         sum(r["total_excess_cr"] for r in cost_overruns.to_dict(orient="records")), 2
     ) if not cost_overruns.empty else 0.0
@@ -349,6 +380,9 @@ def build_risk_report():
         "state_summary": state_summary.to_dict(orient="records"),
         "category_summary": category_summary.to_dict(orient="records"),
         "yearly_trend": yearly_trend.to_dict(orient="records"),
+        "state_yearly_trend": state_yearly_trend,
+        "state_category_summary": state_category_summary,
+        "mp_yearly_trend": mp_yearly_trend,
     }
     return output
 

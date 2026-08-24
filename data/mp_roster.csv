@@ -1,0 +1,116 @@
+mp_id,mp_name,state,constituency,house
+MP0001,Priya Sharma,Uttar Pradesh,Uttar Pradesh Constituency 1,Lok Sabha
+MP0002,Kavita Nair,Uttar Pradesh,Uttar Pradesh Constituency 2,Rajya Sabha
+MP0003,Priya Reddy,Uttar Pradesh,Uttar Pradesh Constituency 3,Lok Sabha
+MP0004,Sunita Sharma,Uttar Pradesh,Uttar Pradesh Constituency 4,Rajya Sabha
+MP0005,Kavita Sharma,Uttar Pradesh,Uttar Pradesh Constituency 5,Lok Sabha
+MP0006,Divya Joshi,Uttar Pradesh,Uttar Pradesh Constituency 6,Lok Sabha
+MP0007,Vinod Yadav,Uttar Pradesh,Uttar Pradesh Constituency 7,Lok Sabha
+MP0008,Rajesh Iyer,Uttar Pradesh,Uttar Pradesh Constituency 8,Lok Sabha
+MP0009,Ashok Yadav,Uttar Pradesh,Uttar Pradesh Constituency 9,Lok Sabha
+MP0010,Ashok Patel,Uttar Pradesh,Uttar Pradesh Constituency 10,Rajya Sabha
+MP0011,Priya Das,Uttar Pradesh,Uttar Pradesh Constituency 11,Lok Sabha
+MP0012,Shalini Yadav,Uttar Pradesh,Uttar Pradesh Constituency 12,Lok Sabha
+MP0013,Sanjay Patel,Uttar Pradesh,Uttar Pradesh Constituency 13,Lok Sabha
+MP0014,Ravi Reddy,Uttar Pradesh,Uttar Pradesh Constituency 14,Lok Sabha
+MP0015,Shalini Das,Uttar Pradesh,Uttar Pradesh Constituency 15,Lok Sabha
+MP0016,Amit Verma,Uttar Pradesh,Uttar Pradesh Constituency 16,Lok Sabha
+MP0017,Deepa Reddy,Maharashtra,Maharashtra Constituency 1,Lok Sabha
+MP0018,Priya Mishra,Maharashtra,Maharashtra Constituency 2,Lok Sabha
+MP0019,Meena Iyer,Maharashtra,Maharashtra Constituency 3,Lok Sabha
+MP0020,Suresh Yadav,Maharashtra,Maharashtra Constituency 4,Lok Sabha
+MP0021,Amit Iyer,Maharashtra,Maharashtra Constituency 5,Lok Sabha
+MP0022,Kavita Iyer,Maharashtra,Maharashtra Constituency 6,Lok Sabha
+MP0023,Manoj Nair,Maharashtra,Maharashtra Constituency 7,Lok Sabha
+MP0024,Sunita Nair,Maharashtra,Maharashtra Constituency 8,Lok Sabha
+MP0025,Ashok Mishra,Maharashtra,Maharashtra Constituency 9,Lok Sabha
+MP0026,Suresh Rao,Maharashtra,Maharashtra Constituency 10,Lok Sabha
+MP0027,Neha Mishra,West Bengal,West Bengal Constituency 1,Lok Sabha
+MP0028,Sanjay Singh,West Bengal,West Bengal Constituency 2,Lok Sabha
+MP0029,Kavita Yadav,West Bengal,West Bengal Constituency 3,Lok Sabha
+MP0030,Pooja Mishra,West Bengal,West Bengal Constituency 4,Lok Sabha
+MP0031,Vikram Pillai,West Bengal,West Bengal Constituency 5,Rajya Sabha
+MP0032,Sunita Patel,West Bengal,West Bengal Constituency 6,Lok Sabha
+MP0033,Anjali Joshi,West Bengal,West Bengal Constituency 7,Lok Sabha
+MP0034,Ravi Mishra,West Bengal,West Bengal Constituency 8,Lok Sabha
+MP0035,Sanjay Yadav,Bihar,Bihar Constituency 1,Lok Sabha
+MP0036,Rajesh Patel,Bihar,Bihar Constituency 2,Lok Sabha
+MP0037,Divya Yadav,Bihar,Bihar Constituency 3,Lok Sabha
+MP0038,Ashok Patel,Bihar,Bihar Constituency 4,Lok Sabha
+MP0039,Anjali Kumar,Bihar,Bihar Constituency 5,Rajya Sabha
+MP0040,Manoj Iyer,Bihar,Bihar Constituency 6,Lok Sabha
+MP0041,Priya Chauhan,Bihar,Bihar Constituency 7,Lok Sabha
+MP0042,Arun Gupta,Bihar,Bihar Constituency 8,Lok Sabha
+MP0043,Anjali Sharma,Tamil Nadu,Tamil Nadu Constituency 1,Lok Sabha
+MP0044,Neha Sharma,Tamil Nadu,Tamil Nadu Constituency 2,Rajya Sabha
+MP0045,Meena Chauhan,Tamil Nadu,Tamil Nadu Constituency 3,Lok Sabha
+MP0046,Kavita Reddy,Tamil Nadu,Tamil Nadu Constituency 4,Rajya Sabha
+MP0047,Neha Reddy,Tamil Nadu,Tamil Nadu Constituency 5,Lok Sabha
+MP0048,Divya Singh,Tamil Nadu,Tamil Nadu Constituency 6,Rajya Sabha
+MP0049,Neha Iyer,Tamil Nadu,Tamil Nadu Constituency 7,Lok Sabha
+MP0050,Shalini Joshi,Tamil Nadu,Tamil Nadu Constituency 8,Lok Sabha
+MP0051,Divya Gupta,Madhya Pradesh,Madhya Pradesh Constituency 1,Lok Sabha
+MP0052,Ravi Das,Madhya Pradesh,Madhya Pradesh Constituency 2,Lok Sabha
+MP0053,Arun Kumar,Madhya Pradesh,Madhya Pradesh Constituency 3,Rajya Sabha
+MP0054,Kavita Reddy,Madhya Pradesh,Madhya Pradesh Constituency 4,Lok Sabha
+MP0055,Vinod Nair,Madhya Pradesh,Madhya Pradesh Constituency 5,Lok Sabha
+MP0056,Rajesh Reddy,Madhya Pradesh,Madhya Pradesh Constituency 6,Lok Sabha
+MP0057,Sunita Nair,Karnataka,Karnataka Constituency 1,Rajya Sabha
+MP0058,Sunita Rao,Karnataka,Karnataka Constituency 2,Rajya Sabha
+MP0059,Kavita Yadav,Karnataka,Karnataka Constituency 3,Lok Sabha
+MP0060,Suresh Singh,Karnataka,Karnataka Constituency 4,Lok Sabha
+MP0061,Vinod Pillai,Karnataka,Karnataka Constituency 5,Lok Sabha
+MP0062,Neha Joshi,Karnataka,Karnataka Constituency 6,Lok Sabha
+MP0063,Priya Joshi,Gujarat,Gujarat Constituency 1,Lok Sabha
+MP0064,Pooja Kumar,Gujarat,Gujarat Constituency 2,Lok Sabha
+MP0065,Sunita Patel,Gujarat,Gujarat Constituency 3,Rajya Sabha
+MP0066,Ashok Patel,Gujarat,Gujarat Constituency 4,Lok Sabha
+MP0067,Suresh Kumar,Gujarat,Gujarat Constituency 5,Rajya Sabha
+MP0068,Anjali Yadav,Gujarat,Gujarat Constituency 6,Lok Sabha
+MP0069,Amit Kumar,Rajasthan,Rajasthan Constituency 1,Lok Sabha
+MP0070,Divya Patel,Rajasthan,Rajasthan Constituency 2,Rajya Sabha
+MP0071,Divya Sharma,Rajasthan,Rajasthan Constituency 3,Lok Sabha
+MP0072,Kavita Iyer,Rajasthan,Rajasthan Constituency 4,Lok Sabha
+MP0073,Neha Gupta,Rajasthan,Rajasthan Constituency 5,Lok Sabha
+MP0074,Sunita Iyer,Rajasthan,Rajasthan Constituency 6,Lok Sabha
+MP0075,Ravi Yadav,Andhra Pradesh,Andhra Pradesh Constituency 1,Lok Sabha
+MP0076,Sanjay Chauhan,Andhra Pradesh,Andhra Pradesh Constituency 2,Lok Sabha
+MP0077,Divya Pillai,Andhra Pradesh,Andhra Pradesh Constituency 3,Lok Sabha
+MP0078,Deepa Gupta,Andhra Pradesh,Andhra Pradesh Constituency 4,Lok Sabha
+MP0079,Vinod Verma,Andhra Pradesh,Andhra Pradesh Constituency 5,Lok Sabha
+MP0080,Sunita Verma,Odisha,Odisha Constituency 1,Lok Sabha
+MP0081,Arun Iyer,Odisha,Odisha Constituency 2,Rajya Sabha
+MP0082,Arun Reddy,Odisha,Odisha Constituency 3,Lok Sabha
+MP0083,Amit Reddy,Odisha,Odisha Constituency 4,Lok Sabha
+MP0084,Kavita Mishra,Odisha,Odisha Constituency 5,Rajya Sabha
+MP0085,Vinod Nair,Telangana,Telangana Constituency 1,Lok Sabha
+MP0086,Sunita Reddy,Telangana,Telangana Constituency 2,Lok Sabha
+MP0087,Vinod Rao,Telangana,Telangana Constituency 3,Lok Sabha
+MP0088,Suresh Rao,Telangana,Telangana Constituency 4,Lok Sabha
+MP0089,Ravi Singh,Kerala,Kerala Constituency 1,Lok Sabha
+MP0090,Deepa Kumar,Kerala,Kerala Constituency 2,Lok Sabha
+MP0091,Amit Sharma,Kerala,Kerala Constituency 3,Lok Sabha
+MP0092,Vinod Patel,Kerala,Kerala Constituency 4,Rajya Sabha
+MP0093,Suresh Yadav,Kerala,Kerala Constituency 5,Rajya Sabha
+MP0094,Meena Reddy,Jharkhand,Jharkhand Constituency 1,Lok Sabha
+MP0095,Meena Chauhan,Jharkhand,Jharkhand Constituency 2,Lok Sabha
+MP0096,Divya Chauhan,Jharkhand,Jharkhand Constituency 3,Lok Sabha
+MP0097,Arun Sharma,Jharkhand,Jharkhand Constituency 4,Lok Sabha
+MP0098,Divya Chauhan,Assam,Assam Constituency 1,Lok Sabha
+MP0099,Priya Singh,Assam,Assam Constituency 2,Lok Sabha
+MP0100,Priya Singh,Assam,Assam Constituency 3,Lok Sabha
+MP0101,Shalini Gupta,Assam,Assam Constituency 4,Lok Sabha
+MP0102,Suresh Yadav,Punjab,Punjab Constituency 1,Lok Sabha
+MP0103,Manoj Verma,Punjab,Punjab Constituency 2,Rajya Sabha
+MP0104,Pooja Yadav,Punjab,Punjab Constituency 3,Rajya Sabha
+MP0105,Ashok Singh,Punjab,Punjab Constituency 4,Lok Sabha
+MP0106,Manoj Iyer,Chhattisgarh,Chhattisgarh Constituency 1,Lok Sabha
+MP0107,Divya Joshi,Chhattisgarh,Chhattisgarh Constituency 2,Lok Sabha
+MP0108,Priya Reddy,Chhattisgarh,Chhattisgarh Constituency 3,Lok Sabha
+MP0109,Vikram Verma,Haryana,Haryana Constituency 1,Lok Sabha
+MP0110,Vinod Singh,Haryana,Haryana Constituency 2,Lok Sabha
+MP0111,Sunita Chauhan,Haryana,Haryana Constituency 3,Lok Sabha
+MP0112,Sunita Das,Delhi,Delhi Constituency 1,Lok Sabha
+MP0113,Kavita Patel,Delhi,Delhi Constituency 2,Lok Sabha
+MP0114,Divya Joshi,Uttarakhand,Uttarakhand Constituency 1,Lok Sabha
+MP0115,Vikram Nair,Uttarakhand,Uttarakhand Constituency 2,Lok Sabha

@@ -1,0 +1,2356 @@
+{
+  "generated_at": "2026-08-24T05:00:31.906209",
+  "summary": {
+    "total_mps": 115,
+    "total_works": 3195,
+    "completed_works": 2900,
+    "total_sanctioned_cr": 2559.3,
+    "total_expenditure_cr": 2455.1,
+    "high_risk_count": 5,
+    "medium_risk_count": 7,
+    "low_risk_count": 23,
+    "total_excess_cr": 23.19,
+    "national_avg_utilization_pct": 89.0
+  },
+  "mps": [
+    {
+      "mp_id": "MP0001",
+      "mp_name": "Priya Sharma",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 96.2,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 87.3,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0002",
+      "mp_name": "Kavita Nair",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 2",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 80.8,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 85.4,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0003",
+      "mp_name": "Priya Reddy",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 110.5,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 95.3,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0004",
+      "mp_name": "Sunita Sharma",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 4",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 101.5,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 97.8,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0005",
+      "mp_name": "Kavita Sharma",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 5",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 74.3,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 86.4,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0006",
+      "mp_name": "Divya Joshi",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 6",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 91.8,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 89.5,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0007",
+      "mp_name": "Vinod Yadav",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 7",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 72.2,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 95.5,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0008",
+      "mp_name": "Rajesh Iyer",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 8",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 88.6,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 89.3,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0009",
+      "mp_name": "Ashok Yadav",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 9",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 92.0,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 86.6,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0010",
+      "mp_name": "Ashok Patel",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 10",
+      "house": "Rajya Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Flagged by the ML anomaly model based on an unusual combination of spending metrics"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 91.0,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 97.0,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0011",
+      "mp_name": "Priya Das",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 11",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 71.4,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 85.5,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0012",
+      "mp_name": "Shalini Yadav",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 12",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 83.7,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 91.1,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0013",
+      "mp_name": "Sanjay Patel",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 13",
+      "house": "Lok Sabha",
+      "risk_level": "Medium",
+      "risk_points": 2,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)",
+        "Only 10.6% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 103.5,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 94.7,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0014",
+      "mp_name": "Ravi Reddy",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 14",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Flagged by the ML anomaly model based on an unusual combination of spending metrics"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 76.5,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 91.1,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0015",
+      "mp_name": "Shalini Das",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 15",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 96.3,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 90.4,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0016",
+      "mp_name": "Amit Verma",
+      "state": "Uttar Pradesh",
+      "constituency": "Uttar Pradesh Constituency 16",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 96.4,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 95.3,
+      "state_avg_utilization_pct": 91.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0017",
+      "mp_name": "Deepa Reddy",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 80.4,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 87.0,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0018",
+      "mp_name": "Priya Mishra",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 71.4,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 91.8,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0019",
+      "mp_name": "Meena Iyer",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 102.3,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 93.7,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0020",
+      "mp_name": "Suresh Yadav",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 95.6,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 89.4,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0021",
+      "mp_name": "Amit Iyer",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 5",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 92.5,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 88.0,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0022",
+      "mp_name": "Kavita Iyer",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 6",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 79.5,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 89.4,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0023",
+      "mp_name": "Manoj Nair",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 7",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 97.0,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 86.8,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0024",
+      "mp_name": "Sunita Nair",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 8",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 106.4,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 85.1,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0025",
+      "mp_name": "Ashok Mishra",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 9",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 108.0,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 98.0,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0026",
+      "mp_name": "Suresh Rao",
+      "state": "Maharashtra",
+      "constituency": "Maharashtra Constituency 10",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Only 8.1% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 116.2,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 96.1,
+      "state_avg_utilization_pct": 90.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0027",
+      "mp_name": "Neha Mishra",
+      "state": "West Bengal",
+      "constituency": "West Bengal Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 91.3,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 93.5,
+      "state_avg_utilization_pct": 91.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0028",
+      "mp_name": "Sanjay Singh",
+      "state": "West Bengal",
+      "constituency": "West Bengal Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 95.9,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 98.4,
+      "state_avg_utilization_pct": 91.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0029",
+      "mp_name": "Kavita Yadav",
+      "state": "West Bengal",
+      "constituency": "West Bengal Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 77.2,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 86.2,
+      "state_avg_utilization_pct": 91.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0030",
+      "mp_name": "Pooja Mishra",
+      "state": "West Bengal",
+      "constituency": "West Bengal Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 95.9,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 89.2,
+      "state_avg_utilization_pct": 91.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0031",
+      "mp_name": "Vikram Pillai",
+      "state": "West Bengal",
+      "constituency": "West Bengal Constituency 5",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 89.0,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 90.5,
+      "state_avg_utilization_pct": 91.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0032",
+      "mp_name": "Sunita Patel",
+      "state": "West Bengal",
+      "constituency": "West Bengal Constituency 6",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 90.3,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 90.0,
+      "state_avg_utilization_pct": 91.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0033",
+      "mp_name": "Anjali Joshi",
+      "state": "West Bengal",
+      "constituency": "West Bengal Constituency 7",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 83.0,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 87.0,
+      "state_avg_utilization_pct": 91.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0034",
+      "mp_name": "Ravi Mishra",
+      "state": "West Bengal",
+      "constituency": "West Bengal Constituency 8",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 109.8,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 93.5,
+      "state_avg_utilization_pct": 91.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0035",
+      "mp_name": "Sanjay Yadav",
+      "state": "Bihar",
+      "constituency": "Bihar Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 102.9,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 92.1,
+      "state_avg_utilization_pct": 83.1,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0036",
+      "mp_name": "Rajesh Patel",
+      "state": "Bihar",
+      "constituency": "Bihar Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "Medium",
+      "risk_points": 2,
+      "reasons": [
+        "Fund utilization is only 29.0%, well below the national average of ~91%"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 20.5,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 29.0,
+      "state_avg_utilization_pct": 83.1,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0037",
+      "mp_name": "Divya Yadav",
+      "state": "Bihar",
+      "constituency": "Bihar Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 86.4,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 92.5,
+      "state_avg_utilization_pct": 83.1,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0038",
+      "mp_name": "Ashok Patel",
+      "state": "Bihar",
+      "constituency": "Bihar Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 110.4,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 92.2,
+      "state_avg_utilization_pct": 83.1,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0039",
+      "mp_name": "Anjali Kumar",
+      "state": "Bihar",
+      "constituency": "Bihar Constituency 5",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 92.3,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 88.8,
+      "state_avg_utilization_pct": 83.1,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0040",
+      "mp_name": "Manoj Iyer",
+      "state": "Bihar",
+      "constituency": "Bihar Constituency 6",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 82.7,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 90.6,
+      "state_avg_utilization_pct": 83.1,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0041",
+      "mp_name": "Priya Chauhan",
+      "state": "Bihar",
+      "constituency": "Bihar Constituency 7",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 85.0,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 88.8,
+      "state_avg_utilization_pct": 83.1,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0042",
+      "mp_name": "Arun Gupta",
+      "state": "Bihar",
+      "constituency": "Bihar Constituency 8",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 81.9,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 91.2,
+      "state_avg_utilization_pct": 83.1,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0043",
+      "mp_name": "Anjali Sharma",
+      "state": "Tamil Nadu",
+      "constituency": "Tamil Nadu Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Only 6.8% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 94.9,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 91.6,
+      "state_avg_utilization_pct": 89.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0044",
+      "mp_name": "Neha Sharma",
+      "state": "Tamil Nadu",
+      "constituency": "Tamil Nadu Constituency 2",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 102.5,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 92.1,
+      "state_avg_utilization_pct": 89.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0045",
+      "mp_name": "Meena Chauhan",
+      "state": "Tamil Nadu",
+      "constituency": "Tamil Nadu Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "Medium",
+      "risk_points": 2,
+      "reasons": [
+        "19 works exceeded sanctioned cost by an average of 83.2% (total excess: \u20b911.54 Cr)"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 98.3,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 87.0,
+      "state_avg_utilization_pct": 89.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0046",
+      "mp_name": "Kavita Reddy",
+      "state": "Tamil Nadu",
+      "constituency": "Tamil Nadu Constituency 4",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 86.1,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 90.2,
+      "state_avg_utilization_pct": 89.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0047",
+      "mp_name": "Neha Reddy",
+      "state": "Tamil Nadu",
+      "constituency": "Tamil Nadu Constituency 5",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 82.4,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 86.4,
+      "state_avg_utilization_pct": 89.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0048",
+      "mp_name": "Divya Singh",
+      "state": "Tamil Nadu",
+      "constituency": "Tamil Nadu Constituency 6",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 90.6,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 89.2,
+      "state_avg_utilization_pct": 89.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0049",
+      "mp_name": "Neha Iyer",
+      "state": "Tamil Nadu",
+      "constituency": "Tamil Nadu Constituency 7",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 99.5,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 86.3,
+      "state_avg_utilization_pct": 89.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0050",
+      "mp_name": "Shalini Joshi",
+      "state": "Tamil Nadu",
+      "constituency": "Tamil Nadu Constituency 8",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 86.8,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 90.4,
+      "state_avg_utilization_pct": 89.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0051",
+      "mp_name": "Divya Gupta",
+      "state": "Madhya Pradesh",
+      "constituency": "Madhya Pradesh Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Only 9.0% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 121.9,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 96.3,
+      "state_avg_utilization_pct": 91.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0052",
+      "mp_name": "Ravi Das",
+      "state": "Madhya Pradesh",
+      "constituency": "Madhya Pradesh Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 92.7,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 102.6,
+      "state_avg_utilization_pct": 91.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0053",
+      "mp_name": "Arun Kumar",
+      "state": "Madhya Pradesh",
+      "constituency": "Madhya Pradesh Constituency 3",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 93.3,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 88.6,
+      "state_avg_utilization_pct": 91.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0054",
+      "mp_name": "Kavita Reddy",
+      "state": "Madhya Pradesh",
+      "constituency": "Madhya Pradesh Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 74.7,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 88.9,
+      "state_avg_utilization_pct": 91.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0055",
+      "mp_name": "Vinod Nair",
+      "state": "Madhya Pradesh",
+      "constituency": "Madhya Pradesh Constituency 5",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 84.2,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 83.6,
+      "state_avg_utilization_pct": 91.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0056",
+      "mp_name": "Rajesh Reddy",
+      "state": "Madhya Pradesh",
+      "constituency": "Madhya Pradesh Constituency 6",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 83.5,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 90.9,
+      "state_avg_utilization_pct": 91.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0057",
+      "mp_name": "Sunita Nair",
+      "state": "Karnataka",
+      "constituency": "Karnataka Constituency 1",
+      "house": "Rajya Sabha",
+      "risk_level": "High",
+      "risk_points": 3,
+      "reasons": [
+        "81.5% of works awarded to a single implementing agency (United Infrastructure Engineering Co)",
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 93.1,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 89.6,
+      "state_avg_utilization_pct": 91.6,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0058",
+      "mp_name": "Sunita Rao",
+      "state": "Karnataka",
+      "constituency": "Karnataka Constituency 2",
+      "house": "Rajya Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 103.3,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 90.1,
+      "state_avg_utilization_pct": 91.6,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0059",
+      "mp_name": "Kavita Yadav",
+      "state": "Karnataka",
+      "constituency": "Karnataka Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "Medium",
+      "risk_points": 2,
+      "reasons": [
+        "19 works (76.0% of eligible works) remain incomplete beyond the 1-year guideline, up to 2005 days overdue -- well above the peer average"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 95.4,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 97.7,
+      "state_avg_utilization_pct": 91.6,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0060",
+      "mp_name": "Suresh Singh",
+      "state": "Karnataka",
+      "constituency": "Karnataka Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 87.7,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 89.8,
+      "state_avg_utilization_pct": 91.6,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0061",
+      "mp_name": "Vinod Pillai",
+      "state": "Karnataka",
+      "constituency": "Karnataka Constituency 5",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 96.4,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 91.6,
+      "state_avg_utilization_pct": 91.6,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0062",
+      "mp_name": "Neha Joshi",
+      "state": "Karnataka",
+      "constituency": "Karnataka Constituency 6",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 93.1,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 90.5,
+      "state_avg_utilization_pct": 91.6,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0063",
+      "mp_name": "Priya Joshi",
+      "state": "Gujarat",
+      "constituency": "Gujarat Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 74.2,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 90.1,
+      "state_avg_utilization_pct": 89.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0064",
+      "mp_name": "Pooja Kumar",
+      "state": "Gujarat",
+      "constituency": "Gujarat Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Only 13.2% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 95.4,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 90.6,
+      "state_avg_utilization_pct": 89.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0065",
+      "mp_name": "Sunita Patel",
+      "state": "Gujarat",
+      "constituency": "Gujarat Constituency 3",
+      "house": "Rajya Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 94.4,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 87.1,
+      "state_avg_utilization_pct": 89.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0066",
+      "mp_name": "Ashok Patel",
+      "state": "Gujarat",
+      "constituency": "Gujarat Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Flagged by the ML anomaly model based on an unusual combination of spending metrics"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 109.0,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 90.5,
+      "state_avg_utilization_pct": 89.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0067",
+      "mp_name": "Suresh Kumar",
+      "state": "Gujarat",
+      "constituency": "Gujarat Constituency 5",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 98.4,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 86.3,
+      "state_avg_utilization_pct": 89.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0068",
+      "mp_name": "Anjali Yadav",
+      "state": "Gujarat",
+      "constituency": "Gujarat Constituency 6",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 94.7,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 91.4,
+      "state_avg_utilization_pct": 89.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0069",
+      "mp_name": "Amit Kumar",
+      "state": "Rajasthan",
+      "constituency": "Rajasthan Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 116.0,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 92.1,
+      "state_avg_utilization_pct": 81.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0070",
+      "mp_name": "Divya Patel",
+      "state": "Rajasthan",
+      "constituency": "Rajasthan Constituency 2",
+      "house": "Rajya Sabha",
+      "risk_level": "High",
+      "risk_points": 3,
+      "reasons": [
+        "Fund utilization is only 21.9%, well below the national average of ~91%",
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 13.4,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 21.9,
+      "state_avg_utilization_pct": 81.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0071",
+      "mp_name": "Divya Sharma",
+      "state": "Rajasthan",
+      "constituency": "Rajasthan Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Only 10.2% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 96.7,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 97.3,
+      "state_avg_utilization_pct": 81.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0072",
+      "mp_name": "Kavita Iyer",
+      "state": "Rajasthan",
+      "constituency": "Rajasthan Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 87.6,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 90.7,
+      "state_avg_utilization_pct": 81.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0073",
+      "mp_name": "Neha Gupta",
+      "state": "Rajasthan",
+      "constituency": "Rajasthan Constituency 5",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 83.7,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 89.1,
+      "state_avg_utilization_pct": 81.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0074",
+      "mp_name": "Sunita Iyer",
+      "state": "Rajasthan",
+      "constituency": "Rajasthan Constituency 6",
+      "house": "Lok Sabha",
+      "risk_level": "High",
+      "risk_points": 3,
+      "reasons": [
+        "84.6% of works awarded to a single implementing agency (Sai Infrastructure Developers)",
+        "2 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 82.7,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 94.7,
+      "state_avg_utilization_pct": 81.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0075",
+      "mp_name": "Ravi Yadav",
+      "state": "Andhra Pradesh",
+      "constituency": "Andhra Pradesh Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 95.7,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 92.9,
+      "state_avg_utilization_pct": 90.4,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0076",
+      "mp_name": "Sanjay Chauhan",
+      "state": "Andhra Pradesh",
+      "constituency": "Andhra Pradesh Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 82.8,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 89.9,
+      "state_avg_utilization_pct": 90.4,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0077",
+      "mp_name": "Divya Pillai",
+      "state": "Andhra Pradesh",
+      "constituency": "Andhra Pradesh Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 88.5,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 93.1,
+      "state_avg_utilization_pct": 90.4,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0078",
+      "mp_name": "Deepa Gupta",
+      "state": "Andhra Pradesh",
+      "constituency": "Andhra Pradesh Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 73.0,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 84.3,
+      "state_avg_utilization_pct": 90.4,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0079",
+      "mp_name": "Vinod Verma",
+      "state": "Andhra Pradesh",
+      "constituency": "Andhra Pradesh Constituency 5",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 92.3,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 91.8,
+      "state_avg_utilization_pct": 90.4,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0080",
+      "mp_name": "Sunita Verma",
+      "state": "Odisha",
+      "constituency": "Odisha Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 96.4,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 91.3,
+      "state_avg_utilization_pct": 93.9,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0081",
+      "mp_name": "Arun Iyer",
+      "state": "Odisha",
+      "constituency": "Odisha Constituency 2",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 88.6,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 96.0,
+      "state_avg_utilization_pct": 93.9,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0082",
+      "mp_name": "Arun Reddy",
+      "state": "Odisha",
+      "constituency": "Odisha Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Only 11.2% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 123.5,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 99.0,
+      "state_avg_utilization_pct": 93.9,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0083",
+      "mp_name": "Amit Reddy",
+      "state": "Odisha",
+      "constituency": "Odisha Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 88.5,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 89.6,
+      "state_avg_utilization_pct": 93.9,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0084",
+      "mp_name": "Kavita Mishra",
+      "state": "Odisha",
+      "constituency": "Odisha Constituency 5",
+      "house": "Rajya Sabha",
+      "risk_level": "Medium",
+      "risk_points": 2,
+      "reasons": [
+        "16 works (72.7% of eligible works) remain incomplete beyond the 1-year guideline, up to 1862 days overdue -- well above the peer average"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 95.5,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 93.6,
+      "state_avg_utilization_pct": 93.9,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0085",
+      "mp_name": "Vinod Nair",
+      "state": "Telangana",
+      "constituency": "Telangana Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 88.6,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 86.7,
+      "state_avg_utilization_pct": 90.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0086",
+      "mp_name": "Sunita Reddy",
+      "state": "Telangana",
+      "constituency": "Telangana Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "Medium",
+      "risk_points": 2,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)",
+        "Only 13.7% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 90.7,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 88.5,
+      "state_avg_utilization_pct": 90.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0087",
+      "mp_name": "Vinod Rao",
+      "state": "Telangana",
+      "constituency": "Telangana Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "Medium",
+      "risk_points": 2,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)",
+        "Only 10.3% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 95.8,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 91.4,
+      "state_avg_utilization_pct": 90.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0088",
+      "mp_name": "Suresh Rao",
+      "state": "Telangana",
+      "constituency": "Telangana Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 98.9,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 94.1,
+      "state_avg_utilization_pct": 90.2,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0089",
+      "mp_name": "Ravi Singh",
+      "state": "Kerala",
+      "constituency": "Kerala Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 74.1,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 93.4,
+      "state_avg_utilization_pct": 88.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0090",
+      "mp_name": "Deepa Kumar",
+      "state": "Kerala",
+      "constituency": "Kerala Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 93.8,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 87.1,
+      "state_avg_utilization_pct": 88.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0091",
+      "mp_name": "Amit Sharma",
+      "state": "Kerala",
+      "constituency": "Kerala Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 62.4,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 85.2,
+      "state_avg_utilization_pct": 88.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0092",
+      "mp_name": "Vinod Patel",
+      "state": "Kerala",
+      "constituency": "Kerala Constituency 4",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 88.4,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 86.3,
+      "state_avg_utilization_pct": 88.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0093",
+      "mp_name": "Suresh Yadav",
+      "state": "Kerala",
+      "constituency": "Kerala Constituency 5",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 84.5,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 90.4,
+      "state_avg_utilization_pct": 88.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0094",
+      "mp_name": "Meena Reddy",
+      "state": "Jharkhand",
+      "constituency": "Jharkhand Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 91.8,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 88.8,
+      "state_avg_utilization_pct": 75.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0095",
+      "mp_name": "Meena Chauhan",
+      "state": "Jharkhand",
+      "constituency": "Jharkhand Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "High",
+      "risk_points": 3,
+      "reasons": [
+        "Fund utilization is only 22.3%, well below the national average of ~91%",
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 20.4,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 22.3,
+      "state_avg_utilization_pct": 75.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0096",
+      "mp_name": "Divya Chauhan",
+      "state": "Jharkhand",
+      "constituency": "Jharkhand Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 72.2,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 94.7,
+      "state_avg_utilization_pct": 75.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0097",
+      "mp_name": "Arun Sharma",
+      "state": "Jharkhand",
+      "constituency": "Jharkhand Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 98.7,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 95.5,
+      "state_avg_utilization_pct": 75.3,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0098",
+      "mp_name": "Divya Chauhan",
+      "state": "Assam",
+      "constituency": "Assam Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 90.8,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 88.1,
+      "state_avg_utilization_pct": 86.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0099",
+      "mp_name": "Priya Singh",
+      "state": "Assam",
+      "constituency": "Assam Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 105.2,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 87.9,
+      "state_avg_utilization_pct": 86.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0100",
+      "mp_name": "Priya Singh",
+      "state": "Assam",
+      "constituency": "Assam Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Only 12.1% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 87.8,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 87.6,
+      "state_avg_utilization_pct": 86.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0101",
+      "mp_name": "Shalini Gupta",
+      "state": "Assam",
+      "constituency": "Assam Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "Flagged by the ML anomaly model based on an unusual combination of spending metrics"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 85.1,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 83.6,
+      "state_avg_utilization_pct": 86.8,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0102",
+      "mp_name": "Suresh Yadav",
+      "state": "Punjab",
+      "constituency": "Punjab Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 103.2,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 95.7,
+      "state_avg_utilization_pct": 93.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0103",
+      "mp_name": "Manoj Verma",
+      "state": "Punjab",
+      "constituency": "Punjab Constituency 2",
+      "house": "Rajya Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 95.3,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 95.0,
+      "state_avg_utilization_pct": 93.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0104",
+      "mp_name": "Pooja Yadav",
+      "state": "Punjab",
+      "constituency": "Punjab Constituency 3",
+      "house": "Rajya Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 87.0,
+        "trend": "stable"
+      },
+      "own_utilization_pct": 88.9,
+      "state_avg_utilization_pct": 93.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0105",
+      "mp_name": "Ashok Singh",
+      "state": "Punjab",
+      "constituency": "Punjab Constituency 4",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 70.4,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 94.4,
+      "state_avg_utilization_pct": 93.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0106",
+      "mp_name": "Manoj Iyer",
+      "state": "Chhattisgarh",
+      "constituency": "Chhattisgarh Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 99.1,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 94.7,
+      "state_avg_utilization_pct": 91.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0107",
+      "mp_name": "Divya Joshi",
+      "state": "Chhattisgarh",
+      "constituency": "Chhattisgarh Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "High",
+      "risk_points": 3,
+      "reasons": [
+        "13 works exceeded sanctioned cost by an average of 75.8% (total excess: \u20b911.65 Cr)",
+        "Only 9.8% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"
+      ],
+      "ml_anomaly": true,
+      "forecast": {
+        "projected_year_end_utilization_pct": 100.3,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 88.5,
+      "state_avg_utilization_pct": 91.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0108",
+      "mp_name": "Priya Reddy",
+      "state": "Chhattisgarh",
+      "constituency": "Chhattisgarh Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 84.6,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 91.3,
+      "state_avg_utilization_pct": 91.5,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0109",
+      "mp_name": "Vikram Verma",
+      "state": "Haryana",
+      "constituency": "Haryana Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 91.9,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 88.0,
+      "state_avg_utilization_pct": 87.9,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0110",
+      "mp_name": "Vinod Singh",
+      "state": "Haryana",
+      "constituency": "Haryana Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 79.6,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 90.5,
+      "state_avg_utilization_pct": 87.9,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0111",
+      "mp_name": "Sunita Chauhan",
+      "state": "Haryana",
+      "constituency": "Haryana Constituency 3",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 110.2,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 85.3,
+      "state_avg_utilization_pct": 87.9,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0112",
+      "mp_name": "Sunita Das",
+      "state": "Delhi",
+      "constituency": "Delhi Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 106.5,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 92.6,
+      "state_avg_utilization_pct": 92.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0113",
+      "mp_name": "Kavita Patel",
+      "state": "Delhi",
+      "constituency": "Delhi Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 102.7,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 91.5,
+      "state_avg_utilization_pct": 92.0,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0114",
+      "mp_name": "Divya Joshi",
+      "state": "Uttarakhand",
+      "constituency": "Uttarakhand Constituency 1",
+      "house": "Lok Sabha",
+      "risk_level": "None",
+      "risk_points": 0,
+      "reasons": [],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 84.5,
+        "trend": "declining"
+      },
+      "own_utilization_pct": 90.2,
+      "state_avg_utilization_pct": 87.7,
+      "national_avg_utilization_pct": 89.0
+    },
+    {
+      "mp_id": "MP0115",
+      "mp_name": "Vikram Nair",
+      "state": "Uttarakhand",
+      "constituency": "Uttarakhand Constituency 2",
+      "house": "Lok Sabha",
+      "risk_level": "Low",
+      "risk_points": 1,
+      "reasons": [
+        "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"
+      ],
+      "ml_anomaly": false,
+      "forecast": {
+        "projected_year_end_utilization_pct": 91.2,
+        "trend": "improving"
+      },
+      "own_utilization_pct": 85.2,
+      "state_avg_utilization_pct": 87.7,
+      "national_avg_utilization_pct": 89.0
+    }
+  ],
+  "state_summary": [
+    {
+      "state": "Andhra Pradesh",
+      "sanctioned_cr": 113.0,
+      "expenditure_cr": 106.7,
+      "n_works": 143
+    },
+    {
+      "state": "Assam",
+      "sanctioned_cr": 86.8,
+      "expenditure_cr": 82.4,
+      "n_works": 107
+    },
+    {
+      "state": "Bihar",
+      "sanctioned_cr": 166.3,
+      "expenditure_cr": 158.9,
+      "n_works": 218
+    },
+    {
+      "state": "Chhattisgarh",
+      "sanctioned_cr": 68.6,
+      "expenditure_cr": 77.8,
+      "n_works": 73
+    },
+    {
+      "state": "Delhi",
+      "sanctioned_cr": 46.0,
+      "expenditure_cr": 43.5,
+      "n_works": 54
+    },
+    {
+      "state": "Gujarat",
+      "sanctioned_cr": 134.0,
+      "expenditure_cr": 127.3,
+      "n_works": 167
+    },
+    {
+      "state": "Haryana",
+      "sanctioned_cr": 65.9,
+      "expenditure_cr": 63.0,
+      "n_works": 77
+    },
+    {
+      "state": "Jharkhand",
+      "sanctioned_cr": 75.3,
+      "expenditure_cr": 71.5,
+      "n_works": 114
+    },
+    {
+      "state": "Karnataka",
+      "sanctioned_cr": 137.4,
+      "expenditure_cr": 130.7,
+      "n_works": 156
+    },
+    {
+      "state": "Kerala",
+      "sanctioned_cr": 110.6,
+      "expenditure_cr": 104.0,
+      "n_works": 117
+    },
+    {
+      "state": "Madhya Pradesh",
+      "sanctioned_cr": 137.7,
+      "expenditure_cr": 129.8,
+      "n_works": 183
+    },
+    {
+      "state": "Maharashtra",
+      "sanctioned_cr": 226.3,
+      "expenditure_cr": 214.6,
+      "n_works": 288
+    },
+    {
+      "state": "Odisha",
+      "sanctioned_cr": 117.4,
+      "expenditure_cr": 111.8,
+      "n_works": 147
+    },
+    {
+      "state": "Punjab",
+      "sanctioned_cr": 93.5,
+      "expenditure_cr": 88.4,
+      "n_works": 107
+    },
+    {
+      "state": "Rajasthan",
+      "sanctioned_cr": 121.5,
+      "expenditure_cr": 114.8,
+      "n_works": 165
+    },
+    {
+      "state": "Tamil Nadu",
+      "sanctioned_cr": 178.3,
+      "expenditure_cr": 181.1,
+      "n_works": 232
+    },
+    {
+      "state": "Telangana",
+      "sanctioned_cr": 90.2,
+      "expenditure_cr": 84.9,
+      "n_works": 134
+    },
+    {
+      "state": "Uttar Pradesh",
+      "sanctioned_cr": 364.6,
+      "expenditure_cr": 348.7,
+      "n_works": 435
+    },
+    {
+      "state": "Uttarakhand",
+      "sanctioned_cr": 43.9,
+      "expenditure_cr": 42.3,
+      "n_works": 49
+    },
+    {
+      "state": "West Bengal",
+      "sanctioned_cr": 182.1,
+      "expenditure_cr": 172.8,
+      "n_works": 229
+    }
+  ],
+  "category_summary": [
+    {
+      "category": "Sports Infrastructure",
+      "sanctioned_cr": 280.1
+    },
+    {
+      "category": "Education",
+      "sanctioned_cr": 275.1
+    },
+    {
+      "category": "Other Public Facilities (Community Centres)",
+      "sanctioned_cr": 266.4
+    },
+    {
+      "category": "Rural Development",
+      "sanctioned_cr": 258.2
+    },
+    {
+      "category": "Sanitation",
+      "sanctioned_cr": 255.7
+    },
+    {
+      "category": "Drinking Water",
+      "sanctioned_cr": 251.9
+    },
+    {
+      "category": "Electricity Facility",
+      "sanctioned_cr": 248.0
+    },
+    {
+      "category": "Roads, Pathways & Bridges",
+      "sanctioned_cr": 246.5
+    },
+    {
+      "category": "Irrigation",
+      "sanctioned_cr": 239.6
+    },
+    {
+      "category": "Health & Family Welfare",
+      "sanctioned_cr": 237.7
+    }
+  ],
+  "yearly_trend": [
+    {
+      "year": 2021,
+      "sanctioned_cr": 516.3,
+      "expenditure_cr": 495.7
+    },
+    {
+      "year": 2022,
+      "sanctioned_cr": 501.6,
+      "expenditure_cr": 480.5
+    },
+    {
+      "year": 2023,
+      "sanctioned_cr": 507.4,
+      "expenditure_cr": 486.4
+    },
+    {
+      "year": 2024,
+      "sanctioned_cr": 517.1,
+      "expenditure_cr": 495.3
+    },
+    {
+      "year": 2025,
+      "sanctioned_cr": 516.9,
+      "expenditure_cr": 497.2
+    }
+  ]
+}

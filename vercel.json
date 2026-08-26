@@ -1,0 +1,5 @@
+{
+  "builds": [
+    { "src": "frontend/dashboard.html", "use": "@vercel/static" }
+  ]
+}

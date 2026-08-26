@@ -9,24 +9,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root{
-    --navy-deep:#0E1B33;
-    --navy:#152548;
-    --navy-mid:#26365E;
-    --paper:#F6F4EE;
-    --paper-warm:#EFEBDF;
-    --gold:#C08A34;
-    --gold-soft:#DDB876;
-    --ink:#1B2333;
-    --ink-soft:#5B6478;
-    --line:#DCD6C4;
-    --risk-high:#A23B2E;
-    --risk-high-bg:#FBEAE6;
-    --risk-med:#B87A22;
-    --risk-med-bg:#FBF0DD;
-    --risk-low:#5B7A52;
-    --risk-low-bg:#EAF0E6;
-    --risk-none:#8B9099;
-    --risk-none-bg:#F0F0EE;
+    --blue:#193571;
+    --blue-bg:#EFF6FF;
+    --blue-soft:#3B82F6;
+    --paper:#F8F9FB;
+    --card:#FFFFFF;
+    --ink:#1E293B;
+    --ink-soft:#060c18;
+    --line:#E5E7EB;
+    --risk-high:#DC2626;
+    --risk-high-bg:#FEF2F2;
+    --risk-med:#D97706;
+    --risk-med-bg:#FFFBEB;
+    --risk-low:#16A34A;
+    --risk-low-bg:#ECFDF5;
+    --risk-none:#64748B;
+    --risk-none-bg:#F1F5F9;
+    --icon-green:#16A34A; --icon-green-bg:#ECFDF5;
+    --icon-red:#DC2626; --icon-red-bg:#FEF2F2;
+    --icon-purple:#7C3AED; --icon-purple-bg:#F5F3FF;
+    --icon-amber:#D97706; --icon-amber-bg:#FFFBEB;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -42,64 +44,58 @@
 
   /* ---------- Header / masthead ---------- */
   header.masthead{
-    background:linear-gradient(155deg,var(--navy-deep) 0%, var(--navy) 60%, var(--navy-mid) 100%);
-    color:var(--paper);
+    background:var(--card);
+    color:var(--ink);
     padding:0;
-    position:relative;
-    overflow:hidden;
-    border-bottom:3px solid var(--gold);
-  }
-  header.masthead::before{
-    content:"";
-    position:absolute; inset:0;
-    background-image:
-      repeating-linear-gradient(115deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 68px);
-    pointer-events:none;
+    border-bottom:1px solid var(--line);
   }
   .masthead-inner{
-    max-width:1180px; margin:0 auto; padding:44px 32px 36px;
-    position:relative; z-index:1;
+    max-width:1180px; margin:0 auto; padding:28px 32px 26px;
   }
   .eyebrow{
     font-family:'IBM Plex Mono',monospace;
-    font-size:12px; letter-spacing:0.16em; text-transform:uppercase;
-    color:var(--gold-soft); margin:0 0 14px;
-    display:flex; align-items:center; gap:10px;
+    font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--blue); margin:0 0 10px;
+    display:flex; align-items:center; gap:8px;
   }
-  .eyebrow::before{content:"◆"; color:var(--gold); font-size:10px;}
   h1.title{
-    font-size:44px; font-weight:600; line-height:1.05; margin:0 0 12px;
-    letter-spacing:-0.01em;
+    font-size:30px; font-weight:700; line-height:1.15; margin:0 0 8px;
+    letter-spacing:-0.01em; color:var(--ink); font-family:'IBM Plex Sans',sans-serif;
   }
-  h1.title em{font-style:italic; font-weight:300; color:var(--gold-soft);}
+  h1.title em{font-style:normal; font-weight:400; color:var(--ink-soft);}
   .subtitle{
-    font-size:16.5px; color:#C7CDE0; max-width:640px; line-height:1.55; margin:0 0 30px;
+    font-size:14.5px; color:var(--ink-soft); max-width:640px; line-height:1.55; margin:0 0 22px;
     font-weight:400;
   }
   .stat-strip{
-    display:grid; grid-template-columns:repeat(5,1fr);
-    border-top:1px solid rgba(255,255,255,0.14);
-    padding-top:26px;
+    display:grid; grid-template-columns:repeat(5,1fr); gap:14px;
   }
-  .stat{padding-right:20px;}
-  .stat .num{font-family:'Fraunces',serif; font-size:30px; font-weight:600; color:#fff; line-height:1;}
-  .stat .lbl{font-size:12px; color:#9AA4C0; margin-top:7px; text-transform:uppercase; letter-spacing:0.05em;}
-  .stat.risk-high .num{color:#F0968A;}
-  .stat.risk-med .num{color:var(--gold-soft);}
+  .stat{
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:16px 18px;
+  }
+  .stat .icon-chip{
+    width:34px; height:34px; border-radius:8px; margin-bottom:10px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--blue-bg); color:var(--blue); font-size:16px;
+  }
+  .stat.risk-high .icon-chip{background:var(--icon-red-bg); color:var(--icon-red);}
+  .stat.risk-med .icon-chip{background:var(--icon-amber-bg); color:var(--icon-amber);}
+  .stat .num{font-family:'IBM Plex Sans',sans-serif; font-size:22px; font-weight:700; color:var(--ink); line-height:1.1;}
+  .stat .lbl{font-size:11.5px; color:var(--ink-soft); margin-top:5px;}
 
   .insight-banner{
-    background:rgba(192,138,52,0.14);
-    border-top:1px solid rgba(255,255,255,0.14);
-    padding:14px 32px;
-    position:relative; z-index:1;
+    background:var(--blue-bg);
+    border-bottom:1px solid var(--line);
+    padding:12px 32px;
   }
   .insight-banner-inner{
     max-width:1180px; margin:0 auto;
-    display:flex; align-items:center; gap:10px;
-    font-size:14px; color:var(--gold-soft); font-weight:500;
+    display:flex; align-items:center; gap:9px;
+    font-size:13.5px; color:#2b59da; font-weight:500;
   }
-  .insight-banner-inner::before{content:"⚠"; font-size:15px;}
-  .insight-banner strong{color:#fff;}
+  .insight-banner-inner::before{content:"ⓘ"; font-size:14px;}
+  .insight-banner strong{color:#1E3A8A;}
 
   /* ---------- Role selector bar ---------- */
   .role-bar{
@@ -119,10 +115,10 @@
     padding:7px 16px; font-size:13px; cursor:pointer; color:var(--ink-soft);
     font-family:'IBM Plex Sans',sans-serif; transition:all .15s; font-weight:500;
   }
-  .role-btn.active{background:var(--navy); color:#fff; border-color:var(--navy);}
-  .role-btn:hover:not(.active){border-color:var(--gold); color:var(--ink);}
+  .role-btn.active{background:var(--blue); color:#fff; border-color:var(--blue);}
+  .role-btn:hover:not(.active){border-color:var(--blue); color:var(--ink);}
   .scope-select{
-    border:1px solid var(--gold); background:var(--paper-warm); border-radius:20px;
+    border:1px solid var(--blue); background:var(--blue-bg); border-radius:20px;
     padding:7px 16px; font-size:13px; font-family:'IBM Plex Sans',sans-serif;
     color:var(--ink); margin-left:4px; cursor:pointer;
   }
@@ -138,7 +134,7 @@
     margin:0 0 4px; display:flex; align-items:baseline; gap:12px;
   }
   h2.section-head .idx{
-    font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--gold);
+    font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--blue);
     font-weight:500;
   }
   p.section-desc{color:var(--ink-soft); font-size:14.5px; margin:0 0 24px; max-width:640px; line-height:1.6;}
@@ -163,23 +159,23 @@
     border:1px solid var(--line); background:#fff; border-radius:3px;
     padding:10px 14px; font-family:'IBM Plex Sans',sans-serif; font-size:14px; color:var(--ink);
   }
-  .search-box:focus{outline:2px solid var(--gold); outline-offset:-1px;}
+  .search-box:focus{outline:2px solid var(--blue); outline-offset:-1px;}
   .filter-btn{
     border:1px solid var(--line); background:#fff; border-radius:3px;
     padding:9px 15px; font-size:13px; cursor:pointer; color:var(--ink-soft);
     font-family:'IBM Plex Sans',sans-serif; transition:all .15s;
   }
-  .filter-btn.active{background:var(--navy); color:#fff; border-color:var(--navy);}
-  .filter-btn:hover:not(.active){border-color:var(--gold);}
+  .filter-btn.active{background:var(--blue); color:#fff; border-color:var(--blue);}
+  .filter-btn:hover:not(.active){border-color:var(--blue);}
 
   table{width:100%; border-collapse:collapse; background:#fff;}
   thead th{
     text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em;
-    color:var(--ink-soft); font-weight:600; padding:12px 14px; border-bottom:2px solid var(--navy);
+    color:var(--ink-soft); font-weight:600; padding:12px 14px; border-bottom:2px solid var(--blue);
   }
   tbody td{padding:13px 14px; font-size:14px; border-bottom:1px solid var(--line);}
   tbody tr{cursor:pointer; transition:background .1s;}
-  tbody tr:hover{background:var(--paper-warm);}
+  tbody tr:hover{background:var(--blue-bg);}
   .risk-pill{
     display:inline-block; padding:3px 11px; border-radius:20px; font-size:11.5px;
     font-weight:600; letter-spacing:0.02em;
@@ -198,11 +194,11 @@
   }
   .modal-backdrop.open{display:flex;}
   .modal{
-    background:#fff; max-width:560px; width:100%; border-radius:4px;
-    max-height:82vh; overflow-y:auto; border-top:4px solid var(--gold);
+    background:#fff; max-width:560px; width:100%; border-radius:8px;
+    max-height:82vh; overflow-y:auto; border-top:4px solid var(--blue);
   }
   .modal-head{padding:26px 28px 18px; border-bottom:1px solid var(--line);}
-  .modal-head .mp-title{font-family:'Fraunces',serif; font-size:22px; font-weight:600; margin:0 0 4px;}
+  .modal-head .mp-title{font-family:'IBM Plex Sans',sans-serif; font-size:20px; font-weight:700; margin:0 0 4px;}
   .modal-head .mp-sub{color:var(--ink-soft); font-size:13.5px;}
   .modal-body{padding:22px 28px 28px;}
   .reason-item{
@@ -210,7 +206,7 @@
     font-size:14px; line-height:1.5;
   }
   .reason-item:last-child{border-bottom:none;}
-  .reason-mark{color:var(--gold); font-weight:700; flex-shrink:0;}
+  .reason-mark{color:var(--blue); font-weight:700; flex-shrink:0;}
   .no-reasons{color:var(--ink-soft); font-size:14px; font-style:italic; padding:8px 0;}
   .compare-block{margin-top:20px; padding-top:16px; border-top:1px solid var(--line);}
   .compare-block h4{
@@ -233,11 +229,11 @@
 
   /* ---------- Footer ---------- */
   footer{
-    background:var(--navy-deep); color:#9AA4C0; padding:30px 32px; margin-top:60px;
+    background:#F1F5F9; color:var(--ink-soft); padding:30px 32px; margin-top:60px; border-top:1px solid var(--line);
     font-size:12.5px;
   }
   footer .inner{max-width:1180px; margin:0 auto; line-height:1.8;}
-  footer strong{color:#DCE1F0;}
+  footer strong{color:var(--ink);}
 
   @media(max-width:820px){
     .stat-strip{grid-template-columns:repeat(2,1fr); row-gap:20px;}
@@ -348,14 +344,15 @@ const REPORT = {"generated_at": "2026-08-24T12:00:44.434968", "summary": {"total
 const s = REPORT.summary;
 const statStrip = document.getElementById('statStrip');
 const stats = [
-  {num: s.total_mps, lbl: 'MPs Monitored'},
-  {num: s.total_works.toLocaleString(), lbl: 'Works Tracked'},
-  {num: `₹${s.total_sanctioned_cr.toLocaleString()} Cr`, lbl: 'Total Sanctioned'},
-  {num: s.high_risk_count, lbl: 'High-Risk Flags', cls:'risk-high'},
-  {num: s.medium_risk_count, lbl: 'Medium-Risk Flags', cls:'risk-med'},
+  {num: s.total_mps, lbl: 'MPs Monitored', icon:'👤'},
+  {num: s.total_works.toLocaleString(), lbl: 'Works Tracked', icon:'📋'},
+  {num: `₹${s.total_sanctioned_cr.toLocaleString()} Cr`, lbl: 'Total Sanctioned', icon:'₹'},
+  {num: s.high_risk_count, lbl: 'High-Risk Flags', cls:'risk-high', icon:'⚠'},
+  {num: s.medium_risk_count, lbl: 'Medium-Risk Flags', cls:'risk-med', icon:'◐'},
 ];
 statStrip.innerHTML = stats.map(x => `
   <div class="stat ${x.cls||''}">
+    <div class="icon-chip">${x.icon}</div>
     <div class="num">${x.num}</div>
     <div class="lbl">${x.lbl}</div>
   </div>`).join('');
@@ -363,10 +360,10 @@ statStrip.innerHTML = stats.map(x => `
 // ---------- Chart.js defaults ----------
 Chart.defaults.font.family = "'IBM Plex Sans', sans-serif";
 Chart.defaults.color = '#5B6478';
-const gold = '#C08A34';
-const navy = '#26365E';
-const navyDeep = '#152548';
-const goldHighlight = '#8FA876'; // used to highlight the selected state's bar
+const gold = '#7C9CF0';   // secondary series color (kept var name "gold" to avoid renaming every usage)
+const navy = '#193571';   // primary series color, matches --blue
+const navyDeep = '#1E3A8A';
+const goldHighlight = '#16A34A'; // used to highlight the selected state's bar
 
 let trendChartInstance = null;
 let categoryChartInstance = null;

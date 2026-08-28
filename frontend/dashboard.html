@@ -92,7 +92,7 @@ footer{margin-top:35px;color:#8190A5;font-size:10.5px;text-align:center;padding:
   <button class="menu-btn" id="menuBtn">☰</button>
   <div class="brand">MPLAD <span>Drishti</span></div>
   <div class="top-right">
-    <div class="status"><i class="dot"></i><span id="dataStatus">Loading local data…</span></div>
+    <div class="status"><i class="dot"></i><span id="dataStatus">Loading dashboard data…</span></div>
     <span class="mono" id="updated"></span>
   </div>
 </header>
@@ -115,7 +115,7 @@ footer{margin-top:35px;color:#8190A5;font-size:10.5px;text-align:center;padding:
         <h1>MPLAD <span>Drishti</span></h1>
         <p>Early-warning intelligence for anomalies, fund utilization, execution risk, duplicate works and compliance signals across MPLADS.</p>
       </div>
-      <div class="live-badge">LOCAL DATA PIPELINE · <b id="sourceBadge">CONNECTING</b></div>
+      <div class="live-badge">LIVE DATA STATUS · <b id="sourceBadge">CONNECTING</b></div>
     </div>
   </div>
 
@@ -131,7 +131,7 @@ footer{margin-top:35px;color:#8190A5;font-size:10.5px;text-align:center;padding:
   <!-- DASHBOARD -->
   <section class="page active" id="page-dashboard">
     <div class="page-head">
-      <div><h2 id="pageTitle">National Overview</h2><p id="pageDesc">All available MPLADS records loaded from your local data folder.</p></div>
+      <div><h2 id="pageTitle">National Overview</h2><p id="pageDesc">All monitored MPLADS records across the national dataset.</p></div>
       <div class="filters">
         <select id="stateFilter"><option value="">All States</option></select>
         <select id="riskFilter"><option value="">All Risk</option><option>High</option><option>Medium</option><option>Low</option><option>None</option></select>
@@ -139,8 +139,8 @@ footer{margin-top:35px;color:#8190A5;font-size:10.5px;text-align:center;padding:
     </div>
 
     <div class="kpis">
-      <div class="kpi blue"><div class="label">MPs in Dataset</div><div class="value" id="kpiMP">—</div><div class="sub">from mp_risk_report.json</div></div>
-      <div class="kpi blue"><div class="label">Total Works</div><div class="value" id="kpiWorks">—</div><div class="sub">from works data when available</div></div>
+      <div class="kpi blue"><div class="label">MPs in Dataset</div><div class="value" id="kpiMP">—</div><div class="sub">MPs currently monitored</div></div>
+      <div class="kpi blue"><div class="label">Total Works</div><div class="value" id="kpiWorks">—</div><div class="sub">Recommended works tracked</div></div>
       <div class="kpi red"><div class="label">High Risk</div><div class="value" id="kpiHigh">—</div><div class="sub">requires attention</div></div>
       <div class="kpi orange"><div class="label">Medium Risk</div><div class="value" id="kpiMed">—</div><div class="sub">review recommended</div></div>
       <div class="kpi green"><div class="label">Utilization</div><div class="value" id="kpiUtil">—</div><div class="sub">national / selected scope</div></div>
@@ -165,7 +165,7 @@ footer{margin-top:35px;color:#8190A5;font-size:10.5px;text-align:center;padding:
 
   <!-- ANALYTICS -->
   <section class="page" id="page-analytics">
-    <div class="page-head"><div><h2>Graph Analytics</h2><p>Interactive analytical views generated from the local dataset.</p></div></div>
+    <div class="page-head"><div><h2>Graph Analytics</h2><p>Interactive analytical views generated from the monitored dataset.</p></div></div>
     <div class="grid2">
       <div class="card"><h3>State Utilization Comparison</h3><div class="chart-wrap"><canvas id="stateUtilChart"></canvas></div></div>
       <div class="card"><h3>Risk Signals by State</h3><div class="chart-wrap"><canvas id="stateRiskChart"></canvas></div></div>
@@ -179,7 +179,7 @@ footer{margin-top:35px;color:#8190A5;font-size:10.5px;text-align:center;padding:
   <!-- MAP -->
   <section class="page" id="page-map">
     <div class="page-head"><div><h2>India Risk Heat Map</h2><p>Geographic state boundaries colored directly from MP risk records. Hover or click a state.</p></div></div>
-    <div class="notice">The heat map uses your <b>mp_risk_report.json</b> as the source of truth. States with more severe risk signals receive higher intensity.</div>
+    <div class="notice">State shading reflects aggregated MP risk signals across the monitored dataset — darker shades indicate more severe or frequent flags.</div>
     <div class="card map-card">
       <h3>State Risk Intensity</h3>
       <div class="map-shell"><svg id="indiaMap" viewBox="0 0 800 700" aria-label="India risk heat map"></svg><div class="map-tooltip" id="mapTooltip"></div></div>
@@ -189,7 +189,7 @@ footer{margin-top:35px;color:#8190A5;font-size:10.5px;text-align:center;padding:
 
   <!-- REPORTS -->
   <section class="page" id="page-reports">
-    <div class="page-head"><div><h2>Reports & Data</h2><p>Search the records loaded from your project data folder.</p></div><button class="export" onclick="exportCSV()">Export filtered CSV</button></div>
+    <div class="page-head"><div><h2>Reports & Data</h2><p>Search the monitored MPLADS records.</p></div><button class="export" onclick="exportCSV()">Export filtered CSV</button></div>
     <div class="filters" style="margin-bottom:14px"><input class="search" id="search" style="flex:1;min-width:240px" placeholder="Search MP, state, constituency…"></div>
     <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>MP ID</th><th>MP Name</th><th>State</th><th>Constituency</th><th>House</th><th>Utilization</th><th>Forecast</th><th>Risk</th></tr></thead><tbody id="reportTable"></tbody></table></div></div>
   </section>
@@ -327,7 +327,7 @@ function renderCharts(){
   const top=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,7);
   makeChart('categoryChart','bar',{labels:top.map(x=>x[0]),datasets:[{label:'Amount',data:top.map(x=>x[1]),backgroundColor:'#3B82F6',borderRadius:5}]},{legend:false,scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:'#EEF2F7'}}}});
   const completed=WORKS.filter(w=>/complete|completed/i.test(Object.values(w).join(' '))).length;
-  $('execution').innerHTML=`<div style="font-size:28px;font-weight:800">${WORKS.length?completed:'—'}</div><div style="font-size:11px;color:#667085;margin:4px 0 15px">completed works detected</div><div style="font-size:11px;color:#667085">Dataset rows: <b>${WORKS.length||'not loaded'}</b></div><div style="font-size:11px;color:#667085;margin-top:7px">Risk signals: <b>${rows.filter(x=>x.risk_level!=='None').length}</b></div>`;
+  $('execution').innerHTML=`<div style="font-size:28px;font-weight:800">${WORKS.length?completed:'—'}</div><div style="font-size:11px;color:#667085;margin:4px 0 15px">completed works detected</div><div style="font-size:11px;color:#667085">Works records tracked: <b>${WORKS.length || (REPORT.summary && REPORT.summary.total_works) || 0}</b></div><div style="font-size:11px;color:#667085;margin-top:7px">Risk signals: <b>${rows.filter(x=>x.risk_level!=='None').length}</b></div>`;
   const byState=st.slice(0,10);
   makeChart('stateUtilChart','bar',{labels:byState.map(x=>x.s),datasets:[{label:'Avg utilization %',data:byState.map(x=>x.n.reduce((a,x)=>a+num(x.own_utilization_pct),0)/Math.max(1,x.n.length)),backgroundColor:'#2563EB',borderRadius:5}]},{legend:false,scales:{x:{grid:{display:false}},y:{beginAtZero:true,max:120}}});
   makeChart('stateRiskChart','bar',{labels:byState.map(x=>x.s),datasets:[{label:'High',data:byState.map(x=>x.n.filter(y=>y.risk_level==='High').length),backgroundColor:'#DC2626'},{label:'Medium',data:byState.map(x=>x.n.filter(y=>y.risk_level==='Medium').length),backgroundColor:'#EA8A17'}]},{legend:true});
@@ -372,7 +372,7 @@ async function renderMap(){
           <div>
             <b style="color:#0B1F3A">India map could not be loaded.</b><br><br>
             Check your internet connection or allow the map service.<br>
-            The rest of the dashboard and local data will continue to work.
+            The rest of the dashboard will continue to work using the monitored dataset.
           </div>
         </div>`;
       return;
@@ -531,7 +531,7 @@ function openModal(id){
 function closeModal(){$('modalBg').classList.remove('open')}
 function exportCSV(){
   const rows=filtered(); const cols=['mp_id','mp_name','state','constituency','house','risk_level','risk_points','own_utilization_pct','state_avg_utilization_pct','national_avg_utilization_pct'];
-  const out=[cols.join(','),...rows.map(r=>cols.map(c=>`"${String(c==='risk_level'?r[c]??'':c==='forecast'?r.forecast?.projected_year_end_utilization_pct??'':r[c]??'').replaceAll('"','""')}"`).join(','))].join('\\n');
+  const out=[cols.join(','),...rows.map(r=>cols.map(c=>`"${String(c==='risk_level'?r[c]??'':c==='forecast'?r.forecast?.projected_year_end_utilization_pct??'':r[c]??'').replaceAll('"','""')}"`).join(','))].join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([out],{type:'text/csv'}));a.download='mplad_drishti_risk_report.csv';a.click();
 }
 function navigate(page){
@@ -543,13 +543,13 @@ $('menuBtn').onclick=()=>{ $('sidebar').classList.toggle('closed');$('main').cla
 document.querySelectorAll('.role').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.role').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentRole=b.dataset.role;
   const s=$('scope');
-  if(currentRole==='ministry'){s.style.display='none';$('pageTitle').textContent='National Overview';$('pageDesc').textContent='All available MPLADS records loaded from your local data folder.'}
+  if(currentRole==='ministry'){s.style.display='none';$('pageTitle').textContent='National Overview';$('pageDesc').textContent='All monitored MPLADS records across the national dataset.'}
   else{
     s.style.display='block';
     if(currentRole==='mp'){s.innerHTML='<option value="">All MPs</option>'+REPORT.mps.map(x=>`<option value="${esc(x.mp_id)}">${esc(x.mp_name)}</option>`).join('')}
     else{s.innerHTML='<option value="">All States</option>'+states().map(x=>`<option>${esc(x)}</option>`).join('')}
     $('pageTitle').textContent=currentRole==='state'?'State Authority Overview':currentRole==='district'?'District Authority Overview':'MP Constituency Overview';
-    $('pageDesc').textContent=currentRole==='district'?'District view uses the state field currently present in the dataset; connect district-level records when available.':'Scoped intelligence from the same local data pipeline.';
+    $('pageDesc').textContent=currentRole==='district'?'District-level breakdowns reflect the granularity currently available in the monitored dataset.':'Scoped intelligence from the same monitored dataset.';
   }
   renderAll();
 });

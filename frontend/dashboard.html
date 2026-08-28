@@ -3,675 +3,532 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MPLAD Drishti — Fund Utilization Intelligence Platform</title>
+<title>MPLAD Drishti — Intelligence Dashboard</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.3/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+
 <style>
-  :root{
-    --blue:#193571;
-    --blue-bg:#EFF6FF;
-    --blue-soft:#3B82F6;
-    --paper:#F8F9FB;
-    --card:#FFFFFF;
-    --ink:#1E293B;
-    --ink-soft:#060c18;
-    --line:#E5E7EB;
-    --risk-high:#DC2626;
-    --risk-high-bg:#FEF2F2;
-    --risk-med:#D97706;
-    --risk-med-bg:#FFFBEB;
-    --risk-low:#16A34A;
-    --risk-low-bg:#ECFDF5;
-    --risk-none:#64748B;
-    --risk-none-bg:#F1F5F9;
-    --icon-green:#16A34A; --icon-green-bg:#ECFDF5;
-    --icon-red:#DC2626; --icon-red-bg:#FEF2F2;
-    --icon-purple:#7C3AED; --icon-purple-bg:#F5F3FF;
-    --icon-amber:#D97706; --icon-amber-bg:#FFFBEB;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'IBM Plex Sans',sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  .serif{font-family:'Fraunces',serif;}
-  .mono{font-family:'IBM Plex Mono',monospace;}
-
-  /* ---------- Header / masthead ---------- */
-  header.masthead{
-    background:var(--card);
-    color:var(--ink);
-    padding:0;
-    border-bottom:1px solid var(--line);
-  }
-  .masthead-inner{
-    max-width:1180px; margin:0 auto; padding:28px 32px 26px;
-  }
-  .eyebrow{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
-    color:var(--blue); margin:0 0 10px;
-    display:flex; align-items:center; gap:8px;
-  }
-  h1.title{
-    font-size:30px; font-weight:700; line-height:1.15; margin:0 0 8px;
-    letter-spacing:-0.01em; color:var(--ink); font-family:'IBM Plex Sans',sans-serif;
-  }
-  h1.title em{font-style:normal; font-weight:400; color:var(--ink-soft);}
-  .subtitle{
-    font-size:14.5px; color:var(--ink-soft); max-width:640px; line-height:1.55; margin:0 0 22px;
-    font-weight:400;
-  }
-  .stat-strip{
-    display:grid; grid-template-columns:repeat(5,1fr); gap:14px;
-  }
-  .stat{
-    background:var(--card); border:1px solid var(--line); border-radius:10px;
-    padding:16px 18px;
-  }
-  .stat .icon-chip{
-    width:34px; height:34px; border-radius:8px; margin-bottom:10px;
-    display:flex; align-items:center; justify-content:center;
-    background:var(--blue-bg); color:var(--blue); font-size:16px;
-  }
-  .stat.risk-high .icon-chip{background:var(--icon-red-bg); color:var(--icon-red);}
-  .stat.risk-med .icon-chip{background:var(--icon-amber-bg); color:var(--icon-amber);}
-  .stat .num{font-family:'IBM Plex Sans',sans-serif; font-size:22px; font-weight:700; color:var(--ink); line-height:1.1;}
-  .stat .lbl{font-size:11.5px; color:var(--ink-soft); margin-top:5px;}
-
-  .insight-banner{
-    background:var(--blue-bg);
-    border-bottom:1px solid var(--line);
-    padding:12px 32px;
-  }
-  .insight-banner-inner{
-    max-width:1180px; margin:0 auto;
-    display:flex; align-items:center; gap:9px;
-    font-size:13.5px; color:#2b59da; font-weight:500;
-  }
-  .insight-banner-inner::before{content:"ⓘ"; font-size:14px;}
-  .insight-banner strong{color:#1E3A8A;}
-
-  /* ---------- Role selector bar ---------- */
-  .role-bar{
-    background:#fff; border-bottom:1px solid var(--line);
-    position:sticky; top:0; z-index:20;
-  }
-  .role-bar-inner{
-    max-width:1180px; margin:0 auto; padding:13px 32px;
-    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-  }
-  .role-label{
-    font-size:12px; text-transform:uppercase; letter-spacing:0.06em;
-    color:var(--ink-soft); font-weight:600; margin-right:4px;
-  }
-  .role-btn{
-    border:1px solid var(--line); background:#fff; border-radius:20px;
-    padding:7px 16px; font-size:13px; cursor:pointer; color:var(--ink-soft);
-    font-family:'IBM Plex Sans',sans-serif; transition:all .15s; font-weight:500;
-  }
-  .role-btn.active{background:var(--blue); color:#fff; border-color:var(--blue);}
-  .role-btn:hover:not(.active){border-color:var(--blue); color:var(--ink);}
-  .scope-select{
-    border:1px solid var(--blue); background:var(--blue-bg); border-radius:20px;
-    padding:7px 16px; font-size:13px; font-family:'IBM Plex Sans',sans-serif;
-    color:var(--ink); margin-left:4px; cursor:pointer;
-  }
-  .scope-note{
-    font-size:12px; color:var(--ink-soft); font-style:italic; margin-left:6px;
-  }
-
-  /* ---------- Main layout ---------- */
-  main{max-width:1180px; margin:0 auto; padding:44px 32px 90px;}
-  section{margin-bottom:52px;}
-  h2.section-head{
-    font-family:'Fraunces',serif; font-size:22px; font-weight:600;
-    margin:0 0 4px; display:flex; align-items:baseline; gap:12px;
-  }
-  h2.section-head .idx{
-    font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--blue);
-    font-weight:500;
-  }
-  p.section-desc{color:var(--ink-soft); font-size:14.5px; margin:0 0 24px; max-width:640px; line-height:1.6;}
-
-  .grid-2{display:grid; grid-template-columns:1.3fr 1fr; gap:22px;}
-  .card{
-    background:#fff; border:1px solid var(--line); border-radius:3px;
-    padding:24px 26px;
-  }
-  .card h3{
-    font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft);
-    margin:0 0 18px; font-weight:600;
-  }
-  canvas{max-width:100%;}
-
-  /* ---------- Risk table ---------- */
-  .table-controls{
-    display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center;
-  }
-  .search-box{
-    flex:1; min-width:220px;
-    border:1px solid var(--line); background:#fff; border-radius:3px;
-    padding:10px 14px; font-family:'IBM Plex Sans',sans-serif; font-size:14px; color:var(--ink);
-  }
-  .search-box:focus{outline:2px solid var(--blue); outline-offset:-1px;}
-  .filter-btn{
-    border:1px solid var(--line); background:#fff; border-radius:3px;
-    padding:9px 15px; font-size:13px; cursor:pointer; color:var(--ink-soft);
-    font-family:'IBM Plex Sans',sans-serif; transition:all .15s;
-  }
-  .filter-btn.active{background:var(--blue); color:#fff; border-color:var(--blue);}
-  .filter-btn:hover:not(.active){border-color:var(--blue);}
-
-  table{width:100%; border-collapse:collapse; background:#fff;}
-  thead th{
-    text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em;
-    color:var(--ink-soft); font-weight:600; padding:12px 14px; border-bottom:2px solid var(--blue);
-  }
-  tbody td{padding:13px 14px; font-size:14px; border-bottom:1px solid var(--line);}
-  tbody tr{cursor:pointer; transition:background .1s;}
-  tbody tr:hover{background:var(--blue-bg);}
-  .risk-pill{
-    display:inline-block; padding:3px 11px; border-radius:20px; font-size:11.5px;
-    font-weight:600; letter-spacing:0.02em;
-  }
-  .risk-pill.High{background:var(--risk-high-bg); color:var(--risk-high);}
-  .risk-pill.Medium{background:var(--risk-med-bg); color:var(--risk-med);}
-  .risk-pill.Low{background:var(--risk-low-bg); color:var(--risk-low);}
-  .risk-pill.None{background:var(--risk-none-bg); color:var(--risk-none);}
-  .mp-name{font-weight:600;}
-  .mp-const{color:var(--ink-soft); font-size:12.5px;}
-
-  /* ---------- Drill-down modal ---------- */
-  .modal-backdrop{
-    display:none; position:fixed; inset:0; background:rgba(14,27,51,0.55);
-    z-index:50; align-items:center; justify-content:center; padding:24px;
-  }
-  .modal-backdrop.open{display:flex;}
-  .modal{
-    background:#fff; max-width:560px; width:100%; border-radius:8px;
-    max-height:82vh; overflow-y:auto; border-top:4px solid var(--blue);
-  }
-  .modal-head{padding:26px 28px 18px; border-bottom:1px solid var(--line);}
-  .modal-head .mp-title{font-family:'IBM Plex Sans',sans-serif; font-size:20px; font-weight:700; margin:0 0 4px;}
-  .modal-head .mp-sub{color:var(--ink-soft); font-size:13.5px;}
-  .modal-body{padding:22px 28px 28px;}
-  .reason-item{
-    display:flex; gap:12px; padding:13px 0; border-bottom:1px solid var(--line);
-    font-size:14px; line-height:1.5;
-  }
-  .reason-item:last-child{border-bottom:none;}
-  .reason-mark{color:var(--blue); font-weight:700; flex-shrink:0;}
-  .no-reasons{color:var(--ink-soft); font-size:14px; font-style:italic; padding:8px 0;}
-  .compare-block{margin-top:20px; padding-top:16px; border-top:1px solid var(--line);}
-  .compare-block h4{
-    font-size:12px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);
-    margin:0 0 10px; font-weight:600;
-  }
-  .compare-row{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:7px 0; font-size:13.5px; color:var(--ink);
-  }
-  .compare-val{font-family:'IBM Plex Mono',monospace; font-weight:600;}
-  .trend-improving{color:var(--risk-low);}
-  .trend-declining{color:var(--risk-high);}
-  .trend-stable{color:var(--ink-soft);}
-  .modal-close{
-    position:absolute; top:18px; right:20px; background:none; border:none;
-    font-size:22px; color:var(--ink-soft); cursor:pointer; line-height:1;
-  }
-  .modal{position:relative;}
-
-  /* ---------- Footer ---------- */
-  footer{
-    background:#F1F5F9; color:var(--ink-soft); padding:30px 32px; margin-top:60px; border-top:1px solid var(--line);
-    font-size:12.5px;
-  }
-  footer .inner{max-width:1180px; margin:0 auto; line-height:1.8;}
-  footer strong{color:var(--ink);}
-
-  @media(max-width:820px){
-    .stat-strip{grid-template-columns:repeat(2,1fr); row-gap:20px;}
-    .grid-2{grid-template-columns:1fr;}
-    h1.title{font-size:32px;}
-  }
+:root{
+  --navy:#0B1F3A; --navy2:#102A4C; --blue:#2563EB; --blue2:#3B82F6;
+  --cyan:#0891B2; --orange:#EA8A17; --red:#DC2626; --green:#159447;
+  --bg:#F4F7FB; --card:#FFFFFF; --ink:#172033; --muted:#667085;
+  --line:#E3E8F0; --shadow:0 8px 28px rgba(11,31,58,.07);
+  --sidebar:250px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 22px;gap:15px;position:sticky;top:0;z-index:50}
+.menu-btn{width:40px;height:40px;border:1px solid var(--line);background:#fff;border-radius:10px;font-size:21px;color:var(--navy)}
+.brand{font-size:20px;font-weight:800;letter-spacing:-.4px}.brand span{color:var(--blue)}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+.status{display:flex;align-items:center;gap:7px}.dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.layout{display:flex;min-height:calc(100vh - 68px)}
+.sidebar{position:fixed;left:0;top:68px;bottom:0;width:var(--sidebar);background:var(--navy);padding:20px 12px;z-index:40;transition:.25s}
+.sidebar.closed{transform:translateX(-100%)}
+.nav-title{font:11px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#8EA2BC;padding:8px 12px 10px}
+.nav-item{width:100%;border:0;background:transparent;color:#B9C7D8;text-align:left;padding:12px 13px;border-radius:10px;margin:2px 0;display:flex;align-items:center;gap:12px;font-size:14px}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-item.active{background:rgba(59,130,246,.2);color:#fff;box-shadow:inset 3px 0 var(--blue2)}
+.nav-icon{width:20px;text-align:center;font-size:16px}
+.main{margin-left:var(--sidebar);width:calc(100% - var(--sidebar));padding:28px 30px 60px;transition:.25s}
+.main.expanded{margin-left:0;width:100%}
+.hero{background:linear-gradient(135deg,var(--navy),#173D6C);color:#fff;border-radius:18px;padding:28px 30px;margin-bottom:20px;box-shadow:var(--shadow)}
+.hero-top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+.eyebrow{font:11px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#9FC1F7;margin-bottom:9px}
+.hero h1{margin:0;font-size:30px;letter-spacing:-.8px}.hero h1 span{color:#8CC8FF}
+.hero p{max-width:760px;color:#C9D8EA;line-height:1.6;font-size:13.5px;margin:10px 0 0}
+.live-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:9px 12px;border-radius:10px;font-size:11px;white-space:nowrap}
+.perspective{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:20px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);position:sticky;top:78px;z-index:20}
+.perspective strong{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-right:4px}
+.role{border:1px solid var(--line);background:#fff;color:#536174;border-radius:9px;padding:8px 13px;font-size:12.5px;font-weight:600}
+.role.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.scope{margin-left:auto;border:1px solid #B8D0F7;background:#F3F7FF;border-radius:9px;padding:8px 12px;font-size:12px;color:var(--navy)}
+.page{display:none}.page.active{display:block}
+.page-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0 18px}
+.page-head h2{margin:0;font-size:22px;letter-spacing:-.4px}.page-head p{margin:4px 0 0;color:var(--muted);font-size:12.5px}
+.filters{display:flex;gap:8px;flex-wrap:wrap}.filters select,.search{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 11px;font-size:12.5px;color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:var(--shadow)}
+.kpi .label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.kpi .value{font-size:25px;font-weight:800;margin-top:8px;letter-spacing:-.6px}.kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
+.kpi.blue{border-top:3px solid var(--blue)}.kpi.red{border-top:3px solid var(--red)}.kpi.orange{border-top:3px solid var(--orange)}.kpi.green{border-top:3px solid var(--green)}.kpi.cyan{border-top:3px solid var(--cyan)}
+.grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;margin-bottom:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:19px;box-shadow:var(--shadow)}
+.card h3{margin:0 0 15px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#526174}
+.chart-wrap{position:relative;height:290px}.chart-small{height:245px}
+.table-wrap{overflow:auto}.data-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:720px}
+.data-table th{text-align:left;padding:11px 10px;color:#718096;font-size:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+.data-table td{padding:12px 10px;border-bottom:1px solid var(--line)}.data-table tr:hover{background:#F7FAFF}
+.risk{display:inline-block;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:800;text-transform:uppercase}
+.risk.High{color:#991B1B;background:#FEE2E2}.risk.Medium{color:#92400E;background:#FEF3C7}.risk.Low{color:#166534;background:#DCFCE7}.risk.None{color:#475569;background:#F1F5F9}
+.bar{height:7px;background:#EAF0F7;border-radius:20px;overflow:hidden}.bar i{display:block;height:100%;background:var(--blue);border-radius:20px}
+.alert{border:1px solid var(--line);border-left:4px solid var(--red);border-radius:10px;padding:13px 14px;margin-bottom:10px}.alert.medium{border-left-color:var(--orange)}
+.alert-head{display:flex;justify-content:space-between;gap:10px}.alert strong{font-size:13px}.alert small{color:var(--muted);font-size:11px}.alert p{font-size:11.5px;color:#5F6B7A;margin:7px 0 0;line-height:1.5}
+.map-card{min-height:480px}.map-shell{height:420px;background:linear-gradient(180deg,#EFF6FF,#F8FBFF);border-radius:11px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+#indiaMap{width:100%;height:100%;min-height:390px;display:block}.state{stroke:#fff;stroke-width:1;cursor:pointer;transition:.15s}.state:hover{filter:brightness(.92)}.state:hover{stroke:#111827;stroke-width:1.6}
+.map-tooltip{position:absolute;display:none;background:#0B1F3A;color:#fff;padding:10px 12px;border-radius:9px;font-size:11px;pointer-events:none;z-index:5;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}.legend span{font-size:10.5px;color:var(--muted);display:flex;gap:6px;align-items:center}.sw{width:11px;height:11px;border-radius:3px}
+.notice{padding:11px 13px;background:#F0F6FF;border:1px solid #D7E7FF;border-radius:9px;color:#31557F;font-size:11.5px;margin-bottom:15px}
+.empty{padding:30px;text-align:center;color:var(--muted);font-size:12px}
+.export{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 12px;font-size:12px;font-weight:700}.export:hover{border-color:var(--blue);color:var(--blue)}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(7,20,38,.55);z-index:100;align-items:center;justify-content:center;padding:20px}.modal-bg.open{display:flex}
+.modal{background:#fff;width:min(600px,100%);max-height:85vh;overflow:auto;border-radius:15px;border-top:4px solid var(--blue);padding:22px;position:relative}.close{position:absolute;right:15px;top:12px;border:0;background:none;font-size:24px;color:#667085}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}.detail{background:#F7F9FC;border-radius:8px;padding:10px}.detail small{display:block;color:var(--muted);font-size:10px}.detail b{display:block;margin-top:4px;font-size:13px}
+footer{margin-top:35px;color:#8190A5;font-size:10.5px;text-align:center;padding:20px;border-top:1px solid var(--line)}
+@media(max-width:1050px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2,.grid3{grid-template-columns:1fr}}
+@media(max-width:760px){:root{--sidebar:0px}.sidebar{width:250px}.main{margin-left:0;width:100%;padding:18px 14px}.hero-top{display:block}.live-badge{display:inline-block;margin-top:15px}.perspective{overflow:auto;top:68px}.role{white-space:nowrap}.scope{display:none}.kpis{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
-<body>
 
-<header class="masthead">
-  <div class="masthead-inner">
-    <p class="eyebrow">MPLADS Fund Monitoring · Problem Statement SIH26102</p>
-    <h1 class="title">MPLAD <em>Drishti</em></h1>
-    <p class="subtitle">An early-warning analytics platform that surfaces anomalies, cost overruns, delays and compliance gaps across MPLAD Scheme fund utilization — before they surface years later in an audit.</p>
-    <div class="stat-strip" id="statStrip"></div>
+<body>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn">☰</button>
+  <div class="brand">MPLAD <span>Drishti</span></div>
+  <div class="top-right">
+    <div class="status"><i class="dot"></i><span id="dataStatus">Loading local data…</span></div>
+    <span class="mono" id="updated"></span>
   </div>
-  <div class="insight-banner" id="insightBanner"></div>
 </header>
 
-<div class="role-bar">
-  <div class="role-bar-inner">
-    <span class="role-label">Viewing as:</span>
-    <button class="role-btn active" data-role="ministry">Ministry (National)</button>
-    <button class="role-btn" data-role="state">State / District Authority</button>
-    <button class="role-btn" data-role="mp">Member of Parliament</button>
-    <select class="scope-select" id="scopeSelect" style="display:none;"></select>
+<aside class="sidebar" id="sidebar">
+  <div class="nav-title">Intelligence Console</div>
+  <button class="nav-item active" data-page="dashboard"><span class="nav-icon">▦</span>Dashboard</button>
+  <button class="nav-item" data-page="analytics"><span class="nav-icon">◒</span>Graph Analytics</button>
+  <button class="nav-item" data-page="map"><span class="nav-icon">⌁</span>Risk Heat Map</button>
+  <button class="nav-item" data-page="reports"><span class="nav-icon">▤</span>Reports & Data</button>
+  <button class="nav-item" data-page="alerts"><span class="nav-icon">⚠</span>Alerts</button>
+  <div style="margin-top:auto"></div>
+</aside>
+
+<main class="main" id="main">
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="eyebrow">MPLADS Fund Monitoring · SIH26102</div>
+        <h1>MPLAD <span>Drishti</span></h1>
+        <p>Early-warning intelligence for anomalies, fund utilization, execution risk, duplicate works and compliance signals across MPLADS.</p>
+      </div>
+      <div class="live-badge">LOCAL DATA PIPELINE · <b id="sourceBadge">CONNECTING</b></div>
+    </div>
   </div>
-</div>
 
-<main>
+  <div class="perspective">
+    <strong>Perspective</strong>
+    <button class="role active" data-role="ministry">Ministry</button>
+    <button class="role" data-role="state">State Authority</button>
+    <button class="role" data-role="district">District Authority</button>
+    <button class="role" data-role="mp">Member of Parliament</button>
+    <select class="scope" id="scope"></select>
+  </div>
 
-  <section>
-    <h2 class="section-head"><span class="idx">01</span> <span id="section1Title">National Utilization Overview</span></h2>
-    <p class="section-desc" id="section1Desc">Sanctioned vs. actual expenditure across five years of MPLADS data, and where funds are concentrated by category.</p>
-    <div class="grid-2">
-      <div class="card">
-        <h3 id="trendCardTitle">Sanctioned vs. Expenditure by Year (₹ Crore)</h3>
-        <canvas id="trendChart" height="200"></canvas>
-      </div>
-      <div class="card" id="categoryCard">
-        <h3 id="categoryCardTitle">Fund Allocation by Category (₹ Crore)</h3>
-        <canvas id="categoryChart" height="220"></canvas>
+  <!-- DASHBOARD -->
+  <section class="page active" id="page-dashboard">
+    <div class="page-head">
+      <div><h2 id="pageTitle">National Overview</h2><p id="pageDesc">All available MPLADS records loaded from your local data folder.</p></div>
+      <div class="filters">
+        <select id="stateFilter"><option value="">All States</option></select>
+        <select id="riskFilter"><option value="">All Risk</option><option>High</option><option>Medium</option><option>Low</option><option>None</option></select>
       </div>
     </div>
-  </section>
 
-  <section id="section2" >
-    <h2 class="section-head"><span class="idx">02</span> <span id="section2Title">State-Wise Fund Utilization</span></h2>
-    <p class="section-desc" id="section2Desc">Sanctioned amount against actual expenditure, by state — a large gap can indicate under-utilization or delayed execution. The selected state is highlighted.</p>
+    <div class="kpis">
+      <div class="kpi blue"><div class="label">MPs in Dataset</div><div class="value" id="kpiMP">—</div><div class="sub">from mp_risk_report.json</div></div>
+      <div class="kpi blue"><div class="label">Total Works</div><div class="value" id="kpiWorks">—</div><div class="sub">from works data when available</div></div>
+      <div class="kpi red"><div class="label">High Risk</div><div class="value" id="kpiHigh">—</div><div class="sub">requires attention</div></div>
+      <div class="kpi orange"><div class="label">Medium Risk</div><div class="value" id="kpiMed">—</div><div class="sub">review recommended</div></div>
+      <div class="kpi green"><div class="label">Utilization</div><div class="value" id="kpiUtil">—</div><div class="sub">national / selected scope</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card"><h3>Sanctioned vs Expenditure — Yearly</h3><div class="chart-wrap"><canvas id="trendChart"></canvas></div></div>
+      <div class="card"><h3>Risk Distribution</h3><div class="chart-wrap chart-small"><canvas id="riskChart"></canvas></div></div>
+    </div>
+
+    <div class="grid3">
+      <div class="card"><h3>Top States by Risk</h3><div id="stateRiskList"></div></div>
+      <div class="card"><h3>Fund Allocation by Category</h3><div class="chart-wrap chart-small"><canvas id="categoryChart"></canvas></div></div>
+      <div class="card"><h3>Execution Snapshot</h3><div id="execution"></div></div>
+    </div>
+
     <div class="card">
-      <canvas id="stateChart" height="90"></canvas>
+      <h3>Priority Risk Register <button class="export" onclick="exportCSV()">Export CSV</button></h3>
+      <div class="table-wrap"><table class="data-table"><thead><tr><th>MP</th><th>State</th><th>Constituency</th><th>House</th><th>Utilization</th><th>Risk</th><th>Signals</th></tr></thead><tbody id="riskTable"></tbody></table></div>
     </div>
   </section>
 
-  <section>
-    <h2 class="section-head"><span class="idx">03</span> <span id="section3Title">MP-Wise Risk Register</span></h2>
-    <p class="section-desc" id="section3Desc">Every flag is explainable — click a row to see exactly why an MP's fund utilization was flagged, with the specific anomaly and metric behind it.</p>
-
-    <div class="table-controls">
-      <input type="text" class="search-box" id="searchBox" placeholder="Search by MP name, state, or constituency…">
-      <button class="filter-btn active" data-filter="All">All</button>
-      <button class="filter-btn" data-filter="High">High Risk</button>
-      <button class="filter-btn" data-filter="Medium">Medium</button>
-      <button class="filter-btn" data-filter="Low">Low</button>
-      <button class="filter-btn" id="exportBtn">⬇ Export CSV</button>
+  <!-- ANALYTICS -->
+  <section class="page" id="page-analytics">
+    <div class="page-head"><div><h2>Graph Analytics</h2><p>Interactive analytical views generated from the local dataset.</p></div></div>
+    <div class="grid2">
+      <div class="card"><h3>State Utilization Comparison</h3><div class="chart-wrap"><canvas id="stateUtilChart"></canvas></div></div>
+      <div class="card"><h3>Risk Signals by State</h3><div class="chart-wrap"><canvas id="stateRiskChart"></canvas></div></div>
     </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Member of Parliament</th>
-          <th>State</th>
-          <th>House</th>
-          <th>Risk Level</th>
-          <th>Signals</th>
-        </tr>
-      </thead>
-      <tbody id="mpTableBody"></tbody>
-    </table>
+    <div class="grid2">
+      <div class="card"><h3>Forecasted Year-End Utilization</h3><div class="chart-wrap"><canvas id="forecastChart"></canvas></div></div>
+      <div class="card"><h3>House-wise Risk</h3><div class="chart-wrap chart-small"><canvas id="houseChart"></canvas></div></div>
+    </div>
   </section>
 
+  <!-- MAP -->
+  <section class="page" id="page-map">
+    <div class="page-head"><div><h2>India Risk Heat Map</h2><p>Geographic state boundaries colored directly from MP risk records. Hover or click a state.</p></div></div>
+    <div class="notice">The heat map uses your <b>mp_risk_report.json</b> as the source of truth. States with more severe risk signals receive higher intensity.</div>
+    <div class="card map-card">
+      <h3>State Risk Intensity</h3>
+      <div class="map-shell"><svg id="indiaMap" viewBox="0 0 800 700" aria-label="India risk heat map"></svg><div class="map-tooltip" id="mapTooltip"></div></div>
+      <div class="legend"><span><i class="sw" style="background:#E5E7EB"></i>No flagged MPs</span><span><i class="sw" style="background:#86EFAC"></i>Low</span><span><i class="sw" style="background:#FBBF24"></i>Medium</span><span><i class="sw" style="background:#F87171"></i>High</span><span><i class="sw" style="background:#B91C1C"></i>Very high</span></div>
+    </div>
+  </section>
+
+  <!-- REPORTS -->
+  <section class="page" id="page-reports">
+    <div class="page-head"><div><h2>Reports & Data</h2><p>Search the records loaded from your project data folder.</p></div><button class="export" onclick="exportCSV()">Export filtered CSV</button></div>
+    <div class="filters" style="margin-bottom:14px"><input class="search" id="search" style="flex:1;min-width:240px" placeholder="Search MP, state, constituency…"></div>
+    <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>MP ID</th><th>MP Name</th><th>State</th><th>Constituency</th><th>House</th><th>Utilization</th><th>Forecast</th><th>Risk</th></tr></thead><tbody id="reportTable"></tbody></table></div></div>
+  </section>
+
+  <!-- ALERTS -->
+  <section class="page" id="page-alerts">
+    <div class="page-head"><div><h2>Alerts</h2><p>High and medium risk records requiring review.</p></div></div>
+    <div id="alerts"></div>
+  </section>
+
+  <footer><b>MPLAD Drishti</b> · Smart India Hackathon 2026</footer>
 </main>
 
-<div class="modal-backdrop" id="modalBackdrop">
-  <div class="modal">
-    <button class="modal-close" id="modalClose">×</button>
-    <div class="modal-head">
-      <p class="mp-title" id="modalName"></p>
-      <p class="mp-sub" id="modalSub"></p>
-    </div>
-    <div class="modal-body" id="modalBody"></div>
-  </div>
-</div>
-
-<footer>
-  <div class="inner">
-    <strong>MPLAD Drishti</strong> — built for Smart India Hackathon 2026, Problem Statement SIH26102 (Ministry of Statistics &amp; Programme Implementation).<br>
-    Demo runs on a realistic synthetic dataset modeled on published MPLADS statistics (schema matches the official MoSPI/Dataful dataset). Production version connects to data.gov.in, dataful.in and the MPLADS eSAKSHI portal.<br>
-    Team Cipher.
-  </div>
-</footer>
+<div class="modal-bg" id="modalBg"><div class="modal"><button class="close" onclick="closeModal()">×</button><h2 id="modalName"></h2><p id="modalSub" style="color:#667085;font-size:12px"></p><div class="detail-grid" id="modalDetails"></div><h3 style="font-size:11px;text-transform:uppercase;color:#667085">Explainable signals</h3><ul id="modalReasons" style="font-size:12px;line-height:1.8"></ul></div></div>
 
 <script>
-const REPORT = {"generated_at": "2026-08-24T12:00:44.434968", "summary": {"total_mps": 115, "total_works": 3195, "completed_works": 2900, "total_sanctioned_cr": 2559.3, "total_expenditure_cr": 2455.1, "high_risk_count": 5, "medium_risk_count": 7, "low_risk_count": 23, "total_excess_cr": 23.19, "national_avg_utilization_pct": 89.0}, "mps": [{"mp_id": "MP0001", "mp_name": "Priya Sharma", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 96.2, "trend": "improving"}, "own_utilization_pct": 87.3, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0002", "mp_name": "Kavita Nair", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 2", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 80.8, "trend": "declining"}, "own_utilization_pct": 85.4, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0003", "mp_name": "Priya Reddy", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 3", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 110.5, "trend": "improving"}, "own_utilization_pct": 95.3, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0004", "mp_name": "Sunita Sharma", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 4", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 101.5, "trend": "improving"}, "own_utilization_pct": 97.8, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0005", "mp_name": "Kavita Sharma", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 5", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 74.3, "trend": "declining"}, "own_utilization_pct": 86.4, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0006", "mp_name": "Divya Joshi", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 6", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 91.8, "trend": "stable"}, "own_utilization_pct": 89.5, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0007", "mp_name": "Vinod Yadav", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 7", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 72.2, "trend": "declining"}, "own_utilization_pct": 95.5, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0008", "mp_name": "Rajesh Iyer", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 8", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 88.6, "trend": "stable"}, "own_utilization_pct": 89.3, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0009", "mp_name": "Ashok Yadav", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 9", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 92.0, "trend": "improving"}, "own_utilization_pct": 86.6, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0010", "mp_name": "Ashok Patel", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 10", "house": "Rajya Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Flagged by the ML anomaly model based on an unusual combination of spending metrics"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 91.0, "trend": "declining"}, "own_utilization_pct": 97.0, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0011", "mp_name": "Priya Das", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 11", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 71.4, "trend": "declining"}, "own_utilization_pct": 85.5, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0012", "mp_name": "Shalini Yadav", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 12", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 83.7, "trend": "declining"}, "own_utilization_pct": 91.1, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0013", "mp_name": "Sanjay Patel", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 13", "house": "Lok Sabha", "risk_level": "Medium", "risk_points": 2, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)", "Only 10.6% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 103.5, "trend": "improving"}, "own_utilization_pct": 94.7, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0014", "mp_name": "Ravi Reddy", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 14", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Flagged by the ML anomaly model based on an unusual combination of spending metrics"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 76.5, "trend": "declining"}, "own_utilization_pct": 91.1, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0015", "mp_name": "Shalini Das", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 15", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 96.3, "trend": "improving"}, "own_utilization_pct": 90.4, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0016", "mp_name": "Amit Verma", "state": "Uttar Pradesh", "constituency": "Uttar Pradesh Constituency 16", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 96.4, "trend": "stable"}, "own_utilization_pct": 95.3, "state_avg_utilization_pct": 91.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0017", "mp_name": "Deepa Reddy", "state": "Maharashtra", "constituency": "Maharashtra Constituency 1", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 80.4, "trend": "declining"}, "own_utilization_pct": 87.0, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0018", "mp_name": "Priya Mishra", "state": "Maharashtra", "constituency": "Maharashtra Constituency 2", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 71.4, "trend": "declining"}, "own_utilization_pct": 91.8, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0019", "mp_name": "Meena Iyer", "state": "Maharashtra", "constituency": "Maharashtra Constituency 3", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 102.3, "trend": "improving"}, "own_utilization_pct": 93.7, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0020", "mp_name": "Suresh Yadav", "state": "Maharashtra", "constituency": "Maharashtra Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 95.6, "trend": "improving"}, "own_utilization_pct": 89.4, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0021", "mp_name": "Amit Iyer", "state": "Maharashtra", "constituency": "Maharashtra Constituency 5", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 92.5, "trend": "improving"}, "own_utilization_pct": 88.0, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0022", "mp_name": "Kavita Iyer", "state": "Maharashtra", "constituency": "Maharashtra Constituency 6", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 79.5, "trend": "declining"}, "own_utilization_pct": 89.4, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0023", "mp_name": "Manoj Nair", "state": "Maharashtra", "constituency": "Maharashtra Constituency 7", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 97.0, "trend": "improving"}, "own_utilization_pct": 86.8, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0024", "mp_name": "Sunita Nair", "state": "Maharashtra", "constituency": "Maharashtra Constituency 8", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 106.4, "trend": "improving"}, "own_utilization_pct": 85.1, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0025", "mp_name": "Ashok Mishra", "state": "Maharashtra", "constituency": "Maharashtra Constituency 9", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 108.0, "trend": "improving"}, "own_utilization_pct": 98.0, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0026", "mp_name": "Suresh Rao", "state": "Maharashtra", "constituency": "Maharashtra Constituency 10", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Only 8.1% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 116.2, "trend": "improving"}, "own_utilization_pct": 96.1, "state_avg_utilization_pct": 90.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0027", "mp_name": "Neha Mishra", "state": "West Bengal", "constituency": "West Bengal Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 91.3, "trend": "stable"}, "own_utilization_pct": 93.5, "state_avg_utilization_pct": 91.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0028", "mp_name": "Sanjay Singh", "state": "West Bengal", "constituency": "West Bengal Constituency 2", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 95.9, "trend": "stable"}, "own_utilization_pct": 98.4, "state_avg_utilization_pct": 91.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0029", "mp_name": "Kavita Yadav", "state": "West Bengal", "constituency": "West Bengal Constituency 3", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 77.2, "trend": "declining"}, "own_utilization_pct": 86.2, "state_avg_utilization_pct": 91.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0030", "mp_name": "Pooja Mishra", "state": "West Bengal", "constituency": "West Bengal Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 95.9, "trend": "improving"}, "own_utilization_pct": 89.2, "state_avg_utilization_pct": 91.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0031", "mp_name": "Vikram Pillai", "state": "West Bengal", "constituency": "West Bengal Constituency 5", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 89.0, "trend": "stable"}, "own_utilization_pct": 90.5, "state_avg_utilization_pct": 91.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0032", "mp_name": "Sunita Patel", "state": "West Bengal", "constituency": "West Bengal Constituency 6", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 90.3, "trend": "stable"}, "own_utilization_pct": 90.0, "state_avg_utilization_pct": 91.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0033", "mp_name": "Anjali Joshi", "state": "West Bengal", "constituency": "West Bengal Constituency 7", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 83.0, "trend": "declining"}, "own_utilization_pct": 87.0, "state_avg_utilization_pct": 91.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0034", "mp_name": "Ravi Mishra", "state": "West Bengal", "constituency": "West Bengal Constituency 8", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 109.8, "trend": "improving"}, "own_utilization_pct": 93.5, "state_avg_utilization_pct": 91.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0035", "mp_name": "Sanjay Yadav", "state": "Bihar", "constituency": "Bihar Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 102.9, "trend": "improving"}, "own_utilization_pct": 92.1, "state_avg_utilization_pct": 83.1, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0036", "mp_name": "Rajesh Patel", "state": "Bihar", "constituency": "Bihar Constituency 2", "house": "Lok Sabha", "risk_level": "Medium", "risk_points": 2, "reasons": ["Fund utilization is only 29.0%, well below the national average of ~91%"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 20.5, "trend": "declining"}, "own_utilization_pct": 29.0, "state_avg_utilization_pct": 83.1, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0037", "mp_name": "Divya Yadav", "state": "Bihar", "constituency": "Bihar Constituency 3", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 86.4, "trend": "declining"}, "own_utilization_pct": 92.5, "state_avg_utilization_pct": 83.1, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0038", "mp_name": "Ashok Patel", "state": "Bihar", "constituency": "Bihar Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 110.4, "trend": "improving"}, "own_utilization_pct": 92.2, "state_avg_utilization_pct": 83.1, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0039", "mp_name": "Anjali Kumar", "state": "Bihar", "constituency": "Bihar Constituency 5", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 92.3, "trend": "improving"}, "own_utilization_pct": 88.8, "state_avg_utilization_pct": 83.1, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0040", "mp_name": "Manoj Iyer", "state": "Bihar", "constituency": "Bihar Constituency 6", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 82.7, "trend": "declining"}, "own_utilization_pct": 90.6, "state_avg_utilization_pct": 83.1, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0041", "mp_name": "Priya Chauhan", "state": "Bihar", "constituency": "Bihar Constituency 7", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 85.0, "trend": "declining"}, "own_utilization_pct": 88.8, "state_avg_utilization_pct": 83.1, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0042", "mp_name": "Arun Gupta", "state": "Bihar", "constituency": "Bihar Constituency 8", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 81.9, "trend": "declining"}, "own_utilization_pct": 91.2, "state_avg_utilization_pct": 83.1, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0043", "mp_name": "Anjali Sharma", "state": "Tamil Nadu", "constituency": "Tamil Nadu Constituency 1", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Only 6.8% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 94.9, "trend": "improving"}, "own_utilization_pct": 91.6, "state_avg_utilization_pct": 89.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0044", "mp_name": "Neha Sharma", "state": "Tamil Nadu", "constituency": "Tamil Nadu Constituency 2", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 102.5, "trend": "improving"}, "own_utilization_pct": 92.1, "state_avg_utilization_pct": 89.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0045", "mp_name": "Meena Chauhan", "state": "Tamil Nadu", "constituency": "Tamil Nadu Constituency 3", "house": "Lok Sabha", "risk_level": "Medium", "risk_points": 2, "reasons": ["19 works exceeded sanctioned cost by an average of 83.2% (total excess: \u20b911.54 Cr)"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 98.3, "trend": "improving"}, "own_utilization_pct": 87.0, "state_avg_utilization_pct": 89.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0046", "mp_name": "Kavita Reddy", "state": "Tamil Nadu", "constituency": "Tamil Nadu Constituency 4", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 86.1, "trend": "declining"}, "own_utilization_pct": 90.2, "state_avg_utilization_pct": 89.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0047", "mp_name": "Neha Reddy", "state": "Tamil Nadu", "constituency": "Tamil Nadu Constituency 5", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 82.4, "trend": "declining"}, "own_utilization_pct": 86.4, "state_avg_utilization_pct": 89.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0048", "mp_name": "Divya Singh", "state": "Tamil Nadu", "constituency": "Tamil Nadu Constituency 6", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 90.6, "trend": "stable"}, "own_utilization_pct": 89.2, "state_avg_utilization_pct": 89.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0049", "mp_name": "Neha Iyer", "state": "Tamil Nadu", "constituency": "Tamil Nadu Constituency 7", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 99.5, "trend": "improving"}, "own_utilization_pct": 86.3, "state_avg_utilization_pct": 89.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0050", "mp_name": "Shalini Joshi", "state": "Tamil Nadu", "constituency": "Tamil Nadu Constituency 8", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 86.8, "trend": "declining"}, "own_utilization_pct": 90.4, "state_avg_utilization_pct": 89.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0051", "mp_name": "Divya Gupta", "state": "Madhya Pradesh", "constituency": "Madhya Pradesh Constituency 1", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Only 9.0% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 121.9, "trend": "improving"}, "own_utilization_pct": 96.3, "state_avg_utilization_pct": 91.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0052", "mp_name": "Ravi Das", "state": "Madhya Pradesh", "constituency": "Madhya Pradesh Constituency 2", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 92.7, "trend": "declining"}, "own_utilization_pct": 102.6, "state_avg_utilization_pct": 91.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0053", "mp_name": "Arun Kumar", "state": "Madhya Pradesh", "constituency": "Madhya Pradesh Constituency 3", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 93.3, "trend": "improving"}, "own_utilization_pct": 88.6, "state_avg_utilization_pct": 91.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0054", "mp_name": "Kavita Reddy", "state": "Madhya Pradesh", "constituency": "Madhya Pradesh Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 74.7, "trend": "declining"}, "own_utilization_pct": 88.9, "state_avg_utilization_pct": 91.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0055", "mp_name": "Vinod Nair", "state": "Madhya Pradesh", "constituency": "Madhya Pradesh Constituency 5", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 84.2, "trend": "stable"}, "own_utilization_pct": 83.6, "state_avg_utilization_pct": 91.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0056", "mp_name": "Rajesh Reddy", "state": "Madhya Pradesh", "constituency": "Madhya Pradesh Constituency 6", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 83.5, "trend": "declining"}, "own_utilization_pct": 90.9, "state_avg_utilization_pct": 91.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0057", "mp_name": "Sunita Nair", "state": "Karnataka", "constituency": "Karnataka Constituency 1", "house": "Rajya Sabha", "risk_level": "High", "risk_points": 3, "reasons": ["81.5% of works awarded to a single implementing agency (United Infrastructure Engineering Co)", "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 93.1, "trend": "improving"}, "own_utilization_pct": 89.6, "state_avg_utilization_pct": 91.6, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0058", "mp_name": "Sunita Rao", "state": "Karnataka", "constituency": "Karnataka Constituency 2", "house": "Rajya Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 103.3, "trend": "improving"}, "own_utilization_pct": 90.1, "state_avg_utilization_pct": 91.6, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0059", "mp_name": "Kavita Yadav", "state": "Karnataka", "constituency": "Karnataka Constituency 3", "house": "Lok Sabha", "risk_level": "Medium", "risk_points": 2, "reasons": ["19 works (76.0% of eligible works) remain incomplete beyond the 1-year guideline, up to 2005 days overdue -- well above the peer average"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 95.4, "trend": "stable"}, "own_utilization_pct": 97.7, "state_avg_utilization_pct": 91.6, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0060", "mp_name": "Suresh Singh", "state": "Karnataka", "constituency": "Karnataka Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 87.7, "trend": "stable"}, "own_utilization_pct": 89.8, "state_avg_utilization_pct": 91.6, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0061", "mp_name": "Vinod Pillai", "state": "Karnataka", "constituency": "Karnataka Constituency 5", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 96.4, "trend": "improving"}, "own_utilization_pct": 91.6, "state_avg_utilization_pct": 91.6, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0062", "mp_name": "Neha Joshi", "state": "Karnataka", "constituency": "Karnataka Constituency 6", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 93.1, "trend": "stable"}, "own_utilization_pct": 90.5, "state_avg_utilization_pct": 91.6, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0063", "mp_name": "Priya Joshi", "state": "Gujarat", "constituency": "Gujarat Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 74.2, "trend": "declining"}, "own_utilization_pct": 90.1, "state_avg_utilization_pct": 89.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0064", "mp_name": "Pooja Kumar", "state": "Gujarat", "constituency": "Gujarat Constituency 2", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Only 13.2% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 95.4, "trend": "improving"}, "own_utilization_pct": 90.6, "state_avg_utilization_pct": 89.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0065", "mp_name": "Sunita Patel", "state": "Gujarat", "constituency": "Gujarat Constituency 3", "house": "Rajya Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 94.4, "trend": "improving"}, "own_utilization_pct": 87.1, "state_avg_utilization_pct": 89.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0066", "mp_name": "Ashok Patel", "state": "Gujarat", "constituency": "Gujarat Constituency 4", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Flagged by the ML anomaly model based on an unusual combination of spending metrics"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 109.0, "trend": "improving"}, "own_utilization_pct": 90.5, "state_avg_utilization_pct": 89.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0067", "mp_name": "Suresh Kumar", "state": "Gujarat", "constituency": "Gujarat Constituency 5", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 98.4, "trend": "improving"}, "own_utilization_pct": 86.3, "state_avg_utilization_pct": 89.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0068", "mp_name": "Anjali Yadav", "state": "Gujarat", "constituency": "Gujarat Constituency 6", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 94.7, "trend": "improving"}, "own_utilization_pct": 91.4, "state_avg_utilization_pct": 89.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0069", "mp_name": "Amit Kumar", "state": "Rajasthan", "constituency": "Rajasthan Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 116.0, "trend": "improving"}, "own_utilization_pct": 92.1, "state_avg_utilization_pct": 81.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0070", "mp_name": "Divya Patel", "state": "Rajasthan", "constituency": "Rajasthan Constituency 2", "house": "Rajya Sabha", "risk_level": "High", "risk_points": 3, "reasons": ["Fund utilization is only 21.9%, well below the national average of ~91%", "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 13.4, "trend": "declining"}, "own_utilization_pct": 21.9, "state_avg_utilization_pct": 81.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0071", "mp_name": "Divya Sharma", "state": "Rajasthan", "constituency": "Rajasthan Constituency 3", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Only 10.2% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 96.7, "trend": "stable"}, "own_utilization_pct": 97.3, "state_avg_utilization_pct": 81.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0072", "mp_name": "Kavita Iyer", "state": "Rajasthan", "constituency": "Rajasthan Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 87.6, "trend": "declining"}, "own_utilization_pct": 90.7, "state_avg_utilization_pct": 81.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0073", "mp_name": "Neha Gupta", "state": "Rajasthan", "constituency": "Rajasthan Constituency 5", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 83.7, "trend": "declining"}, "own_utilization_pct": 89.1, "state_avg_utilization_pct": 81.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0074", "mp_name": "Sunita Iyer", "state": "Rajasthan", "constituency": "Rajasthan Constituency 6", "house": "Lok Sabha", "risk_level": "High", "risk_points": 3, "reasons": ["84.6% of works awarded to a single implementing agency (Sai Infrastructure Developers)", "2 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 82.7, "trend": "declining"}, "own_utilization_pct": 94.7, "state_avg_utilization_pct": 81.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0075", "mp_name": "Ravi Yadav", "state": "Andhra Pradesh", "constituency": "Andhra Pradesh Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 95.7, "trend": "stable"}, "own_utilization_pct": 92.9, "state_avg_utilization_pct": 90.4, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0076", "mp_name": "Sanjay Chauhan", "state": "Andhra Pradesh", "constituency": "Andhra Pradesh Constituency 2", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 82.8, "trend": "declining"}, "own_utilization_pct": 89.9, "state_avg_utilization_pct": 90.4, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0077", "mp_name": "Divya Pillai", "state": "Andhra Pradesh", "constituency": "Andhra Pradesh Constituency 3", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 88.5, "trend": "declining"}, "own_utilization_pct": 93.1, "state_avg_utilization_pct": 90.4, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0078", "mp_name": "Deepa Gupta", "state": "Andhra Pradesh", "constituency": "Andhra Pradesh Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 73.0, "trend": "declining"}, "own_utilization_pct": 84.3, "state_avg_utilization_pct": 90.4, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0079", "mp_name": "Vinod Verma", "state": "Andhra Pradesh", "constituency": "Andhra Pradesh Constituency 5", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 92.3, "trend": "stable"}, "own_utilization_pct": 91.8, "state_avg_utilization_pct": 90.4, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0080", "mp_name": "Sunita Verma", "state": "Odisha", "constituency": "Odisha Constituency 1", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 96.4, "trend": "improving"}, "own_utilization_pct": 91.3, "state_avg_utilization_pct": 93.9, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0081", "mp_name": "Arun Iyer", "state": "Odisha", "constituency": "Odisha Constituency 2", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 88.6, "trend": "declining"}, "own_utilization_pct": 96.0, "state_avg_utilization_pct": 93.9, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0082", "mp_name": "Arun Reddy", "state": "Odisha", "constituency": "Odisha Constituency 3", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Only 11.2% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 123.5, "trend": "improving"}, "own_utilization_pct": 99.0, "state_avg_utilization_pct": 93.9, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0083", "mp_name": "Amit Reddy", "state": "Odisha", "constituency": "Odisha Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 88.5, "trend": "stable"}, "own_utilization_pct": 89.6, "state_avg_utilization_pct": 93.9, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0084", "mp_name": "Kavita Mishra", "state": "Odisha", "constituency": "Odisha Constituency 5", "house": "Rajya Sabha", "risk_level": "Medium", "risk_points": 2, "reasons": ["16 works (72.7% of eligible works) remain incomplete beyond the 1-year guideline, up to 1862 days overdue -- well above the peer average"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 95.5, "trend": "stable"}, "own_utilization_pct": 93.6, "state_avg_utilization_pct": 93.9, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0085", "mp_name": "Vinod Nair", "state": "Telangana", "constituency": "Telangana Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 88.6, "trend": "stable"}, "own_utilization_pct": 86.7, "state_avg_utilization_pct": 90.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0086", "mp_name": "Sunita Reddy", "state": "Telangana", "constituency": "Telangana Constituency 2", "house": "Lok Sabha", "risk_level": "Medium", "risk_points": 2, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)", "Only 13.7% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 90.7, "trend": "stable"}, "own_utilization_pct": 88.5, "state_avg_utilization_pct": 90.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0087", "mp_name": "Vinod Rao", "state": "Telangana", "constituency": "Telangana Constituency 3", "house": "Lok Sabha", "risk_level": "Medium", "risk_points": 2, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)", "Only 10.3% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 95.8, "trend": "improving"}, "own_utilization_pct": 91.4, "state_avg_utilization_pct": 90.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0088", "mp_name": "Suresh Rao", "state": "Telangana", "constituency": "Telangana Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 98.9, "trend": "improving"}, "own_utilization_pct": 94.1, "state_avg_utilization_pct": 90.2, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0089", "mp_name": "Ravi Singh", "state": "Kerala", "constituency": "Kerala Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 74.1, "trend": "declining"}, "own_utilization_pct": 93.4, "state_avg_utilization_pct": 88.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0090", "mp_name": "Deepa Kumar", "state": "Kerala", "constituency": "Kerala Constituency 2", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 93.8, "trend": "improving"}, "own_utilization_pct": 87.1, "state_avg_utilization_pct": 88.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0091", "mp_name": "Amit Sharma", "state": "Kerala", "constituency": "Kerala Constituency 3", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 62.4, "trend": "declining"}, "own_utilization_pct": 85.2, "state_avg_utilization_pct": 88.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0092", "mp_name": "Vinod Patel", "state": "Kerala", "constituency": "Kerala Constituency 4", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 88.4, "trend": "stable"}, "own_utilization_pct": 86.3, "state_avg_utilization_pct": 88.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0093", "mp_name": "Suresh Yadav", "state": "Kerala", "constituency": "Kerala Constituency 5", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 84.5, "trend": "declining"}, "own_utilization_pct": 90.4, "state_avg_utilization_pct": 88.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0094", "mp_name": "Meena Reddy", "state": "Jharkhand", "constituency": "Jharkhand Constituency 1", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 91.8, "trend": "stable"}, "own_utilization_pct": 88.8, "state_avg_utilization_pct": 75.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0095", "mp_name": "Meena Chauhan", "state": "Jharkhand", "constituency": "Jharkhand Constituency 2", "house": "Lok Sabha", "risk_level": "High", "risk_points": 3, "reasons": ["Fund utilization is only 22.3%, well below the national average of ~91%", "1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 20.4, "trend": "stable"}, "own_utilization_pct": 22.3, "state_avg_utilization_pct": 75.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0096", "mp_name": "Divya Chauhan", "state": "Jharkhand", "constituency": "Jharkhand Constituency 3", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 72.2, "trend": "declining"}, "own_utilization_pct": 94.7, "state_avg_utilization_pct": 75.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0097", "mp_name": "Arun Sharma", "state": "Jharkhand", "constituency": "Jharkhand Constituency 4", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 98.7, "trend": "improving"}, "own_utilization_pct": 95.5, "state_avg_utilization_pct": 75.3, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0098", "mp_name": "Divya Chauhan", "state": "Assam", "constituency": "Assam Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 90.8, "trend": "stable"}, "own_utilization_pct": 88.1, "state_avg_utilization_pct": 86.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0099", "mp_name": "Priya Singh", "state": "Assam", "constituency": "Assam Constituency 2", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 105.2, "trend": "improving"}, "own_utilization_pct": 87.9, "state_avg_utilization_pct": 86.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0100", "mp_name": "Priya Singh", "state": "Assam", "constituency": "Assam Constituency 3", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Only 12.1% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 87.8, "trend": "stable"}, "own_utilization_pct": 87.6, "state_avg_utilization_pct": 86.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0101", "mp_name": "Shalini Gupta", "state": "Assam", "constituency": "Assam Constituency 4", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["Flagged by the ML anomaly model based on an unusual combination of spending metrics"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 85.1, "trend": "stable"}, "own_utilization_pct": 83.6, "state_avg_utilization_pct": 86.8, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0102", "mp_name": "Suresh Yadav", "state": "Punjab", "constituency": "Punjab Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 103.2, "trend": "improving"}, "own_utilization_pct": 95.7, "state_avg_utilization_pct": 93.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0103", "mp_name": "Manoj Verma", "state": "Punjab", "constituency": "Punjab Constituency 2", "house": "Rajya Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 95.3, "trend": "stable"}, "own_utilization_pct": 95.0, "state_avg_utilization_pct": 93.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0104", "mp_name": "Pooja Yadav", "state": "Punjab", "constituency": "Punjab Constituency 3", "house": "Rajya Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 87.0, "trend": "stable"}, "own_utilization_pct": 88.9, "state_avg_utilization_pct": 93.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0105", "mp_name": "Ashok Singh", "state": "Punjab", "constituency": "Punjab Constituency 4", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 70.4, "trend": "declining"}, "own_utilization_pct": 94.4, "state_avg_utilization_pct": 93.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0106", "mp_name": "Manoj Iyer", "state": "Chhattisgarh", "constituency": "Chhattisgarh Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 99.1, "trend": "improving"}, "own_utilization_pct": 94.7, "state_avg_utilization_pct": 91.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0107", "mp_name": "Divya Joshi", "state": "Chhattisgarh", "constituency": "Chhattisgarh Constituency 2", "house": "Lok Sabha", "risk_level": "High", "risk_points": 3, "reasons": ["13 works exceeded sanctioned cost by an average of 75.8% (total excess: \u20b911.65 Cr)", "Only 9.8% of funds allocated to SC/ST areas (guideline minimum: 15%/7.5%)"], "ml_anomaly": true, "forecast": {"projected_year_end_utilization_pct": 100.3, "trend": "improving"}, "own_utilization_pct": 88.5, "state_avg_utilization_pct": 91.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0108", "mp_name": "Priya Reddy", "state": "Chhattisgarh", "constituency": "Chhattisgarh Constituency 3", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 84.6, "trend": "declining"}, "own_utilization_pct": 91.3, "state_avg_utilization_pct": 91.5, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0109", "mp_name": "Vikram Verma", "state": "Haryana", "constituency": "Haryana Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 91.9, "trend": "improving"}, "own_utilization_pct": 88.0, "state_avg_utilization_pct": 87.9, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0110", "mp_name": "Vinod Singh", "state": "Haryana", "constituency": "Haryana Constituency 2", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 79.6, "trend": "declining"}, "own_utilization_pct": 90.5, "state_avg_utilization_pct": 87.9, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0111", "mp_name": "Sunita Chauhan", "state": "Haryana", "constituency": "Haryana Constituency 3", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 110.2, "trend": "improving"}, "own_utilization_pct": 85.3, "state_avg_utilization_pct": 87.9, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0112", "mp_name": "Sunita Das", "state": "Delhi", "constituency": "Delhi Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 106.5, "trend": "improving"}, "own_utilization_pct": 92.6, "state_avg_utilization_pct": 92.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0113", "mp_name": "Kavita Patel", "state": "Delhi", "constituency": "Delhi Constituency 2", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 102.7, "trend": "improving"}, "own_utilization_pct": 91.5, "state_avg_utilization_pct": 92.0, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0114", "mp_name": "Divya Joshi", "state": "Uttarakhand", "constituency": "Uttarakhand Constituency 1", "house": "Lok Sabha", "risk_level": "None", "risk_points": 0, "reasons": [], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 84.5, "trend": "declining"}, "own_utilization_pct": 90.2, "state_avg_utilization_pct": 87.7, "national_avg_utilization_pct": 89.0}, {"mp_id": "MP0115", "mp_name": "Vikram Nair", "state": "Uttarakhand", "constituency": "Uttarakhand Constituency 2", "house": "Lok Sabha", "risk_level": "Low", "risk_points": 1, "reasons": ["1 potentially duplicate work(s) detected (same category, agency & cost within a year)"], "ml_anomaly": false, "forecast": {"projected_year_end_utilization_pct": 91.2, "trend": "improving"}, "own_utilization_pct": 85.2, "state_avg_utilization_pct": 87.7, "national_avg_utilization_pct": 89.0}], "state_summary": [{"state": "Andhra Pradesh", "sanctioned_cr": 113.0, "expenditure_cr": 106.7, "n_works": 143}, {"state": "Assam", "sanctioned_cr": 86.8, "expenditure_cr": 82.4, "n_works": 107}, {"state": "Bihar", "sanctioned_cr": 166.3, "expenditure_cr": 158.9, "n_works": 218}, {"state": "Chhattisgarh", "sanctioned_cr": 68.6, "expenditure_cr": 77.8, "n_works": 73}, {"state": "Delhi", "sanctioned_cr": 46.0, "expenditure_cr": 43.5, "n_works": 54}, {"state": "Gujarat", "sanctioned_cr": 134.0, "expenditure_cr": 127.3, "n_works": 167}, {"state": "Haryana", "sanctioned_cr": 65.9, "expenditure_cr": 63.0, "n_works": 77}, {"state": "Jharkhand", "sanctioned_cr": 75.3, "expenditure_cr": 71.5, "n_works": 114}, {"state": "Karnataka", "sanctioned_cr": 137.4, "expenditure_cr": 130.7, "n_works": 156}, {"state": "Kerala", "sanctioned_cr": 110.6, "expenditure_cr": 104.0, "n_works": 117}, {"state": "Madhya Pradesh", "sanctioned_cr": 137.7, "expenditure_cr": 129.8, "n_works": 183}, {"state": "Maharashtra", "sanctioned_cr": 226.3, "expenditure_cr": 214.6, "n_works": 288}, {"state": "Odisha", "sanctioned_cr": 117.4, "expenditure_cr": 111.8, "n_works": 147}, {"state": "Punjab", "sanctioned_cr": 93.5, "expenditure_cr": 88.4, "n_works": 107}, {"state": "Rajasthan", "sanctioned_cr": 121.5, "expenditure_cr": 114.8, "n_works": 165}, {"state": "Tamil Nadu", "sanctioned_cr": 178.3, "expenditure_cr": 181.1, "n_works": 232}, {"state": "Telangana", "sanctioned_cr": 90.2, "expenditure_cr": 84.9, "n_works": 134}, {"state": "Uttar Pradesh", "sanctioned_cr": 364.6, "expenditure_cr": 348.7, "n_works": 435}, {"state": "Uttarakhand", "sanctioned_cr": 43.9, "expenditure_cr": 42.3, "n_works": 49}, {"state": "West Bengal", "sanctioned_cr": 182.1, "expenditure_cr": 172.8, "n_works": 229}], "category_summary": [{"category": "Sports Infrastructure", "sanctioned_cr": 280.1}, {"category": "Education", "sanctioned_cr": 275.1}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 266.4}, {"category": "Rural Development", "sanctioned_cr": 258.2}, {"category": "Sanitation", "sanctioned_cr": 255.7}, {"category": "Drinking Water", "sanctioned_cr": 251.9}, {"category": "Electricity Facility", "sanctioned_cr": 248.0}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 246.5}, {"category": "Irrigation", "sanctioned_cr": 239.6}, {"category": "Health & Family Welfare", "sanctioned_cr": 237.7}], "yearly_trend": [{"year": 2021, "sanctioned_cr": 516.3, "expenditure_cr": 495.7}, {"year": 2022, "sanctioned_cr": 501.6, "expenditure_cr": 480.5}, {"year": 2023, "sanctioned_cr": 507.4, "expenditure_cr": 486.4}, {"year": 2024, "sanctioned_cr": 517.1, "expenditure_cr": 495.3}, {"year": 2025, "sanctioned_cr": 516.9, "expenditure_cr": 497.2}], "state_yearly_trend": {"Andhra Pradesh": [{"year": 2021, "sanctioned_cr": 23.2, "expenditure_cr": 21.8}, {"year": 2022, "sanctioned_cr": 23.0, "expenditure_cr": 21.9}, {"year": 2023, "sanctioned_cr": 23.4, "expenditure_cr": 22.2}, {"year": 2024, "sanctioned_cr": 20.6, "expenditure_cr": 19.4}, {"year": 2025, "sanctioned_cr": 22.8, "expenditure_cr": 21.4}], "Assam": [{"year": 2021, "sanctioned_cr": 17.0, "expenditure_cr": 16.1}, {"year": 2022, "sanctioned_cr": 16.2, "expenditure_cr": 15.4}, {"year": 2023, "sanctioned_cr": 18.2, "expenditure_cr": 16.9}, {"year": 2024, "sanctioned_cr": 17.0, "expenditure_cr": 16.5}, {"year": 2025, "sanctioned_cr": 18.4, "expenditure_cr": 17.5}], "Bihar": [{"year": 2021, "sanctioned_cr": 32.2, "expenditure_cr": 30.8}, {"year": 2022, "sanctioned_cr": 34.2, "expenditure_cr": 32.6}, {"year": 2023, "sanctioned_cr": 33.2, "expenditure_cr": 31.7}, {"year": 2024, "sanctioned_cr": 35.1, "expenditure_cr": 33.3}, {"year": 2025, "sanctioned_cr": 31.5, "expenditure_cr": 30.5}], "Chhattisgarh": [{"year": 2021, "sanctioned_cr": 13.2, "expenditure_cr": 16.0}, {"year": 2022, "sanctioned_cr": 13.5, "expenditure_cr": 14.4}, {"year": 2023, "sanctioned_cr": 14.1, "expenditure_cr": 15.0}, {"year": 2024, "sanctioned_cr": 14.3, "expenditure_cr": 15.8}, {"year": 2025, "sanctioned_cr": 13.6, "expenditure_cr": 16.5}], "Delhi": [{"year": 2021, "sanctioned_cr": 9.0, "expenditure_cr": 8.5}, {"year": 2022, "sanctioned_cr": 8.6, "expenditure_cr": 8.1}, {"year": 2023, "sanctioned_cr": 8.7, "expenditure_cr": 8.6}, {"year": 2024, "sanctioned_cr": 8.7, "expenditure_cr": 8.0}, {"year": 2025, "sanctioned_cr": 11.0, "expenditure_cr": 10.4}], "Gujarat": [{"year": 2021, "sanctioned_cr": 27.1, "expenditure_cr": 25.4}, {"year": 2022, "sanctioned_cr": 25.1, "expenditure_cr": 24.1}, {"year": 2023, "sanctioned_cr": 25.9, "expenditure_cr": 24.7}, {"year": 2024, "sanctioned_cr": 27.3, "expenditure_cr": 25.8}, {"year": 2025, "sanctioned_cr": 28.5, "expenditure_cr": 27.3}], "Haryana": [{"year": 2021, "sanctioned_cr": 13.5, "expenditure_cr": 13.3}, {"year": 2022, "sanctioned_cr": 11.8, "expenditure_cr": 11.2}, {"year": 2023, "sanctioned_cr": 12.8, "expenditure_cr": 12.3}, {"year": 2024, "sanctioned_cr": 13.9, "expenditure_cr": 13.4}, {"year": 2025, "sanctioned_cr": 14.0, "expenditure_cr": 12.9}], "Jharkhand": [{"year": 2021, "sanctioned_cr": 15.7, "expenditure_cr": 14.7}, {"year": 2022, "sanctioned_cr": 15.4, "expenditure_cr": 14.9}, {"year": 2023, "sanctioned_cr": 15.5, "expenditure_cr": 14.8}, {"year": 2024, "sanctioned_cr": 13.8, "expenditure_cr": 12.8}, {"year": 2025, "sanctioned_cr": 15.0, "expenditure_cr": 14.3}], "Karnataka": [{"year": 2021, "sanctioned_cr": 25.7, "expenditure_cr": 23.9}, {"year": 2022, "sanctioned_cr": 28.7, "expenditure_cr": 26.8}, {"year": 2023, "sanctioned_cr": 26.6, "expenditure_cr": 25.2}, {"year": 2024, "sanctioned_cr": 29.2, "expenditure_cr": 28.4}, {"year": 2025, "sanctioned_cr": 27.1, "expenditure_cr": 26.3}], "Kerala": [{"year": 2021, "sanctioned_cr": 24.0, "expenditure_cr": 22.2}, {"year": 2022, "sanctioned_cr": 21.9, "expenditure_cr": 20.7}, {"year": 2023, "sanctioned_cr": 22.1, "expenditure_cr": 20.4}, {"year": 2024, "sanctioned_cr": 21.8, "expenditure_cr": 20.6}, {"year": 2025, "sanctioned_cr": 20.8, "expenditure_cr": 20.1}], "Madhya Pradesh": [{"year": 2021, "sanctioned_cr": 27.9, "expenditure_cr": 26.2}, {"year": 2022, "sanctioned_cr": 27.4, "expenditure_cr": 25.7}, {"year": 2023, "sanctioned_cr": 26.6, "expenditure_cr": 24.6}, {"year": 2024, "sanctioned_cr": 28.6, "expenditure_cr": 27.3}, {"year": 2025, "sanctioned_cr": 27.3, "expenditure_cr": 26.0}], "Maharashtra": [{"year": 2021, "sanctioned_cr": 47.6, "expenditure_cr": 45.0}, {"year": 2022, "sanctioned_cr": 40.0, "expenditure_cr": 38.2}, {"year": 2023, "sanctioned_cr": 43.9, "expenditure_cr": 41.6}, {"year": 2024, "sanctioned_cr": 47.2, "expenditure_cr": 44.9}, {"year": 2025, "sanctioned_cr": 47.6, "expenditure_cr": 44.9}], "Odisha": [{"year": 2021, "sanctioned_cr": 23.4, "expenditure_cr": 22.6}, {"year": 2022, "sanctioned_cr": 22.4, "expenditure_cr": 21.2}, {"year": 2023, "sanctioned_cr": 23.4, "expenditure_cr": 22.6}, {"year": 2024, "sanctioned_cr": 23.6, "expenditure_cr": 22.0}, {"year": 2025, "sanctioned_cr": 24.6, "expenditure_cr": 23.5}], "Punjab": [{"year": 2021, "sanctioned_cr": 19.6, "expenditure_cr": 18.7}, {"year": 2022, "sanctioned_cr": 18.0, "expenditure_cr": 16.8}, {"year": 2023, "sanctioned_cr": 19.1, "expenditure_cr": 18.6}, {"year": 2024, "sanctioned_cr": 19.2, "expenditure_cr": 18.1}, {"year": 2025, "sanctioned_cr": 17.5, "expenditure_cr": 16.1}], "Rajasthan": [{"year": 2021, "sanctioned_cr": 24.3, "expenditure_cr": 23.0}, {"year": 2022, "sanctioned_cr": 24.7, "expenditure_cr": 23.3}, {"year": 2023, "sanctioned_cr": 24.1, "expenditure_cr": 22.8}, {"year": 2024, "sanctioned_cr": 24.4, "expenditure_cr": 23.2}, {"year": 2025, "sanctioned_cr": 24.0, "expenditure_cr": 22.5}], "Tamil Nadu": [{"year": 2021, "sanctioned_cr": 35.4, "expenditure_cr": 36.5}, {"year": 2022, "sanctioned_cr": 34.8, "expenditure_cr": 35.7}, {"year": 2023, "sanctioned_cr": 35.0, "expenditure_cr": 35.1}, {"year": 2024, "sanctioned_cr": 36.0, "expenditure_cr": 36.1}, {"year": 2025, "sanctioned_cr": 37.2, "expenditure_cr": 37.7}], "Telangana": [{"year": 2021, "sanctioned_cr": 17.6, "expenditure_cr": 16.5}, {"year": 2022, "sanctioned_cr": 17.2, "expenditure_cr": 16.1}, {"year": 2023, "sanctioned_cr": 18.6, "expenditure_cr": 17.6}, {"year": 2024, "sanctioned_cr": 18.9, "expenditure_cr": 18.0}, {"year": 2025, "sanctioned_cr": 17.8, "expenditure_cr": 16.7}], "Uttar Pradesh": [{"year": 2021, "sanctioned_cr": 75.5, "expenditure_cr": 72.4}, {"year": 2022, "sanctioned_cr": 74.0, "expenditure_cr": 70.8}, {"year": 2023, "sanctioned_cr": 70.1, "expenditure_cr": 66.9}, {"year": 2024, "sanctioned_cr": 70.3, "expenditure_cr": 67.3}, {"year": 2025, "sanctioned_cr": 74.7, "expenditure_cr": 71.3}], "Uttarakhand": [{"year": 2021, "sanctioned_cr": 8.4, "expenditure_cr": 7.9}, {"year": 2022, "sanctioned_cr": 9.0, "expenditure_cr": 8.8}, {"year": 2023, "sanctioned_cr": 9.1, "expenditure_cr": 8.8}, {"year": 2024, "sanctioned_cr": 8.9, "expenditure_cr": 8.5}, {"year": 2025, "sanctioned_cr": 8.5, "expenditure_cr": 8.3}], "West Bengal": [{"year": 2021, "sanctioned_cr": 36.0, "expenditure_cr": 34.3}, {"year": 2022, "sanctioned_cr": 35.6, "expenditure_cr": 33.6}, {"year": 2023, "sanctioned_cr": 37.1, "expenditure_cr": 35.8}, {"year": 2024, "sanctioned_cr": 38.4, "expenditure_cr": 36.0}, {"year": 2025, "sanctioned_cr": 35.0, "expenditure_cr": 33.1}]}, "state_category_summary": {"Andhra Pradesh": [{"category": "Sanitation", "sanctioned_cr": 16.0}, {"category": "Education", "sanctioned_cr": 15.2}, {"category": "Health & Family Welfare", "sanctioned_cr": 11.3}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 11.2}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 10.8}, {"category": "Drinking Water", "sanctioned_cr": 10.3}, {"category": "Electricity Facility", "sanctioned_cr": 10.0}, {"category": "Sports Infrastructure", "sanctioned_cr": 10.0}, {"category": "Rural Development", "sanctioned_cr": 9.6}, {"category": "Irrigation", "sanctioned_cr": 8.7}], "Assam": [{"category": "Health & Family Welfare", "sanctioned_cr": 14.5}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 12.5}, {"category": "Education", "sanctioned_cr": 10.5}, {"category": "Sports Infrastructure", "sanctioned_cr": 8.5}, {"category": "Sanitation", "sanctioned_cr": 8.2}, {"category": "Rural Development", "sanctioned_cr": 7.3}, {"category": "Irrigation", "sanctioned_cr": 6.7}, {"category": "Drinking Water", "sanctioned_cr": 6.5}, {"category": "Electricity Facility", "sanctioned_cr": 6.3}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 5.8}], "Bihar": [{"category": "Sports Infrastructure", "sanctioned_cr": 20.4}, {"category": "Sanitation", "sanctioned_cr": 19.0}, {"category": "Education", "sanctioned_cr": 18.1}, {"category": "Irrigation", "sanctioned_cr": 17.3}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 16.9}, {"category": "Drinking Water", "sanctioned_cr": 16.6}, {"category": "Rural Development", "sanctioned_cr": 16.6}, {"category": "Electricity Facility", "sanctioned_cr": 14.6}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 13.7}, {"category": "Health & Family Welfare", "sanctioned_cr": 13.1}], "Chhattisgarh": [{"category": "Rural Development", "sanctioned_cr": 13.4}, {"category": "Sanitation", "sanctioned_cr": 8.8}, {"category": "Electricity Facility", "sanctioned_cr": 8.3}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 7.8}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 6.5}, {"category": "Education", "sanctioned_cr": 5.9}, {"category": "Sports Infrastructure", "sanctioned_cr": 5.7}, {"category": "Drinking Water", "sanctioned_cr": 4.8}, {"category": "Irrigation", "sanctioned_cr": 3.8}, {"category": "Health & Family Welfare", "sanctioned_cr": 3.7}], "Delhi": [{"category": "Irrigation", "sanctioned_cr": 8.3}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 7.2}, {"category": "Education", "sanctioned_cr": 6.3}, {"category": "Rural Development", "sanctioned_cr": 5.8}, {"category": "Health & Family Welfare", "sanctioned_cr": 5.5}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 4.8}, {"category": "Drinking Water", "sanctioned_cr": 3.3}, {"category": "Sports Infrastructure", "sanctioned_cr": 2.7}, {"category": "Electricity Facility", "sanctioned_cr": 1.3}, {"category": "Sanitation", "sanctioned_cr": 0.7}], "Gujarat": [{"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 17.8}, {"category": "Irrigation", "sanctioned_cr": 16.5}, {"category": "Sports Infrastructure", "sanctioned_cr": 16.3}, {"category": "Education", "sanctioned_cr": 14.4}, {"category": "Rural Development", "sanctioned_cr": 13.7}, {"category": "Health & Family Welfare", "sanctioned_cr": 13.4}, {"category": "Drinking Water", "sanctioned_cr": 12.2}, {"category": "Sanitation", "sanctioned_cr": 11.7}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 11.1}, {"category": "Electricity Facility", "sanctioned_cr": 7.1}], "Haryana": [{"category": "Sports Infrastructure", "sanctioned_cr": 11.2}, {"category": "Rural Development", "sanctioned_cr": 10.1}, {"category": "Drinking Water", "sanctioned_cr": 9.4}, {"category": "Education", "sanctioned_cr": 8.2}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 7.4}, {"category": "Health & Family Welfare", "sanctioned_cr": 6.7}, {"category": "Electricity Facility", "sanctioned_cr": 4.3}, {"category": "Irrigation", "sanctioned_cr": 4.2}, {"category": "Sanitation", "sanctioned_cr": 2.7}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 1.7}], "Jharkhand": [{"category": "Sports Infrastructure", "sanctioned_cr": 11.7}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 10.6}, {"category": "Sanitation", "sanctioned_cr": 9.3}, {"category": "Electricity Facility", "sanctioned_cr": 9.1}, {"category": "Rural Development", "sanctioned_cr": 7.4}, {"category": "Education", "sanctioned_cr": 7.3}, {"category": "Irrigation", "sanctioned_cr": 6.6}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 5.5}, {"category": "Health & Family Welfare", "sanctioned_cr": 4.3}, {"category": "Drinking Water", "sanctioned_cr": 3.6}], "Karnataka": [{"category": "Sports Infrastructure", "sanctioned_cr": 19.3}, {"category": "Education", "sanctioned_cr": 18.4}, {"category": "Sanitation", "sanctioned_cr": 18.2}, {"category": "Drinking Water", "sanctioned_cr": 14.7}, {"category": "Irrigation", "sanctioned_cr": 12.5}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 11.7}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 11.7}, {"category": "Electricity Facility", "sanctioned_cr": 11.5}, {"category": "Health & Family Welfare", "sanctioned_cr": 10.4}, {"category": "Rural Development", "sanctioned_cr": 9.1}], "Kerala": [{"category": "Drinking Water", "sanctioned_cr": 16.7}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 16.0}, {"category": "Sports Infrastructure", "sanctioned_cr": 14.1}, {"category": "Sanitation", "sanctioned_cr": 13.2}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 11.0}, {"category": "Electricity Facility", "sanctioned_cr": 9.1}, {"category": "Rural Development", "sanctioned_cr": 8.5}, {"category": "Education", "sanctioned_cr": 8.0}, {"category": "Health & Family Welfare", "sanctioned_cr": 7.9}, {"category": "Irrigation", "sanctioned_cr": 6.1}], "Madhya Pradesh": [{"category": "Education", "sanctioned_cr": 17.2}, {"category": "Irrigation", "sanctioned_cr": 16.4}, {"category": "Electricity Facility", "sanctioned_cr": 16.0}, {"category": "Sports Infrastructure", "sanctioned_cr": 15.9}, {"category": "Sanitation", "sanctioned_cr": 14.4}, {"category": "Drinking Water", "sanctioned_cr": 14.3}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 13.9}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 11.8}, {"category": "Rural Development", "sanctioned_cr": 9.8}, {"category": "Health & Family Welfare", "sanctioned_cr": 7.9}], "Maharashtra": [{"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 32.0}, {"category": "Drinking Water", "sanctioned_cr": 30.6}, {"category": "Health & Family Welfare", "sanctioned_cr": 28.7}, {"category": "Sports Infrastructure", "sanctioned_cr": 22.3}, {"category": "Education", "sanctioned_cr": 21.7}, {"category": "Rural Development", "sanctioned_cr": 20.3}, {"category": "Electricity Facility", "sanctioned_cr": 19.7}, {"category": "Irrigation", "sanctioned_cr": 19.0}, {"category": "Sanitation", "sanctioned_cr": 17.3}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 14.8}], "Odisha": [{"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 15.8}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 14.3}, {"category": "Drinking Water", "sanctioned_cr": 13.4}, {"category": "Sports Infrastructure", "sanctioned_cr": 12.4}, {"category": "Irrigation", "sanctioned_cr": 11.8}, {"category": "Rural Development", "sanctioned_cr": 11.1}, {"category": "Electricity Facility", "sanctioned_cr": 10.5}, {"category": "Education", "sanctioned_cr": 10.0}, {"category": "Health & Family Welfare", "sanctioned_cr": 9.1}, {"category": "Sanitation", "sanctioned_cr": 9.0}], "Punjab": [{"category": "Electricity Facility", "sanctioned_cr": 14.4}, {"category": "Sports Infrastructure", "sanctioned_cr": 14.1}, {"category": "Health & Family Welfare", "sanctioned_cr": 11.3}, {"category": "Rural Development", "sanctioned_cr": 9.2}, {"category": "Education", "sanctioned_cr": 8.9}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 8.7}, {"category": "Sanitation", "sanctioned_cr": 7.0}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 6.7}, {"category": "Drinking Water", "sanctioned_cr": 6.6}, {"category": "Irrigation", "sanctioned_cr": 6.5}], "Rajasthan": [{"category": "Education", "sanctioned_cr": 19.2}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 15.9}, {"category": "Sanitation", "sanctioned_cr": 15.3}, {"category": "Health & Family Welfare", "sanctioned_cr": 13.6}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 13.4}, {"category": "Electricity Facility", "sanctioned_cr": 11.5}, {"category": "Drinking Water", "sanctioned_cr": 9.5}, {"category": "Sports Infrastructure", "sanctioned_cr": 9.3}, {"category": "Rural Development", "sanctioned_cr": 7.9}, {"category": "Irrigation", "sanctioned_cr": 6.0}], "Tamil Nadu": [{"category": "Drinking Water", "sanctioned_cr": 25.4}, {"category": "Rural Development", "sanctioned_cr": 25.1}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 19.4}, {"category": "Sports Infrastructure", "sanctioned_cr": 18.5}, {"category": "Electricity Facility", "sanctioned_cr": 17.7}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 16.3}, {"category": "Irrigation", "sanctioned_cr": 16.2}, {"category": "Health & Family Welfare", "sanctioned_cr": 13.6}, {"category": "Sanitation", "sanctioned_cr": 13.5}, {"category": "Education", "sanctioned_cr": 12.7}], "Telangana": [{"category": "Rural Development", "sanctioned_cr": 12.6}, {"category": "Sanitation", "sanctioned_cr": 12.3}, {"category": "Education", "sanctioned_cr": 10.3}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 9.8}, {"category": "Sports Infrastructure", "sanctioned_cr": 9.3}, {"category": "Electricity Facility", "sanctioned_cr": 9.0}, {"category": "Health & Family Welfare", "sanctioned_cr": 7.6}, {"category": "Drinking Water", "sanctioned_cr": 7.0}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 6.8}, {"category": "Irrigation", "sanctioned_cr": 5.4}], "Uttar Pradesh": [{"category": "Sports Infrastructure", "sanctioned_cr": 45.8}, {"category": "Electricity Facility", "sanctioned_cr": 43.8}, {"category": "Rural Development", "sanctioned_cr": 42.4}, {"category": "Sanitation", "sanctioned_cr": 39.3}, {"category": "Education", "sanctioned_cr": 37.2}, {"category": "Irrigation", "sanctioned_cr": 36.6}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 31.5}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 30.2}, {"category": "Drinking Water", "sanctioned_cr": 29.2}, {"category": "Health & Family Welfare", "sanctioned_cr": 28.7}], "Uttarakhand": [{"category": "Health & Family Welfare", "sanctioned_cr": 9.4}, {"category": "Irrigation", "sanctioned_cr": 6.0}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 5.4}, {"category": "Drinking Water", "sanctioned_cr": 5.0}, {"category": "Electricity Facility", "sanctioned_cr": 4.9}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 4.3}, {"category": "Sports Infrastructure", "sanctioned_cr": 3.6}, {"category": "Sanitation", "sanctioned_cr": 2.2}, {"category": "Rural Development", "sanctioned_cr": 2.1}, {"category": "Education", "sanctioned_cr": 1.0}], "West Bengal": [{"category": "Irrigation", "sanctioned_cr": 25.1}, {"category": "Education", "sanctioned_cr": 24.9}, {"category": "Roads, Pathways & Bridges", "sanctioned_cr": 23.7}, {"category": "Electricity Facility", "sanctioned_cr": 19.0}, {"category": "Sanitation", "sanctioned_cr": 17.6}, {"category": "Health & Family Welfare", "sanctioned_cr": 17.0}, {"category": "Rural Development", "sanctioned_cr": 16.5}, {"category": "Other Public Facilities (Community Centres)", "sanctioned_cr": 16.5}, {"category": "Drinking Water", "sanctioned_cr": 12.9}, {"category": "Sports Infrastructure", "sanctioned_cr": 8.9}]}, "mp_yearly_trend": {"MP0001": [{"year": 2021, "sanctioned_cr": 4.57, "expenditure_cr": 4.18}, {"year": 2022, "sanctioned_cr": 4.1, "expenditure_cr": 4.12}, {"year": 2023, "sanctioned_cr": 3.26, "expenditure_cr": 3.25}, {"year": 2024, "sanctioned_cr": 5.09, "expenditure_cr": 4.84}, {"year": 2025, "sanctioned_cr": 4.81, "expenditure_cr": 4.56}], "MP0002": [{"year": 2021, "sanctioned_cr": 4.19, "expenditure_cr": 4.0}, {"year": 2022, "sanctioned_cr": 5.02, "expenditure_cr": 4.65}, {"year": 2023, "sanctioned_cr": 4.02, "expenditure_cr": 3.94}, {"year": 2024, "sanctioned_cr": 3.64, "expenditure_cr": 3.43}, {"year": 2025, "sanctioned_cr": 4.49, "expenditure_cr": 4.26}], "MP0003": [{"year": 2021, "sanctioned_cr": 4.22, "expenditure_cr": 3.96}, {"year": 2022, "sanctioned_cr": 4.39, "expenditure_cr": 4.23}, {"year": 2023, "sanctioned_cr": 5.14, "expenditure_cr": 4.69}, {"year": 2024, "sanctioned_cr": 4.73, "expenditure_cr": 4.67}, {"year": 2025, "sanctioned_cr": 5.32, "expenditure_cr": 5.17}], "MP0004": [{"year": 2021, "sanctioned_cr": 5.0, "expenditure_cr": 4.84}, {"year": 2022, "sanctioned_cr": 4.97, "expenditure_cr": 4.76}, {"year": 2023, "sanctioned_cr": 4.53, "expenditure_cr": 4.06}, {"year": 2024, "sanctioned_cr": 4.32, "expenditure_cr": 4.0}, {"year": 2025, "sanctioned_cr": 5.63, "expenditure_cr": 5.37}], "MP0005": [{"year": 2021, "sanctioned_cr": 4.1, "expenditure_cr": 3.79}, {"year": 2022, "sanctioned_cr": 4.99, "expenditure_cr": 4.83}, {"year": 2023, "sanctioned_cr": 5.16, "expenditure_cr": 4.85}, {"year": 2024, "sanctioned_cr": 3.52, "expenditure_cr": 3.55}, {"year": 2025, "sanctioned_cr": 3.83, "expenditure_cr": 3.62}], "MP0006": [{"year": 2021, "sanctioned_cr": 4.41, "expenditure_cr": 4.25}, {"year": 2022, "sanctioned_cr": 4.4, "expenditure_cr": 4.32}, {"year": 2023, "sanctioned_cr": 4.93, "expenditure_cr": 4.72}, {"year": 2024, "sanctioned_cr": 3.68, "expenditure_cr": 3.59}, {"year": 2025, "sanctioned_cr": 4.96, "expenditure_cr": 4.67}], "MP0007": [{"year": 2021, "sanctioned_cr": 5.82, "expenditure_cr": 5.88}, {"year": 2022, "sanctioned_cr": 4.89, "expenditure_cr": 4.53}, {"year": 2023, "sanctioned_cr": 4.89, "expenditure_cr": 4.96}, {"year": 2024, "sanctioned_cr": 3.94, "expenditure_cr": 3.68}, {"year": 2025, "sanctioned_cr": 4.34, "expenditure_cr": 4.19}], "MP0008": [{"year": 2021, "sanctioned_cr": 4.52, "expenditure_cr": 4.31}, {"year": 2022, "sanctioned_cr": 4.93, "expenditure_cr": 4.81}, {"year": 2023, "sanctioned_cr": 3.92, "expenditure_cr": 3.59}, {"year": 2024, "sanctioned_cr": 4.06, "expenditure_cr": 3.69}, {"year": 2025, "sanctioned_cr": 4.89, "expenditure_cr": 4.88}], "MP0009": [{"year": 2021, "sanctioned_cr": 4.14, "expenditure_cr": 3.99}, {"year": 2022, "sanctioned_cr": 4.13, "expenditure_cr": 3.73}, {"year": 2023, "sanctioned_cr": 4.1, "expenditure_cr": 3.8}, {"year": 2024, "sanctioned_cr": 5.22, "expenditure_cr": 5.11}, {"year": 2025, "sanctioned_cr": 4.05, "expenditure_cr": 3.71}], "MP0010": [{"year": 2021, "sanctioned_cr": 5.33, "expenditure_cr": 5.05}, {"year": 2022, "sanctioned_cr": 4.4, "expenditure_cr": 4.37}, {"year": 2023, "sanctioned_cr": 5.14, "expenditure_cr": 4.88}, {"year": 2024, "sanctioned_cr": 4.69, "expenditure_cr": 4.64}, {"year": 2025, "sanctioned_cr": 4.69, "expenditure_cr": 4.61}], "MP0011": [{"year": 2021, "sanctioned_cr": 5.01, "expenditure_cr": 4.86}, {"year": 2022, "sanctioned_cr": 4.35, "expenditure_cr": 4.25}, {"year": 2023, "sanctioned_cr": 4.0, "expenditure_cr": 3.85}, {"year": 2024, "sanctioned_cr": 3.96, "expenditure_cr": 3.95}, {"year": 2025, "sanctioned_cr": 4.03, "expenditure_cr": 3.73}], "MP0012": [{"year": 2021, "sanctioned_cr": 4.46, "expenditure_cr": 4.16}, {"year": 2022, "sanctioned_cr": 5.2, "expenditure_cr": 4.89}, {"year": 2023, "sanctioned_cr": 4.24, "expenditure_cr": 4.11}, {"year": 2024, "sanctioned_cr": 4.88, "expenditure_cr": 4.48}, {"year": 2025, "sanctioned_cr": 4.0, "expenditure_cr": 3.96}], "MP0013": [{"year": 2021, "sanctioned_cr": 4.9, "expenditure_cr": 4.7}, {"year": 2022, "sanctioned_cr": 4.48, "expenditure_cr": 4.25}, {"year": 2023, "sanctioned_cr": 4.13, "expenditure_cr": 4.07}, {"year": 2024, "sanctioned_cr": 4.6, "expenditure_cr": 4.32}, {"year": 2025, "sanctioned_cr": 5.57, "expenditure_cr": 5.34}], "MP0014": [{"year": 2021, "sanctioned_cr": 5.05, "expenditure_cr": 4.94}, {"year": 2022, "sanctioned_cr": 4.88, "expenditure_cr": 4.6}, {"year": 2023, "sanctioned_cr": 4.19, "expenditure_cr": 4.0}, {"year": 2024, "sanctioned_cr": 4.78, "expenditure_cr": 4.55}, {"year": 2025, "sanctioned_cr": 3.88, "expenditure_cr": 3.61}], "MP0015": [{"year": 2021, "sanctioned_cr": 4.78, "expenditure_cr": 4.79}, {"year": 2022, "sanctioned_cr": 4.46, "expenditure_cr": 4.26}, {"year": 2023, "sanctioned_cr": 3.62, "expenditure_cr": 3.4}, {"year": 2024, "sanctioned_cr": 4.48, "expenditure_cr": 4.36}, {"year": 2025, "sanctioned_cr": 5.26, "expenditure_cr": 5.04}], "MP0016": [{"year": 2021, "sanctioned_cr": 4.99, "expenditure_cr": 4.67}, {"year": 2022, "sanctioned_cr": 4.4, "expenditure_cr": 4.24}, {"year": 2023, "sanctioned_cr": 4.8, "expenditure_cr": 4.72}, {"year": 2024, "sanctioned_cr": 4.73, "expenditure_cr": 4.4}, {"year": 2025, "sanctioned_cr": 4.91, "expenditure_cr": 4.63}], "MP0017": [{"year": 2021, "sanctioned_cr": 5.22, "expenditure_cr": 4.81}, {"year": 2022, "sanctioned_cr": 3.48, "expenditure_cr": 3.37}, {"year": 2023, "sanctioned_cr": 4.37, "expenditure_cr": 4.09}, {"year": 2024, "sanctioned_cr": 4.57, "expenditure_cr": 4.54}, {"year": 2025, "sanctioned_cr": 4.12, "expenditure_cr": 3.85}], "MP0018": [{"year": 2021, "sanctioned_cr": 5.36, "expenditure_cr": 5.05}, {"year": 2022, "sanctioned_cr": 4.86, "expenditure_cr": 4.73}, {"year": 2023, "sanctioned_cr": 4.58, "expenditure_cr": 4.32}, {"year": 2024, "sanctioned_cr": 4.11, "expenditure_cr": 3.79}, {"year": 2025, "sanctioned_cr": 4.03, "expenditure_cr": 3.67}], "MP0019": [{"year": 2021, "sanctioned_cr": 4.96, "expenditure_cr": 4.96}, {"year": 2022, "sanctioned_cr": 3.88, "expenditure_cr": 3.57}, {"year": 2023, "sanctioned_cr": 4.19, "expenditure_cr": 4.0}, {"year": 2024, "sanctioned_cr": 5.61, "expenditure_cr": 5.3}, {"year": 2025, "sanctioned_cr": 4.8, "expenditure_cr": 4.47}], "MP0020": [{"year": 2021, "sanctioned_cr": 4.73, "expenditure_cr": 4.47}, {"year": 2022, "sanctioned_cr": 3.7, "expenditure_cr": 3.53}, {"year": 2023, "sanctioned_cr": 4.6, "expenditure_cr": 4.31}, {"year": 2024, "sanctioned_cr": 4.45, "expenditure_cr": 4.19}, {"year": 2025, "sanctioned_cr": 4.87, "expenditure_cr": 4.68}], "MP0021": [{"year": 2021, "sanctioned_cr": 4.45, "expenditure_cr": 4.1}, {"year": 2022, "sanctioned_cr": 4.23, "expenditure_cr": 3.96}, {"year": 2023, "sanctioned_cr": 4.37, "expenditure_cr": 4.17}, {"year": 2024, "sanctioned_cr": 4.04, "expenditure_cr": 3.85}, {"year": 2025, "sanctioned_cr": 4.92, "expenditure_cr": 4.56}], "MP0022": [{"year": 2021, "sanctioned_cr": 5.04, "expenditure_cr": 4.8}, {"year": 2022, "sanctioned_cr": 4.68, "expenditure_cr": 4.4}, {"year": 2023, "sanctioned_cr": 3.71, "expenditure_cr": 3.45}, {"year": 2024, "sanctioned_cr": 4.74, "expenditure_cr": 4.74}, {"year": 2025, "sanctioned_cr": 4.18, "expenditure_cr": 4.14}], "MP0023": [{"year": 2021, "sanctioned_cr": 4.15, "expenditure_cr": 4.01}, {"year": 2022, "sanctioned_cr": 3.83, "expenditure_cr": 3.84}, {"year": 2023, "sanctioned_cr": 4.67, "expenditure_cr": 4.32}, {"year": 2024, "sanctioned_cr": 4.28, "expenditure_cr": 4.17}, {"year": 2025, "sanctioned_cr": 4.77, "expenditure_cr": 4.59}], "MP0024": [{"year": 2021, "sanctioned_cr": 4.2, "expenditure_cr": 3.92}, {"year": 2022, "sanctioned_cr": 3.0, "expenditure_cr": 2.83}, {"year": 2023, "sanctioned_cr": 4.26, "expenditure_cr": 4.09}, {"year": 2024, "sanctioned_cr": 4.72, "expenditure_cr": 4.45}, {"year": 2025, "sanctioned_cr": 5.11, "expenditure_cr": 4.8}], "MP0025": [{"year": 2021, "sanctioned_cr": 4.45, "expenditure_cr": 4.11}, {"year": 2022, "sanctioned_cr": 4.86, "expenditure_cr": 4.6}, {"year": 2023, "sanctioned_cr": 4.75, "expenditure_cr": 4.51}, {"year": 2024, "sanctioned_cr": 5.45, "expenditure_cr": 5.15}, {"year": 2025, "sanctioned_cr": 4.99, "expenditure_cr": 4.61}], "MP0026": [{"year": 2021, "sanctioned_cr": 5.02, "expenditure_cr": 4.74}, {"year": 2022, "sanctioned_cr": 3.54, "expenditure_cr": 3.38}, {"year": 2023, "sanctioned_cr": 4.39, "expenditure_cr": 4.38}, {"year": 2024, "sanctioned_cr": 5.25, "expenditure_cr": 4.77}, {"year": 2025, "sanctioned_cr": 5.84, "expenditure_cr": 5.52}], "MP0027": [{"year": 2021, "sanctioned_cr": 4.86, "expenditure_cr": 4.62}, {"year": 2022, "sanctioned_cr": 4.09, "expenditure_cr": 3.79}, {"year": 2023, "sanctioned_cr": 5.21, "expenditure_cr": 4.99}, {"year": 2024, "sanctioned_cr": 5.03, "expenditure_cr": 4.82}, {"year": 2025, "sanctioned_cr": 4.2, "expenditure_cr": 3.94}], "MP0028": [{"year": 2021, "sanctioned_cr": 4.7, "expenditure_cr": 4.63}, {"year": 2022, "sanctioned_cr": 5.1, "expenditure_cr": 4.79}, {"year": 2023, "sanctioned_cr": 5.48, "expenditure_cr": 5.21}, {"year": 2024, "sanctioned_cr": 4.54, "expenditure_cr": 3.99}, {"year": 2025, "sanctioned_cr": 4.77, "expenditure_cr": 4.44}], "MP0029": [{"year": 2021, "sanctioned_cr": 4.87, "expenditure_cr": 4.68}, {"year": 2022, "sanctioned_cr": 3.89, "expenditure_cr": 3.64}, {"year": 2023, "sanctioned_cr": 4.44, "expenditure_cr": 4.23}, {"year": 2024, "sanctioned_cr": 4.55, "expenditure_cr": 4.28}, {"year": 2025, "sanctioned_cr": 3.8, "expenditure_cr": 3.55}], "MP0030": [{"year": 2021, "sanctioned_cr": 4.26, "expenditure_cr": 4.08}, {"year": 2022, "sanctioned_cr": 4.17, "expenditure_cr": 3.91}, {"year": 2023, "sanctioned_cr": 4.42, "expenditure_cr": 4.41}, {"year": 2024, "sanctioned_cr": 5.09, "expenditure_cr": 4.91}, {"year": 2025, "sanctioned_cr": 4.36, "expenditure_cr": 4.16}], "MP0031": [{"year": 2021, "sanctioned_cr": 4.68, "expenditure_cr": 4.41}, {"year": 2022, "sanctioned_cr": 4.32, "expenditure_cr": 3.97}, {"year": 2023, "sanctioned_cr": 4.81, "expenditure_cr": 4.58}, {"year": 2024, "sanctioned_cr": 4.19, "expenditure_cr": 4.05}, {"year": 2025, "sanctioned_cr": 4.62, "expenditure_cr": 4.54}], "MP0032": [{"year": 2021, "sanctioned_cr": 3.74, "expenditure_cr": 3.56}, {"year": 2022, "sanctioned_cr": 5.53, "expenditure_cr": 5.37}, {"year": 2023, "sanctioned_cr": 4.14, "expenditure_cr": 4.06}, {"year": 2024, "sanctioned_cr": 5.1, "expenditure_cr": 4.82}, {"year": 2025, "sanctioned_cr": 3.99, "expenditure_cr": 3.83}], "MP0033": [{"year": 2021, "sanctioned_cr": 4.5, "expenditure_cr": 4.1}, {"year": 2022, "sanctioned_cr": 4.04, "expenditure_cr": 3.84}, {"year": 2023, "sanctioned_cr": 4.66, "expenditure_cr": 4.5}, {"year": 2024, "sanctioned_cr": 4.7, "expenditure_cr": 4.53}, {"year": 2025, "sanctioned_cr": 3.84, "expenditure_cr": 3.68}], "MP0034": [{"year": 2021, "sanctioned_cr": 4.42, "expenditure_cr": 4.23}, {"year": 2022, "sanctioned_cr": 4.41, "expenditure_cr": 4.28}, {"year": 2023, "sanctioned_cr": 3.97, "expenditure_cr": 3.82}, {"year": 2024, "sanctioned_cr": 5.17, "expenditure_cr": 4.54}, {"year": 2025, "sanctioned_cr": 5.4, "expenditure_cr": 5.0}], "MP0035": [{"year": 2021, "sanctioned_cr": 4.13, "expenditure_cr": 3.82}, {"year": 2022, "sanctioned_cr": 4.15, "expenditure_cr": 4.05}, {"year": 2023, "sanctioned_cr": 4.91, "expenditure_cr": 4.71}, {"year": 2024, "sanctioned_cr": 5.44, "expenditure_cr": 5.37}, {"year": 2025, "sanctioned_cr": 4.39, "expenditure_cr": 4.1}], "MP0036": [{"year": 2021, "sanctioned_cr": 1.74, "expenditure_cr": 1.65}, {"year": 2022, "sanctioned_cr": 1.5, "expenditure_cr": 1.33}, {"year": 2023, "sanctioned_cr": 1.45, "expenditure_cr": 1.38}, {"year": 2024, "sanctioned_cr": 1.57, "expenditure_cr": 1.41}, {"year": 2025, "sanctioned_cr": 0.99, "expenditure_cr": 0.95}], "MP0037": [{"year": 2021, "sanctioned_cr": 4.65, "expenditure_cr": 4.44}, {"year": 2022, "sanctioned_cr": 5.25, "expenditure_cr": 5.08}, {"year": 2023, "sanctioned_cr": 4.33, "expenditure_cr": 4.03}, {"year": 2024, "sanctioned_cr": 4.27, "expenditure_cr": 3.84}, {"year": 2025, "sanctioned_cr": 4.63, "expenditure_cr": 4.53}], "MP0038": [{"year": 2021, "sanctioned_cr": 3.59, "expenditure_cr": 3.5}, {"year": 2022, "sanctioned_cr": 4.35, "expenditure_cr": 4.28}, {"year": 2023, "sanctioned_cr": 5.25, "expenditure_cr": 4.99}, {"year": 2024, "sanctioned_cr": 5.14, "expenditure_cr": 4.95}, {"year": 2025, "sanctioned_cr": 4.72, "expenditure_cr": 4.53}], "MP0039": [{"year": 2021, "sanctioned_cr": 4.55, "expenditure_cr": 4.27}, {"year": 2022, "sanctioned_cr": 4.27, "expenditure_cr": 3.96}, {"year": 2023, "sanctioned_cr": 3.9, "expenditure_cr": 3.88}, {"year": 2024, "sanctioned_cr": 5.05, "expenditure_cr": 4.73}, {"year": 2025, "sanctioned_cr": 4.44, "expenditure_cr": 4.5}], "MP0040": [{"year": 2021, "sanctioned_cr": 4.34, "expenditure_cr": 4.03}, {"year": 2022, "sanctioned_cr": 5.14, "expenditure_cr": 4.8}, {"year": 2023, "sanctioned_cr": 4.66, "expenditure_cr": 4.36}, {"year": 2024, "sanctioned_cr": 4.52, "expenditure_cr": 4.31}, {"year": 2025, "sanctioned_cr": 3.99, "expenditure_cr": 3.78}], "MP0041": [{"year": 2021, "sanctioned_cr": 4.55, "expenditure_cr": 4.38}, {"year": 2022, "sanctioned_cr": 4.49, "expenditure_cr": 4.24}, {"year": 2023, "sanctioned_cr": 4.25, "expenditure_cr": 4.11}, {"year": 2024, "sanctioned_cr": 4.86, "expenditure_cr": 4.51}, {"year": 2025, "sanctioned_cr": 4.05, "expenditure_cr": 3.97}], "MP0042": [{"year": 2021, "sanctioned_cr": 4.71, "expenditure_cr": 4.71}, {"year": 2022, "sanctioned_cr": 5.04, "expenditure_cr": 4.88}, {"year": 2023, "sanctioned_cr": 4.45, "expenditure_cr": 4.27}, {"year": 2024, "sanctioned_cr": 4.29, "expenditure_cr": 4.22}, {"year": 2025, "sanctioned_cr": 4.31, "expenditure_cr": 4.1}], "MP0043": [{"year": 2021, "sanctioned_cr": 4.26, "expenditure_cr": 4.1}, {"year": 2022, "sanctioned_cr": 4.8, "expenditure_cr": 4.51}, {"year": 2023, "sanctioned_cr": 4.77, "expenditure_cr": 4.53}, {"year": 2024, "sanctioned_cr": 4.27, "expenditure_cr": 3.9}, {"year": 2025, "sanctioned_cr": 4.8, "expenditure_cr": 4.64}], "MP0044": [{"year": 2021, "sanctioned_cr": 3.64, "expenditure_cr": 3.43}, {"year": 2022, "sanctioned_cr": 5.41, "expenditure_cr": 5.21}, {"year": 2023, "sanctioned_cr": 4.64, "expenditure_cr": 4.43}, {"year": 2024, "sanctioned_cr": 4.27, "expenditure_cr": 4.02}, {"year": 2025, "sanctioned_cr": 5.08, "expenditure_cr": 4.85}], "MP0045": [{"year": 2021, "sanctioned_cr": 4.31, "expenditure_cr": 6.51}, {"year": 2022, "sanctioned_cr": 3.88, "expenditure_cr": 6.35}, {"year": 2023, "sanctioned_cr": 4.14, "expenditure_cr": 5.82}, {"year": 2024, "sanctioned_cr": 4.46, "expenditure_cr": 6.52}, {"year": 2025, "sanctioned_cr": 4.96, "expenditure_cr": 7.82}], "MP0046": [{"year": 2021, "sanctioned_cr": 5.02, "expenditure_cr": 4.88}, {"year": 2022, "sanctioned_cr": 3.83, "expenditure_cr": 3.62}, {"year": 2023, "sanctioned_cr": 4.92, "expenditure_cr": 4.72}, {"year": 2024, "sanctioned_cr": 4.35, "expenditure_cr": 3.95}, {"year": 2025, "sanctioned_cr": 4.42, "expenditure_cr": 3.94}], "MP0047": [{"year": 2021, "sanctioned_cr": 4.56, "expenditure_cr": 4.37}, {"year": 2022, "sanctioned_cr": 3.97, "expenditure_cr": 3.76}, {"year": 2023, "sanctioned_cr": 4.75, "expenditure_cr": 4.66}, {"year": 2024, "sanctioned_cr": 4.24, "expenditure_cr": 4.03}, {"year": 2025, "sanctioned_cr": 4.1, "expenditure_cr": 3.76}], "MP0048": [{"year": 2021, "sanctioned_cr": 4.55, "expenditure_cr": 4.47}, {"year": 2022, "sanctioned_cr": 4.14, "expenditure_cr": 3.97}, {"year": 2023, "sanctioned_cr": 4.3, "expenditure_cr": 3.95}, {"year": 2024, "sanctioned_cr": 5.16, "expenditure_cr": 4.82}, {"year": 2025, "sanctioned_cr": 4.16, "expenditure_cr": 3.73}], "MP0049": [{"year": 2021, "sanctioned_cr": 4.33, "expenditure_cr": 4.18}, {"year": 2022, "sanctioned_cr": 4.11, "expenditure_cr": 3.92}, {"year": 2023, "sanctioned_cr": 3.39, "expenditure_cr": 3.24}, {"year": 2024, "sanctioned_cr": 4.55, "expenditure_cr": 4.36}, {"year": 2025, "sanctioned_cr": 5.21, "expenditure_cr": 4.94}], "MP0050": [{"year": 2021, "sanctioned_cr": 4.74, "expenditure_cr": 4.54}, {"year": 2022, "sanctioned_cr": 4.69, "expenditure_cr": 4.34}, {"year": 2023, "sanctioned_cr": 4.05, "expenditure_cr": 3.79}, {"year": 2024, "sanctioned_cr": 4.68, "expenditure_cr": 4.51}, {"year": 2025, "sanctioned_cr": 4.44, "expenditure_cr": 4.04}], "MP0051": [{"year": 2021, "sanctioned_cr": 4.19, "expenditure_cr": 3.9}, {"year": 2022, "sanctioned_cr": 4.46, "expenditure_cr": 4.2}, {"year": 2023, "sanctioned_cr": 4.25, "expenditure_cr": 3.79}, {"year": 2024, "sanctioned_cr": 5.21, "expenditure_cr": 4.97}, {"year": 2025, "sanctioned_cr": 5.96, "expenditure_cr": 5.46}], "MP0052": [{"year": 2021, "sanctioned_cr": 5.06, "expenditure_cr": 4.66}, {"year": 2022, "sanctioned_cr": 5.52, "expenditure_cr": 5.05}, {"year": 2023, "sanctioned_cr": 5.56, "expenditure_cr": 4.83}, {"year": 2024, "sanctioned_cr": 5.04, "expenditure_cr": 4.82}, {"year": 2025, "sanctioned_cr": 4.48, "expenditure_cr": 4.3}], "MP0053": [{"year": 2021, "sanctioned_cr": 4.7, "expenditure_cr": 4.51}, {"year": 2022, "sanctioned_cr": 3.93, "expenditure_cr": 3.75}, {"year": 2023, "sanctioned_cr": 4.15, "expenditure_cr": 3.94}, {"year": 2024, "sanctioned_cr": 4.59, "expenditure_cr": 4.37}, {"year": 2025, "sanctioned_cr": 4.77, "expenditure_cr": 4.9}], "MP0054": [{"year": 2021, "sanctioned_cr": 5.62, "expenditure_cr": 5.31}, {"year": 2022, "sanctioned_cr": 4.05, "expenditure_cr": 3.83}, {"year": 2023, "sanctioned_cr": 3.69, "expenditure_cr": 3.42}, {"year": 2024, "sanctioned_cr": 4.85, "expenditure_cr": 4.64}, {"year": 2025, "sanctioned_cr": 4.03, "expenditure_cr": 3.9}], "MP0055": [{"year": 2021, "sanctioned_cr": 3.71, "expenditure_cr": 3.5}, {"year": 2022, "sanctioned_cr": 4.79, "expenditure_cr": 4.39}, {"year": 2023, "sanctioned_cr": 4.03, "expenditure_cr": 3.85}, {"year": 2024, "sanctioned_cr": 4.41, "expenditure_cr": 4.17}, {"year": 2025, "sanctioned_cr": 3.96, "expenditure_cr": 3.66}], "MP0056": [{"year": 2021, "sanctioned_cr": 4.62, "expenditure_cr": 4.31}, {"year": 2022, "sanctioned_cr": 4.65, "expenditure_cr": 4.49}, {"year": 2023, "sanctioned_cr": 4.89, "expenditure_cr": 4.72}, {"year": 2024, "sanctioned_cr": 4.49, "expenditure_cr": 4.34}, {"year": 2025, "sanctioned_cr": 4.08, "expenditure_cr": 3.78}], "MP0057": [{"year": 2021, "sanctioned_cr": 3.78, "expenditure_cr": 3.58}, {"year": 2022, "sanctioned_cr": 4.9, "expenditure_cr": 4.47}, {"year": 2023, "sanctioned_cr": 4.61, "expenditure_cr": 4.46}, {"year": 2024, "sanctioned_cr": 5.2, "expenditure_cr": 5.24}, {"year": 2025, "sanctioned_cr": 3.92, "expenditure_cr": 3.82}], "MP0058": [{"year": 2021, "sanctioned_cr": 3.99, "expenditure_cr": 3.8}, {"year": 2022, "sanctioned_cr": 4.57, "expenditure_cr": 4.32}, {"year": 2023, "sanctioned_cr": 4.07, "expenditure_cr": 3.81}, {"year": 2024, "sanctioned_cr": 5.04, "expenditure_cr": 4.81}, {"year": 2025, "sanctioned_cr": 4.85, "expenditure_cr": 4.78}], "MP0059": [{"year": 2021, "sanctioned_cr": 5.17, "expenditure_cr": 4.7}, {"year": 2022, "sanctioned_cr": 4.87, "expenditure_cr": 4.6}, {"year": 2023, "sanctioned_cr": 4.5, "expenditure_cr": 4.37}, {"year": 2024, "sanctioned_cr": 4.96, "expenditure_cr": 4.81}, {"year": 2025, "sanctioned_cr": 4.93, "expenditure_cr": 4.68}], "MP0060": [{"year": 2021, "sanctioned_cr": 3.94, "expenditure_cr": 3.61}, {"year": 2022, "sanctioned_cr": 5.38, "expenditure_cr": 5.14}, {"year": 2023, "sanctioned_cr": 4.39, "expenditure_cr": 4.0}, {"year": 2024, "sanctioned_cr": 4.58, "expenditure_cr": 4.42}, {"year": 2025, "sanctioned_cr": 4.16, "expenditure_cr": 3.84}], "MP0061": [{"year": 2021, "sanctioned_cr": 4.69, "expenditure_cr": 4.31}, {"year": 2022, "sanctioned_cr": 4.21, "expenditure_cr": 4.0}, {"year": 2023, "sanctioned_cr": 4.25, "expenditure_cr": 4.19}, {"year": 2024, "sanctioned_cr": 5.13, "expenditure_cr": 4.98}, {"year": 2025, "sanctioned_cr": 4.62, "expenditure_cr": 4.67}], "MP0062": [{"year": 2021, "sanctioned_cr": 4.15, "expenditure_cr": 3.93}, {"year": 2022, "sanctioned_cr": 4.78, "expenditure_cr": 4.3}, {"year": 2023, "sanctioned_cr": 4.82, "expenditure_cr": 4.42}, {"year": 2024, "sanctioned_cr": 4.24, "expenditure_cr": 4.17}, {"year": 2025, "sanctioned_cr": 4.64, "expenditure_cr": 4.48}], "MP0063": [{"year": 2021, "sanctioned_cr": 5.14, "expenditure_cr": 4.91}, {"year": 2022, "sanctioned_cr": 4.31, "expenditure_cr": 4.09}, {"year": 2023, "sanctioned_cr": 5.29, "expenditure_cr": 5.3}, {"year": 2024, "sanctioned_cr": 3.65, "expenditure_cr": 3.42}, {"year": 2025, "sanctioned_cr": 4.14, "expenditure_cr": 4.07}], "MP0064": [{"year": 2021, "sanctioned_cr": 4.43, "expenditure_cr": 4.16}, {"year": 2022, "sanctioned_cr": 4.38, "expenditure_cr": 4.16}, {"year": 2023, "sanctioned_cr": 4.47, "expenditure_cr": 4.18}, {"year": 2024, "sanctioned_cr": 4.67, "expenditure_cr": 4.37}, {"year": 2025, "sanctioned_cr": 4.7, "expenditure_cr": 4.4}], "MP0065": [{"year": 2021, "sanctioned_cr": 4.23, "expenditure_cr": 3.84}, {"year": 2022, "sanctioned_cr": 3.95, "expenditure_cr": 3.66}, {"year": 2023, "sanctioned_cr": 4.4, "expenditure_cr": 4.16}, {"year": 2024, "sanctioned_cr": 4.75, "expenditure_cr": 4.4}, {"year": 2025, "sanctioned_cr": 4.44, "expenditure_cr": 4.33}], "MP0066": [{"year": 2021, "sanctioned_cr": 4.19, "expenditure_cr": 3.86}, {"year": 2022, "sanctioned_cr": 4.03, "expenditure_cr": 4.02}, {"year": 2023, "sanctioned_cr": 4.11, "expenditure_cr": 4.02}, {"year": 2024, "sanctioned_cr": 5.13, "expenditure_cr": 4.84}, {"year": 2025, "sanctioned_cr": 5.18, "expenditure_cr": 5.04}], "MP0067": [{"year": 2021, "sanctioned_cr": 4.55, "expenditure_cr": 4.34}, {"year": 2022, "sanctioned_cr": 3.62, "expenditure_cr": 3.41}, {"year": 2023, "sanctioned_cr": 3.58, "expenditure_cr": 3.21}, {"year": 2024, "sanctioned_cr": 4.92, "expenditure_cr": 4.65}, {"year": 2025, "sanctioned_cr": 4.91, "expenditure_cr": 4.63}], "MP0068": [{"year": 2021, "sanctioned_cr": 4.56, "expenditure_cr": 4.32}, {"year": 2022, "sanctioned_cr": 4.84, "expenditure_cr": 4.72}, {"year": 2023, "sanctioned_cr": 4.08, "expenditure_cr": 3.82}, {"year": 2024, "sanctioned_cr": 4.22, "expenditure_cr": 4.14}, {"year": 2025, "sanctioned_cr": 5.14, "expenditure_cr": 4.83}], "MP0069": [{"year": 2021, "sanctioned_cr": 3.82, "expenditure_cr": 3.67}, {"year": 2022, "sanctioned_cr": 4.18, "expenditure_cr": 3.91}, {"year": 2023, "sanctioned_cr": 4.97, "expenditure_cr": 4.73}, {"year": 2024, "sanctioned_cr": 4.29, "expenditure_cr": 4.01}, {"year": 2025, "sanctioned_cr": 5.76, "expenditure_cr": 5.42}], "MP0070": [{"year": 2021, "sanctioned_cr": 1.2, "expenditure_cr": 1.16}, {"year": 2022, "sanctioned_cr": 1.71, "expenditure_cr": 1.66}, {"year": 2023, "sanctioned_cr": 0.77, "expenditure_cr": 0.76}, {"year": 2024, "sanctioned_cr": 0.92, "expenditure_cr": 0.85}, {"year": 2025, "sanctioned_cr": 0.88, "expenditure_cr": 0.82}], "MP0071": [{"year": 2021, "sanctioned_cr": 4.98, "expenditure_cr": 4.59}, {"year": 2022, "sanctioned_cr": 4.58, "expenditure_cr": 4.14}, {"year": 2023, "sanctioned_cr": 4.73, "expenditure_cr": 4.49}, {"year": 2024, "sanctioned_cr": 5.64, "expenditure_cr": 5.33}, {"year": 2025, "sanctioned_cr": 4.39, "expenditure_cr": 4.07}], "MP0072": [{"year": 2021, "sanctioned_cr": 4.65, "expenditure_cr": 4.55}, {"year": 2022, "sanctioned_cr": 5.0, "expenditure_cr": 4.76}, {"year": 2023, "sanctioned_cr": 3.91, "expenditure_cr": 3.64}, {"year": 2024, "sanctioned_cr": 4.44, "expenditure_cr": 4.2}, {"year": 2025, "sanctioned_cr": 4.67, "expenditure_cr": 4.33}], "MP0073": [{"year": 2021, "sanctioned_cr": 4.3, "expenditure_cr": 4.05}, {"year": 2022, "sanctioned_cr": 4.61, "expenditure_cr": 4.47}, {"year": 2023, "sanctioned_cr": 4.9, "expenditure_cr": 4.77}, {"year": 2024, "sanctioned_cr": 4.64, "expenditure_cr": 4.46}, {"year": 2025, "sanctioned_cr": 3.84, "expenditure_cr": 3.6}], "MP0074": [{"year": 2021, "sanctioned_cr": 5.34, "expenditure_cr": 4.94}, {"year": 2022, "sanctioned_cr": 4.64, "expenditure_cr": 4.35}, {"year": 2023, "sanctioned_cr": 4.81, "expenditure_cr": 4.45}, {"year": 2024, "sanctioned_cr": 4.48, "expenditure_cr": 4.3}, {"year": 2025, "sanctioned_cr": 4.42, "expenditure_cr": 4.29}], "MP0075": [{"year": 2021, "sanctioned_cr": 4.71, "expenditure_cr": 4.57}, {"year": 2022, "sanctioned_cr": 4.2, "expenditure_cr": 3.92}, {"year": 2023, "sanctioned_cr": 4.97, "expenditure_cr": 4.78}, {"year": 2024, "sanctioned_cr": 4.59, "expenditure_cr": 4.47}, {"year": 2025, "sanctioned_cr": 4.75, "expenditure_cr": 4.49}], "MP0076": [{"year": 2021, "sanctioned_cr": 4.63, "expenditure_cr": 4.25}, {"year": 2022, "sanctioned_cr": 4.84, "expenditure_cr": 4.56}, {"year": 2023, "sanctioned_cr": 4.29, "expenditure_cr": 4.04}, {"year": 2024, "sanctioned_cr": 4.47, "expenditure_cr": 4.19}, {"year": 2025, "sanctioned_cr": 4.23, "expenditure_cr": 3.86}], "MP0077": [{"year": 2021, "sanctioned_cr": 4.63, "expenditure_cr": 4.54}, {"year": 2022, "sanctioned_cr": 5.05, "expenditure_cr": 4.76}, {"year": 2023, "sanctioned_cr": 4.93, "expenditure_cr": 4.68}, {"year": 2024, "sanctioned_cr": 3.78, "expenditure_cr": 3.39}, {"year": 2025, "sanctioned_cr": 4.89, "expenditure_cr": 4.69}], "MP0078": [{"year": 2021, "sanctioned_cr": 4.94, "expenditure_cr": 4.43}, {"year": 2022, "sanctioned_cr": 3.92, "expenditure_cr": 3.69}, {"year": 2023, "sanctioned_cr": 4.38, "expenditure_cr": 4.13}, {"year": 2024, "sanctioned_cr": 3.72, "expenditure_cr": 3.56}, {"year": 2025, "sanctioned_cr": 4.1, "expenditure_cr": 3.81}], "MP0079": [{"year": 2021, "sanctioned_cr": 4.26, "expenditure_cr": 4.01}, {"year": 2022, "sanctioned_cr": 5.04, "expenditure_cr": 4.95}, {"year": 2023, "sanctioned_cr": 4.81, "expenditure_cr": 4.58}, {"year": 2024, "sanctioned_cr": 4.03, "expenditure_cr": 3.74}, {"year": 2025, "sanctioned_cr": 4.81, "expenditure_cr": 4.58}], "MP0080": [{"year": 2021, "sanctioned_cr": 4.88, "expenditure_cr": 4.8}, {"year": 2022, "sanctioned_cr": 4.15, "expenditure_cr": 4.03}, {"year": 2023, "sanctioned_cr": 4.13, "expenditure_cr": 3.96}, {"year": 2024, "sanctioned_cr": 4.59, "expenditure_cr": 4.32}, {"year": 2025, "sanctioned_cr": 5.08, "expenditure_cr": 4.89}], "MP0081": [{"year": 2021, "sanctioned_cr": 5.12, "expenditure_cr": 5.09}, {"year": 2022, "sanctioned_cr": 4.95, "expenditure_cr": 4.64}, {"year": 2023, "sanctioned_cr": 4.82, "expenditure_cr": 4.55}, {"year": 2024, "sanctioned_cr": 4.26, "expenditure_cr": 3.88}, {"year": 2025, "sanctioned_cr": 4.85, "expenditure_cr": 4.67}], "MP0082": [{"year": 2021, "sanctioned_cr": 4.77, "expenditure_cr": 4.39}, {"year": 2022, "sanctioned_cr": 3.82, "expenditure_cr": 3.76}, {"year": 2023, "sanctioned_cr": 4.52, "expenditure_cr": 4.57}, {"year": 2024, "sanctioned_cr": 5.85, "expenditure_cr": 5.46}, {"year": 2025, "sanctioned_cr": 5.79, "expenditure_cr": 5.48}], "MP0083": [{"year": 2021, "sanctioned_cr": 4.09, "expenditure_cr": 3.95}, {"year": 2022, "sanctioned_cr": 4.94, "expenditure_cr": 4.45}, {"year": 2023, "sanctioned_cr": 4.79, "expenditure_cr": 4.67}, {"year": 2024, "sanctioned_cr": 4.27, "expenditure_cr": 4.02}, {"year": 2025, "sanctioned_cr": 4.32, "expenditure_cr": 4.17}], "MP0084": [{"year": 2021, "sanctioned_cr": 4.51, "expenditure_cr": 4.33}, {"year": 2022, "sanctioned_cr": 4.5, "expenditure_cr": 4.34}, {"year": 2023, "sanctioned_cr": 5.14, "expenditure_cr": 4.84}, {"year": 2024, "sanctioned_cr": 4.68, "expenditure_cr": 4.29}, {"year": 2025, "sanctioned_cr": 4.58, "expenditure_cr": 4.28}], "MP0085": [{"year": 2021, "sanctioned_cr": 4.24, "expenditure_cr": 3.84}, {"year": 2022, "sanctioned_cr": 4.12, "expenditure_cr": 3.75}, {"year": 2023, "sanctioned_cr": 4.41, "expenditure_cr": 4.2}, {"year": 2024, "sanctioned_cr": 4.88, "expenditure_cr": 4.65}, {"year": 2025, "sanctioned_cr": 4.02, "expenditure_cr": 3.83}], "MP0086": [{"year": 2021, "sanctioned_cr": 4.2, "expenditure_cr": 3.9}, {"year": 2022, "sanctioned_cr": 4.14, "expenditure_cr": 3.93}, {"year": 2023, "sanctioned_cr": 4.96, "expenditure_cr": 4.71}, {"year": 2024, "sanctioned_cr": 4.76, "expenditure_cr": 4.51}, {"year": 2025, "sanctioned_cr": 4.07, "expenditure_cr": 3.89}], "MP0087": [{"year": 2021, "sanctioned_cr": 4.49, "expenditure_cr": 4.21}, {"year": 2022, "sanctioned_cr": 4.67, "expenditure_cr": 4.49}, {"year": 2023, "sanctioned_cr": 4.18, "expenditure_cr": 3.82}, {"year": 2024, "sanctioned_cr": 4.63, "expenditure_cr": 4.56}, {"year": 2025, "sanctioned_cr": 4.88, "expenditure_cr": 4.56}], "MP0088": [{"year": 2021, "sanctioned_cr": 4.65, "expenditure_cr": 4.53}, {"year": 2022, "sanctioned_cr": 4.29, "expenditure_cr": 3.94}, {"year": 2023, "sanctioned_cr": 5.08, "expenditure_cr": 4.88}, {"year": 2024, "sanctioned_cr": 4.62, "expenditure_cr": 4.3}, {"year": 2025, "sanctioned_cr": 4.88, "expenditure_cr": 4.39}], "MP0089": [{"year": 2021, "sanctioned_cr": 5.48, "expenditure_cr": 4.84}, {"year": 2022, "sanctioned_cr": 5.0, "expenditure_cr": 4.55}, {"year": 2023, "sanctioned_cr": 4.38, "expenditure_cr": 4.1}, {"year": 2024, "sanctioned_cr": 4.18, "expenditure_cr": 4.01}, {"year": 2025, "sanctioned_cr": 4.29, "expenditure_cr": 4.18}], "MP0090": [{"year": 2021, "sanctioned_cr": 4.0, "expenditure_cr": 3.85}, {"year": 2022, "sanctioned_cr": 4.21, "expenditure_cr": 3.95}, {"year": 2023, "sanctioned_cr": 4.79, "expenditure_cr": 4.56}, {"year": 2024, "sanctioned_cr": 4.19, "expenditure_cr": 3.94}, {"year": 2025, "sanctioned_cr": 4.57, "expenditure_cr": 4.33}], "MP0091": [{"year": 2021, "sanctioned_cr": 5.32, "expenditure_cr": 4.74}, {"year": 2022, "sanctioned_cr": 3.87, "expenditure_cr": 3.77}, {"year": 2023, "sanctioned_cr": 4.63, "expenditure_cr": 4.21}, {"year": 2024, "sanctioned_cr": 4.25, "expenditure_cr": 4.05}, {"year": 2025, "sanctioned_cr": 3.23, "expenditure_cr": 3.28}], "MP0092": [{"year": 2021, "sanctioned_cr": 4.36, "expenditure_cr": 4.22}, {"year": 2022, "sanctioned_cr": 4.6, "expenditure_cr": 4.47}, {"year": 2023, "sanctioned_cr": 3.6, "expenditure_cr": 3.28}, {"year": 2024, "sanctioned_cr": 4.4, "expenditure_cr": 3.89}, {"year": 2025, "sanctioned_cr": 4.63, "expenditure_cr": 4.44}], "MP0093": [{"year": 2021, "sanctioned_cr": 4.85, "expenditure_cr": 4.58}, {"year": 2022, "sanctioned_cr": 4.22, "expenditure_cr": 4.0}, {"year": 2023, "sanctioned_cr": 4.69, "expenditure_cr": 4.22}, {"year": 2024, "sanctioned_cr": 4.76, "expenditure_cr": 4.73}, {"year": 2025, "sanctioned_cr": 4.08, "expenditure_cr": 3.85}], "MP0094": [{"year": 2021, "sanctioned_cr": 4.1, "expenditure_cr": 3.76}, {"year": 2022, "sanctioned_cr": 4.67, "expenditure_cr": 4.57}, {"year": 2023, "sanctioned_cr": 4.76, "expenditure_cr": 4.61}, {"year": 2024, "sanctioned_cr": 4.0, "expenditure_cr": 3.63}, {"year": 2025, "sanctioned_cr": 4.68, "expenditure_cr": 4.43}], "MP0095": [{"year": 2021, "sanctioned_cr": 1.47, "expenditure_cr": 1.38}, {"year": 2022, "sanctioned_cr": 0.97, "expenditure_cr": 0.96}, {"year": 2023, "sanctioned_cr": 0.89, "expenditure_cr": 0.83}, {"year": 2024, "sanctioned_cr": 0.95, "expenditure_cr": 0.9}, {"year": 2025, "sanctioned_cr": 1.32, "expenditure_cr": 1.18}], "MP0096": [{"year": 2021, "sanctioned_cr": 5.52, "expenditure_cr": 5.25}, {"year": 2022, "sanctioned_cr": 5.05, "expenditure_cr": 4.62}, {"year": 2023, "sanctioned_cr": 4.91, "expenditure_cr": 4.61}, {"year": 2024, "sanctioned_cr": 4.02, "expenditure_cr": 3.84}, {"year": 2025, "sanctioned_cr": 4.17, "expenditure_cr": 4.05}], "MP0097": [{"year": 2021, "sanctioned_cr": 4.58, "expenditure_cr": 4.33}, {"year": 2022, "sanctioned_cr": 4.75, "expenditure_cr": 4.74}, {"year": 2023, "sanctioned_cr": 4.9, "expenditure_cr": 4.77}, {"year": 2024, "sanctioned_cr": 4.81, "expenditure_cr": 4.43}, {"year": 2025, "sanctioned_cr": 4.82, "expenditure_cr": 4.59}], "MP0098": [{"year": 2021, "sanctioned_cr": 4.5, "expenditure_cr": 4.28}, {"year": 2022, "sanctioned_cr": 4.25, "expenditure_cr": 4.15}, {"year": 2023, "sanctioned_cr": 4.33, "expenditure_cr": 3.93}, {"year": 2024, "sanctioned_cr": 4.21, "expenditure_cr": 4.02}, {"year": 2025, "sanctioned_cr": 4.74, "expenditure_cr": 4.58}], "MP0099": [{"year": 2021, "sanctioned_cr": 4.25, "expenditure_cr": 3.96}, {"year": 2022, "sanctioned_cr": 3.76, "expenditure_cr": 3.44}, {"year": 2023, "sanctioned_cr": 4.02, "expenditure_cr": 3.57}, {"year": 2024, "sanctioned_cr": 4.77, "expenditure_cr": 4.5}, {"year": 2025, "sanctioned_cr": 5.18, "expenditure_cr": 4.98}], "MP0100": [{"year": 2021, "sanctioned_cr": 4.27, "expenditure_cr": 4.1}, {"year": 2022, "sanctioned_cr": 4.36, "expenditure_cr": 4.07}, {"year": 2023, "sanctioned_cr": 4.7, "expenditure_cr": 4.56}, {"year": 2024, "sanctioned_cr": 4.19, "expenditure_cr": 4.24}, {"year": 2025, "sanctioned_cr": 4.38, "expenditure_cr": 4.08}], "MP0101": [{"year": 2021, "sanctioned_cr": 3.98, "expenditure_cr": 3.77}, {"year": 2022, "sanctioned_cr": 3.88, "expenditure_cr": 3.79}, {"year": 2023, "sanctioned_cr": 5.12, "expenditure_cr": 4.8}, {"year": 2024, "sanctioned_cr": 3.79, "expenditure_cr": 3.7}, {"year": 2025, "sanctioned_cr": 4.14, "expenditure_cr": 3.86}], "MP0102": [{"year": 2021, "sanctioned_cr": 4.36, "expenditure_cr": 4.05}, {"year": 2022, "sanctioned_cr": 4.7, "expenditure_cr": 4.31}, {"year": 2023, "sanctioned_cr": 5.27, "expenditure_cr": 5.16}, {"year": 2024, "sanctioned_cr": 4.49, "expenditure_cr": 4.35}, {"year": 2025, "sanctioned_cr": 5.1, "expenditure_cr": 4.6}], "MP0103": [{"year": 2021, "sanctioned_cr": 4.94, "expenditure_cr": 4.7}, {"year": 2022, "sanctioned_cr": 4.26, "expenditure_cr": 3.88}, {"year": 2023, "sanctioned_cr": 4.58, "expenditure_cr": 4.51}, {"year": 2024, "sanctioned_cr": 5.75, "expenditure_cr": 5.36}, {"year": 2025, "sanctioned_cr": 4.22, "expenditure_cr": 3.92}], "MP0104": [{"year": 2021, "sanctioned_cr": 4.65, "expenditure_cr": 4.48}, {"year": 2022, "sanctioned_cr": 4.25, "expenditure_cr": 4.08}, {"year": 2023, "sanctioned_cr": 4.64, "expenditure_cr": 4.42}, {"year": 2024, "sanctioned_cr": 4.12, "expenditure_cr": 3.75}, {"year": 2025, "sanctioned_cr": 4.56, "expenditure_cr": 4.23}], "MP0105": [{"year": 2021, "sanctioned_cr": 5.68, "expenditure_cr": 5.5}, {"year": 2022, "sanctioned_cr": 4.79, "expenditure_cr": 4.54}, {"year": 2023, "sanctioned_cr": 4.62, "expenditure_cr": 4.53}, {"year": 2024, "sanctioned_cr": 4.86, "expenditure_cr": 4.64}, {"year": 2025, "sanctioned_cr": 3.65, "expenditure_cr": 3.38}], "MP0106": [{"year": 2021, "sanctioned_cr": 4.7, "expenditure_cr": 4.63}, {"year": 2022, "sanctioned_cr": 4.48, "expenditure_cr": 4.22}, {"year": 2023, "sanctioned_cr": 4.9, "expenditure_cr": 4.72}, {"year": 2024, "sanctioned_cr": 4.58, "expenditure_cr": 4.29}, {"year": 2025, "sanctioned_cr": 5.02, "expenditure_cr": 4.63}], "MP0107": [{"year": 2021, "sanctioned_cr": 3.93, "expenditure_cr": 7.07}, {"year": 2022, "sanctioned_cr": 4.14, "expenditure_cr": 5.73}, {"year": 2023, "sanctioned_cr": 4.38, "expenditure_cr": 5.72}, {"year": 2024, "sanctioned_cr": 5.34, "expenditure_cr": 7.33}, {"year": 2025, "sanctioned_cr": 4.32, "expenditure_cr": 7.78}], "MP0108": [{"year": 2021, "sanctioned_cr": 4.53, "expenditure_cr": 4.32}, {"year": 2022, "sanctioned_cr": 4.89, "expenditure_cr": 4.49}, {"year": 2023, "sanctioned_cr": 4.81, "expenditure_cr": 4.58}, {"year": 2024, "sanctioned_cr": 4.36, "expenditure_cr": 4.22}, {"year": 2025, "sanctioned_cr": 4.24, "expenditure_cr": 4.07}], "MP0109": [{"year": 2021, "sanctioned_cr": 5.01, "expenditure_cr": 4.9}, {"year": 2022, "sanctioned_cr": 3.57, "expenditure_cr": 3.47}, {"year": 2023, "sanctioned_cr": 3.8, "expenditure_cr": 3.75}, {"year": 2024, "sanctioned_cr": 4.98, "expenditure_cr": 4.88}, {"year": 2025, "sanctioned_cr": 4.63, "expenditure_cr": 4.34}], "MP0110": [{"year": 2021, "sanctioned_cr": 4.87, "expenditure_cr": 4.8}, {"year": 2022, "sanctioned_cr": 4.67, "expenditure_cr": 4.29}, {"year": 2023, "sanctioned_cr": 4.7, "expenditure_cr": 4.49}, {"year": 2024, "sanctioned_cr": 4.17, "expenditure_cr": 4.0}, {"year": 2025, "sanctioned_cr": 4.22, "expenditure_cr": 3.96}], "MP0111": [{"year": 2021, "sanctioned_cr": 3.63, "expenditure_cr": 3.56}, {"year": 2022, "sanctioned_cr": 3.56, "expenditure_cr": 3.41}, {"year": 2023, "sanctioned_cr": 4.29, "expenditure_cr": 4.07}, {"year": 2024, "sanctioned_cr": 4.72, "expenditure_cr": 4.5}, {"year": 2025, "sanctioned_cr": 5.12, "expenditure_cr": 4.63}], "MP0112": [{"year": 2021, "sanctioned_cr": 4.12, "expenditure_cr": 3.92}, {"year": 2022, "sanctioned_cr": 4.82, "expenditure_cr": 4.59}, {"year": 2023, "sanctioned_cr": 4.4, "expenditure_cr": 4.31}, {"year": 2024, "sanctioned_cr": 4.22, "expenditure_cr": 3.81}, {"year": 2025, "sanctioned_cr": 5.58, "expenditure_cr": 5.42}], "MP0113": [{"year": 2021, "sanctioned_cr": 4.87, "expenditure_cr": 4.56}, {"year": 2022, "sanctioned_cr": 3.77, "expenditure_cr": 3.51}, {"year": 2023, "sanctioned_cr": 4.3, "expenditure_cr": 4.26}, {"year": 2024, "sanctioned_cr": 4.47, "expenditure_cr": 4.16}, {"year": 2025, "sanctioned_cr": 5.46, "expenditure_cr": 4.98}], "MP0114": [{"year": 2021, "sanctioned_cr": 4.44, "expenditure_cr": 4.24}, {"year": 2022, "sanctioned_cr": 4.77, "expenditure_cr": 4.5}, {"year": 2023, "sanctioned_cr": 4.85, "expenditure_cr": 4.62}, {"year": 2024, "sanctioned_cr": 4.27, "expenditure_cr": 4.06}, {"year": 2025, "sanctioned_cr": 4.22, "expenditure_cr": 4.2}], "MP0115": [{"year": 2021, "sanctioned_cr": 4.0, "expenditure_cr": 3.69}, {"year": 2022, "sanctioned_cr": 4.2, "expenditure_cr": 4.3}, {"year": 2023, "sanctioned_cr": 4.22, "expenditure_cr": 4.22}, {"year": 2024, "sanctioned_cr": 4.61, "expenditure_cr": 4.39}, {"year": 2025, "sanctioned_cr": 4.28, "expenditure_cr": 4.05}]}};
+let REPORT={summary:{},mps:[]}, WORKS=[], ROSTER=[];
+let charts={}; let currentRole='ministry'; let filteredRows=[];
 
-// ---------- Stat strip ----------
-const s = REPORT.summary;
-const statStrip = document.getElementById('statStrip');
-const stats = [
-  {num: s.total_mps, lbl: 'MPs Monitored', icon:'👤'},
-  {num: s.total_works.toLocaleString(), lbl: 'Works Tracked', icon:'📋'},
-  {num: `₹${s.total_sanctioned_cr.toLocaleString()} Cr`, lbl: 'Total Sanctioned', icon:'₹'},
-  {num: s.high_risk_count, lbl: 'High-Risk Flags', cls:'risk-high', icon:'⚠'},
-  {num: s.medium_risk_count, lbl: 'Medium-Risk Flags', cls:'risk-med', icon:'◐'},
-];
-statStrip.innerHTML = stats.map(x => `
-  <div class="stat ${x.cls||''}">
-    <div class="icon-chip">${x.icon}</div>
-    <div class="num">${x.num}</div>
-    <div class="lbl">${x.lbl}</div>
-  </div>`).join('');
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const num=v=>Number(String(v??'').replace(/,/g,''))||0;
+const pct=v=>num(v).toFixed(1)+'%';
 
-// ---------- Chart.js defaults ----------
-Chart.defaults.font.family = "'IBM Plex Sans', sans-serif";
-Chart.defaults.color = '#5B6478';
-const gold = '#7C9CF0';   // secondary series color (kept var name "gold" to avoid renaming every usage)
-const navy = '#193571';   // primary series color, matches --blue
-const navyDeep = '#1E3A8A';
-const goldHighlight = '#16A34A'; // used to highlight the selected state's bar
+async function loadJSON(path){
+  const r=await fetch(path); if(!r.ok) throw new Error(path+' '+r.status); return r.json();
+}
+async function loadCSV(path){
+  const r=await fetch(path); if(!r.ok) throw new Error(path+' '+r.status);
+  const t=await r.text();
+  return new Promise((resolve,reject)=>Papa.parse(t,{header:true,skipEmptyLines:true,complete:x=>resolve(x.data),error:reject}));
+}
+async function loadData(){
+  try{
+    REPORT=await loadJSON('../data/mp_risk_report.json');
+  }catch(e){
+    try{REPORT=await loadJSON('data/mp_risk_report.json')}catch(_){REPORT={summary:{},mps:[]}}
+  }
+  for(const p of ['../data/mplads_works.csv','data/mplads_works.csv']){try{WORKS=await loadCSV(p);break}catch(e){}}
+  for(const p of ['../data/mp_roster.csv','data/mp_roster.csv']){try{ROSTER=await loadCSV(p);break}catch(e){}}
+  if(!Array.isArray(REPORT.mps)) REPORT.mps=[];
+  if(!REPORT.mps.length){$('dataStatus').textContent='Data not found — check ../data/ paths';}
+  $('dataStatus').textContent=`${REPORT.mps.length} MP records loaded`;
+  $('sourceBadge').textContent=REPORT.mps.length?'CONNECTED':'NO DATA';
+  $('updated').textContent=REPORT.generated_at?new Date(REPORT.generated_at).toLocaleString():'';
+  buildStateFilter(); renderAll();
+}
+function states(){return [...new Set(REPORT.mps.map(x=>x.state).filter(Boolean))].sort()}
+function buildStateFilter(){
+  $('stateFilter').innerHTML='<option value="">All States</option>'+states().map(s=>`<option>${esc(s)}</option>`).join('');
+}
+function filtered(){
+  const st=$('stateFilter').value, risk=$('riskFilter').value, q=($('search')?.value||'').toLowerCase();
+  return REPORT.mps.filter(x=>(!st||x.state===st)&&(!risk||x.risk_level===risk)&&(!q||`${x.mp_name} ${x.state} ${x.constituency} ${x.mp_id}`.toLowerCase().includes(q)));
+}
+function scopeRows(){
+  let rows=REPORT.mps;
+  if(currentRole==='state' && $('scope').value) rows=rows.filter(x=>x.state===$('scope').value);
+  if(currentRole==='district' && $('scope').value) rows=rows.filter(x=>x.state===$('scope').value);
+  if(currentRole==='mp' && $('scope').value) rows=rows.filter(x=>x.mp_id===$('scope').value);
+  return rows;
+}
+function kpis(){
+  const rows=scopeRows(), high=rows.filter(x=>x.risk_level==='High').length, med=rows.filter(x=>x.risk_level==='Medium').length;
+  const util=rows.length?rows.reduce((a,x)=>a+num(x.own_utilization_pct),0)/rows.length:num(REPORT.summary?.national_avg_utilization_pct);
+  $('kpiMP').textContent=rows.length||'—';
+  $('kpiHigh').textContent=high;
+  $('kpiMed').textContent=med;
+  $('kpiUtil').textContent=util?pct(util):'—';
+  $('kpiWorks').textContent=WORKS.length?WORKS.length:(REPORT.summary?.total_works??'—');
+}
+function renderRiskTable(){
+  filteredRows=filtered();
+  $('riskTable').innerHTML=filteredRows.slice(0,30).map(x=>`<tr onclick="openModal('${esc(x.mp_id)}')"><td><b>${esc(x.mp_name)}</b></td><td>${esc(x.state)}</td><td>${esc(x.constituency)}</td><td>${esc(x.house)}</td><td>${pct(x.own_utilization_pct)}</td><td><span class="risk ${x.risk_level}">${esc(x.risk_level)}</span></td><td>${x.reasons?.length||0}</td></tr>`).join('')||`<tr><td colspan="7" class="empty">No matching records.</td></tr>`;
+}
+function renderReport(){
+  const rows=filtered();
+  $('reportTable').innerHTML=rows.map(x=>`<tr onclick="openModal('${esc(x.mp_id)}')"><td>${esc(x.mp_id)}</td><td><b>${esc(x.mp_name)}</b></td><td>${esc(x.state)}</td><td>${esc(x.constituency)}</td><td>${esc(x.house)}</td><td>${pct(x.own_utilization_pct)}</td><td>${pct(x.forecast?.projected_year_end_utilization_pct)}</td><td><span class="risk ${x.risk_level}">${esc(x.risk_level)}</span></td></tr>`).join('')||`<tr><td colspan="8" class="empty">No records found.</td></tr>`;
+}
+function riskCounts(rows){
+  return ['High','Medium','Low','None'].map(r=>rows.filter(x=>x.risk_level===r).length);
+}
+function makeChart(id,type,data,options={}){
+  if(charts[id]) charts[id].destroy();
+  charts[id]=new Chart($(id),{type,data,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:options.legend??true,labels:{font:{size:10}}}},scales:options.scales||{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:'#EEF2F7'}}}}});
+}
+function renderCharts(){
+  const rows=scopeRows(), years=['2022','2023','2024','2025','2026'];
+  const summary=REPORT.summary||{};
+  let yearly=REPORT.yearly||REPORT.annual||null;
+  if(!yearly && REPORT.trends) yearly=REPORT.trends;
+  const sanctioned=years.map(y=>num(yearly?.[y]?.sanctioned||yearly?.[y]?.sanctioned_cr||0));
+  const expenditure=years.map(y=>num(yearly?.[y]?.expenditure||yearly?.[y]?.expenditure_cr||0));
+  if(!sanctioned.some(Boolean)){
+    const s=num(summary.total_sanctioned_cr), e=num(summary.total_expenditure_cr);
+    sanctioned[4]=s; expenditure[4]=e;
+  }
+  makeChart('trendChart','line',{labels:years,datasets:[
+    {label:'Sanctioned',data:sanctioned,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,.08)',fill:true,tension:.35},
+    {label:'Expenditure',data:expenditure,borderColor:'#EA8A17',backgroundColor:'rgba(234,138,23,.07)',fill:true,tension:.35}
+  ]},{legend:true});
+  makeChart('riskChart','doughnut',{labels:['High','Medium','Low','None'],datasets:[{data:riskCounts(rows),backgroundColor:['#DC2626','#EA8A17','#16A34A','#CBD5E1'],borderWidth:0}]},{legend:true});
+  const st=states().map(s=>({s,n:REPORT.mps.filter(x=>x.state===s),risk:REPORT.mps.filter(x=>x.state===s&&['High','Medium'].includes(x.risk_level)).length}));
+  st.sort((a,b)=>b.risk-a.risk);
+  $('stateRiskList').innerHTML=st.slice(0,8).map(x=>`<div style="margin:9px 0"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px"><span>${esc(x.s)}</span><b>${x.risk} flagged</b></div><div class="bar"><i style="width:${Math.min(100,x.risk*18+4)}%"></i></div></div>`).join('')||'<div class="empty">No state data.</div>';
+  const cats={};
+  WORKS.forEach(w=>{const c=w.category||w.work_category||w.Category||'Other'; cats[c]=(cats[c]||0)+num(w.sanctioned_amount||w.sanctioned||w.amount||0)});
+  const top=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,7);
+  makeChart('categoryChart','bar',{labels:top.map(x=>x[0]),datasets:[{label:'Amount',data:top.map(x=>x[1]),backgroundColor:'#3B82F6',borderRadius:5}]},{legend:false,scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:'#EEF2F7'}}}});
+  const completed=WORKS.filter(w=>/complete|completed/i.test(Object.values(w).join(' '))).length;
+  $('execution').innerHTML=`<div style="font-size:28px;font-weight:800">${WORKS.length?completed:'—'}</div><div style="font-size:11px;color:#667085;margin:4px 0 15px">completed works detected</div><div style="font-size:11px;color:#667085">Dataset rows: <b>${WORKS.length||'not loaded'}</b></div><div style="font-size:11px;color:#667085;margin-top:7px">Risk signals: <b>${rows.filter(x=>x.risk_level!=='None').length}</b></div>`;
+  const byState=st.slice(0,10);
+  makeChart('stateUtilChart','bar',{labels:byState.map(x=>x.s),datasets:[{label:'Avg utilization %',data:byState.map(x=>x.n.reduce((a,x)=>a+num(x.own_utilization_pct),0)/Math.max(1,x.n.length)),backgroundColor:'#2563EB',borderRadius:5}]},{legend:false,scales:{x:{grid:{display:false}},y:{beginAtZero:true,max:120}}});
+  makeChart('stateRiskChart','bar',{labels:byState.map(x=>x.s),datasets:[{label:'High',data:byState.map(x=>x.n.filter(y=>y.risk_level==='High').length),backgroundColor:'#DC2626'},{label:'Medium',data:byState.map(x=>x.n.filter(y=>y.risk_level==='Medium').length),backgroundColor:'#EA8A17'}]},{legend:true});
+  const forecast=rows.slice().sort((a,b)=>num(b.forecast?.projected_year_end_utilization_pct)-num(a.forecast?.projected_year_end_utilization_pct)).slice(0,12);
+  makeChart('forecastChart','bar',{labels:forecast.map(x=>x.mp_name),datasets:[{label:'Projected %',data:forecast.map(x=>num(x.forecast?.projected_year_end_utilization_pct)),backgroundColor:'#0891B2',borderRadius:4}]},{legend:false,scales:{x:{grid:{display:false}},y:{beginAtZero:true,max:120}}});
+  const houses=['Lok Sabha','Rajya Sabha']; makeChart('houseChart','doughnut',{labels:houses,datasets:[{data:houses.map(h=>rows.filter(x=>x.house===h&&x.risk_level!=='None').length),backgroundColor:['#2563EB','#EA8A17'],borderWidth:0}]},{legend:true});
+}
+async function renderMap(){
+  if (typeof d3 === 'undefined') {
+    $('indiaMap').innerHTML = '<div class="empty">Map library could not be loaded.</div>';
+    return;
+  }
+  const svg = d3.select('#indiaMap');
+  svg.selectAll('*').remove();
+  const tooltip = $('mapTooltip');
 
-let trendChartInstance = null;
-let categoryChartInstance = null;
-let stateChartInstance = null;
+  // Official NIC/SOI-derived state boundary service.
+  // We request GeoJSON directly from the Government of India's GIS service.
+  const officialUrl =
+    'https://webgis1.nic.in/nicstreet/rest/services/terraintile/MapServer/0/query' +
+    '?where=1%3D1&outFields=STNAME&returnGeometry=true&f=geojson&outSR=4326';
 
-// ---------- Scope state ----------
-let currentRole = 'ministry';   // 'ministry' | 'state' | 'mp'
-let currentState = null;
-let currentMpId = null;
+  let geo = null;
 
-function renderTrendChart(labels, sanctioned, expenditure) {
-  if (trendChartInstance) trendChartInstance.destroy();
-  trendChartInstance = new Chart(document.getElementById('trendChart'), {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {label:'Sanctioned', data: sanctioned, borderColor: navy, backgroundColor:'rgba(38,54,94,0.08)', fill:true, tension:0.3, borderWidth:2},
-        {label:'Expenditure', data: expenditure, borderColor: gold, backgroundColor:'rgba(192,138,52,0.10)', fill:true, tension:0.3, borderWidth:2},
-      ]
-    },
-    options: {
-      responsive:true,
-      plugins:{legend:{position:'bottom', labels:{boxWidth:12, usePointStyle:true}}},
-      scales:{y:{grid:{color:'#EFEBDF'}}, x:{grid:{display:false}}}
+  try {
+    const response = await fetch(officialUrl, {mode:'cors'});
+    if (!response.ok) throw new Error('Map service HTTP ' + response.status);
+    geo = await response.json();
+  } catch (err) {
+    // Fallback to a known public India state GeoJSON.
+    try {
+      const response = await fetch(
+        'https://raw.githubusercontent.com/AbhinavSwami28/india-official-geojson/main/india-states-simplified.geojson',
+        {mode:'cors'}
+      );
+      if (!response.ok) throw new Error('Fallback HTTP ' + response.status);
+      geo = await response.json();
+    } catch (fallbackErr) {
+      $('indiaMap').innerHTML = `
+        <div style="height:100%;display:flex;align-items:center;justify-content:center;
+                    text-align:center;padding:30px;color:#667085;font-size:12px">
+          <div>
+            <b style="color:#0B1F3A">India map could not be loaded.</b><br><br>
+            Check your internet connection or allow the map service.<br>
+            The rest of the dashboard and local data will continue to work.
+          </div>
+        </div>`;
+      return;
     }
-  });
-}
-
-function renderCategoryChart(labels, values) {
-  if (categoryChartInstance) categoryChartInstance.destroy();
-  categoryChartInstance = new Chart(document.getElementById('categoryChart'), {
-    type: 'bar',
-    data: { labels, datasets: [{data: values, backgroundColor: navy, borderRadius:2}] },
-    options: {
-      indexAxis:'y',
-      responsive:true,
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{color:'#EFEBDF'}}, y:{grid:{display:false}, ticks:{font:{size:11}}}}
-    }
-  });
-}
-
-function renderStateChart(highlightState) {
-  const stateSorted = [...REPORT.state_summary].sort((a,b)=>b.sanctioned_cr - a.sanctioned_cr);
-  const sanctionedColors = stateSorted.map(d => d.state === highlightState ? goldHighlight : navy);
-  if (stateChartInstance) stateChartInstance.destroy();
-  stateChartInstance = new Chart(document.getElementById('stateChart'), {
-    type: 'bar',
-    data: {
-      labels: stateSorted.map(d=>d.state),
-      datasets: [
-        {label:'Sanctioned', data: stateSorted.map(d=>d.sanctioned_cr), backgroundColor: sanctionedColors, borderRadius:2},
-        {label:'Expenditure', data: stateSorted.map(d=>d.expenditure_cr), backgroundColor: gold, borderRadius:2},
-      ]
-    },
-    options: {
-      responsive:true,
-      plugins:{legend:{position:'bottom', labels:{boxWidth:12, usePointStyle:true}}},
-      scales:{
-        x:{grid:{display:false}, ticks:{font:{size:10}, maxRotation:60, minRotation:60}},
-        y:{grid:{color:'#EFEBDF'}}
-      }
-    }
-  });
-}
-
-// ---------- Scope switching ----------
-const scopeSelect = document.getElementById('scopeSelect');
-const categoryCard = document.getElementById('categoryCard');
-
-function populateScopeSelect(role) {
-  if (role === 'state') {
-    const states = Object.keys(REPORT.state_yearly_trend).sort();
-    scopeSelect.innerHTML = states.map(s => `<option value="${s}">${s}</option>`).join('');
-    scopeSelect.style.display = 'inline-block';
-    currentState = states[0];
-    scopeSelect.value = currentState;
-  } else if (role === 'mp') {
-    const mps = [...REPORT.mps].sort((a,b)=>a.mp_name.localeCompare(b.mp_name));
-    scopeSelect.innerHTML = mps.map(m => `<option value="${m.mp_id}">${m.mp_name} (${m.constituency})</option>`).join('');
-    scopeSelect.style.display = 'inline-block';
-    currentMpId = mps[0].mp_id;
-    scopeSelect.value = currentMpId;
-  } else {
-    scopeSelect.style.display = 'none';
-  }
-}
-
-function applyScope() {
-  if (currentRole === 'ministry') {
-    document.getElementById('section1Title').textContent = 'National Utilization Overview';
-    document.getElementById('section1Desc').textContent = 'Sanctioned vs. actual expenditure across five years of MPLADS data, and where funds are concentrated by category.';
-    document.getElementById('section2').style.display = '';
-    document.getElementById('section2Title').textContent = 'State-Wise Fund Utilization';
-    document.getElementById('section2Desc').textContent = 'Sanctioned amount against actual expenditure, by state — a large gap can indicate under-utilization or delayed execution.';
-    document.getElementById('section3Title').textContent = 'MP-Wise Risk Register';
-    document.getElementById('section3Desc').textContent = "Every flag is explainable — click a row to see exactly why an MP's fund utilization was flagged, with the specific anomaly and metric behind it.";
-    categoryCard.style.display = '';
-
-    renderTrendChart(
-      REPORT.yearly_trend.map(d=>d.year),
-      REPORT.yearly_trend.map(d=>d.sanctioned_cr),
-      REPORT.yearly_trend.map(d=>d.expenditure_cr)
-    );
-    const catSorted = [...REPORT.category_summary].sort((a,b)=>b.sanctioned_cr - a.sanctioned_cr);
-    renderCategoryChart(catSorted.map(d=>d.category), catSorted.map(d=>d.sanctioned_cr));
-    renderStateChart(null);
-    renderInsightBanner();
-
-  } else if (currentRole === 'state') {
-    document.getElementById('section1Title').textContent = `${currentState} — Utilization Overview`;
-    document.getElementById('section1Desc').textContent = `Sanctioned vs. actual expenditure for ${currentState} across five years, and category-wise allocation within the state.`;
-    document.getElementById('section2').style.display = '';
-    document.getElementById('section2Title').textContent = 'State-Wise Fund Utilization (National Reference)';
-    document.getElementById('section2Desc').textContent = `${currentState} is highlighted below against every other state, for context.`;
-    document.getElementById('section3Title').textContent = `MPs in ${currentState}`;
-    document.getElementById('section3Desc').textContent = `Risk register scoped to Members of Parliament from ${currentState}.`;
-    categoryCard.style.display = '';
-
-    const yt = REPORT.state_yearly_trend[currentState] || [];
-    renderTrendChart(yt.map(d=>d.year), yt.map(d=>d.sanctioned_cr), yt.map(d=>d.expenditure_cr));
-    const cat = (REPORT.state_category_summary[currentState] || []).slice(0, 8);
-    renderCategoryChart(cat.map(d=>d.category), cat.map(d=>d.sanctioned_cr));
-    renderStateChart(currentState);
-    renderInsightBanner();
-
-  } else if (currentRole === 'mp') {
-    const m = REPORT.mps.find(x => x.mp_id === currentMpId);
-    document.getElementById('section1Title').textContent = `${m.mp_name} — Fund Utilization`;
-    document.getElementById('section1Desc').textContent = `${m.constituency}, ${m.state} · Sanctioned vs. expenditure across five years for this MP.`;
-    document.getElementById('section2').style.display = 'none';
-    document.getElementById('section3Title').textContent = 'Your Risk Assessment';
-    document.getElementById('section3Desc').textContent = 'Full detail below — click your row for the complete breakdown.';
-    categoryCard.style.display = 'none';
-
-    const yt = REPORT.mp_yearly_trend[currentMpId] || [];
-    renderTrendChart(yt.map(d=>d.year), yt.map(d=>d.sanctioned_cr), yt.map(d=>d.expenditure_cr));
-    renderInsightBanner();
   }
 
-  renderTable();
-}
-
-function renderInsightBanner() {
-  const banner = document.getElementById('insightBanner');
-  if (currentRole === 'ministry') {
-    const totalFlagged = s.high_risk_count + s.medium_risk_count;
-    banner.innerHTML = `<div class="insight-banner-inner">
-      <span><strong>${totalFlagged} MPs</strong> flagged for review this cycle —
-      <strong>₹${s.total_excess_cr} Cr</strong> in detected cost overruns,
-      national average utilization holding at <strong>${s.national_avg_utilization_pct}%</strong>.</span>
-    </div>`;
-  } else if (currentRole === 'state') {
-    const stateRow = REPORT.state_summary.find(x => x.state === currentState);
-    const stateMps = REPORT.mps.filter(m => m.state === currentState);
-    const flagged = stateMps.filter(m => m.risk_level === 'High' || m.risk_level === 'Medium').length;
-    banner.innerHTML = `<div class="insight-banner-inner">
-      <span><strong>${currentState}:</strong> ${stateMps.length} MPs, ₹${stateRow ? stateRow.sanctioned_cr : '—'} Cr sanctioned,
-      <strong>${flagged}</strong> flagged for review.</span>
-    </div>`;
-  } else if (currentRole === 'mp') {
-    const m = REPORT.mps.find(x => x.mp_id === currentMpId);
-    banner.innerHTML = `<div class="insight-banner-inner">
-      <span><strong>${m.mp_name}:</strong> ${m.own_utilization_pct}% utilized vs. ${m.national_avg_utilization_pct}% national average —
-      <strong>${m.risk_level} risk</strong>, ${m.reasons.length} signal${m.reasons.length===1?'':'s'} flagged.</span>
-    </div>`;
-  }
-}
-
-document.querySelectorAll('.role-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentRole = btn.dataset.role;
-    populateScopeSelect(currentRole);
-    applyScope();
-  });
-});
-scopeSelect.addEventListener('change', () => {
-  if (currentRole === 'state') currentState = scopeSelect.value;
-  if (currentRole === 'mp') currentMpId = scopeSelect.value;
-  applyScope();
-});
-
-// ---------- MP risk table ----------
-const tbody = document.getElementById('mpTableBody');
-let currentFilter = 'All';
-let currentSearch = '';
-
-function riskSortKey(level){
-  return {High:0, Medium:1, Low:2, None:3}[level] ?? 4;
-}
-
-function renderTable(){
-  const q = currentSearch.toLowerCase();
-  let rows = REPORT.mps.filter(m => {
-    if (currentRole === 'state' && m.state !== currentState) return false;
-    if (currentRole === 'mp' && m.mp_id !== currentMpId) return false;
-    if (currentFilter !== 'All' && m.risk_level !== currentFilter) return false;
-    if (q && !(m.mp_name.toLowerCase().includes(q) || m.state.toLowerCase().includes(q) || m.constituency.toLowerCase().includes(q))) return false;
-    return true;
-  });
-  rows = rows.sort((a,b)=> riskSortKey(a.risk_level) - riskSortKey(b.risk_level));
-
-  tbody.innerHTML = rows.map(m => `
-    <tr data-mpid="${m.mp_id}">
-      <td>
-        <div class="mp-name">${m.mp_name}</div>
-        <div class="mp-const">${m.constituency}</div>
-      </td>
-      <td>${m.state}</td>
-      <td>${m.house}</td>
-      <td><span class="risk-pill ${m.risk_level}">${m.risk_level}</span></td>
-      <td>${m.reasons.length ? m.reasons.length + ' flagged signal' + (m.reasons.length>1?'s':'') : '—'}</td>
-    </tr>
-  `).join('');
-
-  tbody.querySelectorAll('tr').forEach(tr => {
-    tr.addEventListener('click', () => openModal(tr.dataset.mpid));
-  });
-}
-
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
-    renderTable();
-  });
-});
-document.getElementById('searchBox').addEventListener('input', (e) => {
-  currentSearch = e.target.value;
-  renderTable();
-});
-
-// ---------- Modal ----------
-const backdrop = document.getElementById('modalBackdrop');
-function openModal(mpId){
-  const m = REPORT.mps.find(x => x.mp_id === mpId);
-  document.getElementById('modalName').textContent = m.mp_name;
-  document.getElementById('modalSub').textContent = `${m.constituency}, ${m.state} · ${m.house}`;
-  const body = document.getElementById('modalBody');
-
-  let html = '';
-  if (m.reasons.length === 0){
-    html += `<div class="no-reasons">No anomalies detected. Fund utilization and work execution fall within expected norms.</div>`;
-  } else {
-    html += `<div style="margin-bottom:14px;"><span class="risk-pill ${m.risk_level}">${m.risk_level} RISK</span></div>` +
-      m.reasons.map(r => `
-        <div class="reason-item">
-          <span class="reason-mark">▸</span>
-          <span>${r}</span>
-        </div>`).join('');
-  }
-
-  // Peer comparison
-  html += `
-    <div class="compare-block">
-      <h4>Utilization vs. Peers</h4>
-      <div class="compare-row"><span>${m.mp_name}</span><span class="compare-val">${m.own_utilization_pct}%</span></div>
-      <div class="compare-row"><span>${m.state} average</span><span class="compare-val">${m.state_avg_utilization_pct ?? '—'}%</span></div>
-      <div class="compare-row"><span>National average</span><span class="compare-val">${m.national_avg_utilization_pct}%</span></div>
-    </div>`;
-
-  // Forecast
-  if (m.forecast) {
-    html += `
-      <div class="compare-block">
-        <h4>Year-End Projection</h4>
-        <div class="compare-row">
-          <span>Projected utilization by year-end</span>
-          <span class="compare-val">${m.forecast.projected_year_end_utilization_pct}%</span>
-        </div>
-        <div class="compare-row"><span>Trend</span><span class="compare-val trend-${m.forecast.trend}">${m.forecast.trend}</span></div>
+  if (!geo || !geo.features || !geo.features.length) {
+    $('indiaMap').innerHTML = `
+      <div style="height:100%;display:flex;align-items:center;justify-content:center;
+                  color:#667085;font-size:12px">
+        Geographic boundary data is empty.
       </div>`;
+    return;
   }
 
-  body.innerHTML = html;
-  backdrop.classList.add('open');
-}
-document.getElementById('modalClose').addEventListener('click', () => backdrop.classList.remove('open'));
-backdrop.addEventListener('click', (e) => { if (e.target === backdrop) backdrop.classList.remove('open'); });
+  const width = 800, height = 700;
+  const projection = d3.geoMercator()
+    .fitExtent([[25, 20], [width - 25, height - 20]], geo);
 
-// ---------- Export CSV ----------
-document.getElementById('exportBtn').addEventListener('click', () => {
-  const rows = REPORT.mps.filter(m => m.risk_level !== 'None');
-  const header = ['MP Name','State','Constituency','House','Risk Level','Reasons'];
-  const csvRows = [header.join(',')];
-  rows.forEach(m => {
-    const line = [
-      `"${m.mp_name}"`, `"${m.state}"`, `"${m.constituency}"`, `"${m.house}"`,
-      m.risk_level, `"${m.reasons.join(' | ').replace(/"/g,'""')}"`
-    ].join(',');
-    csvRows.push(line);
+  const path = d3.geoPath().projection(projection);
+
+  const normalize = s => String(s || '')
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[.,]/g, '')
+    .replace(/\bstate of\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const aliases = {
+    'orissa':'Odisha',
+    'pondicherry':'Puducherry',
+    'uttaranchal':'Uttarakhand',
+    'nct of delhi':'Delhi',
+    'national capital territory of delhi':'Delhi',
+    'jammu and kashmir':'Jammu & Kashmir',
+    'jammu kashmir':'Jammu & Kashmir',
+    'dadra and nagar haveli and daman and diu':'Dadra and Nagar Haveli and Daman and Diu'
+  };
+
+  const rows = REPORT.mps || [];
+  const stats = {};
+
+  rows.forEach(x => {
+    const state = x.state || '';
+    if (!stats[state]) {
+      stats[state] = {mp:0,high:0,medium:0,low:0,none:0,util:0};
+    }
+    const z = stats[state];
+    z.mp++;
+    z[String(x.risk_level || 'None').toLowerCase()]++;
+    z.util += num(x.own_utilization_pct);
   });
-  const blob = new Blob([csvRows.join('\n')], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'mplad_drishti_flagged_mps.csv';
-  a.click();
-  URL.revokeObjectURL(url);
+
+  function featureName(properties){
+    const raw =
+      properties?.STNAME ||
+      properties?.ST_NM ||
+      properties?.STATE_NAME ||
+      properties?.State_Name ||
+      properties?.state_name ||
+      properties?.NAME_1 ||
+      properties?.name ||
+      '';
+
+    const n = normalize(raw);
+    if (stats[raw]) return raw;
+    if (aliases[n] && stats[aliases[n]]) return aliases[n];
+
+    return Object.keys(stats).find(s => normalize(s) === n) || raw;
+  }
+
+  const maxScore = Math.max(
+    1,
+    ...Object.values(stats).map(z => z.high*3 + z.medium*1.5 + z.low*.5)
+  );
+
+  const color = d3.scaleLinear()
+    .domain([0, maxScore*.25, maxScore*.55, maxScore])
+    .range(['#86EFAC','#FBBF24','#F97316','#DC2626'])
+    .clamp(true);
+
+  svg.attr('viewBox', `0 0 ${width} ${height}`);
+
+  svg.selectAll('path')
+    .data(geo.features)
+    .join('path')
+    .attr('class','state')
+    .attr('d',path)
+    .attr('fill',feature => {
+      const state = featureName(feature.properties);
+      const z = stats[state];
+      if (!z) return '#E5E7EB';
+      return color(z.high*3 + z.medium*1.5 + z.low*.5);
+    })
+    .attr('stroke','#FFFFFF')
+    .attr('stroke-width',1)
+    .on('mousemove',(event,feature) => {
+      const state = featureName(feature.properties);
+      const z = stats[state];
+      const high = z?.high || 0;
+      const medium = z?.medium || 0;
+      const low = z?.low || 0;
+      const mp = z?.mp || 0;
+      const avg = z?.mp ? z.util/z.mp : 0;
+
+      tooltip.style.display='block';
+      tooltip.style.left=(event.offsetX+18)+'px';
+      tooltip.style.top=(event.offsetY+18)+'px';
+      tooltip.innerHTML =
+        `<b>${esc(state)}</b><br>` +
+        `MPs: ${mp}<br>` +
+        `High: ${high} · Medium: ${medium} · Low: ${low}<br>` +
+        `Avg. utilization: ${avg ? pct(avg) : 'No data'}`;
+    })
+    .on('mouseleave',() => tooltip.style.display='none')
+    .on('click',(event,feature) => {
+      const state = featureName(feature.properties);
+      if (states().includes(state)) {
+        $('stateFilter').value = state;
+        navigate('dashboard');
+        renderAll();
+      }
+    });
+
+  svg.selectAll('text.state-label')
+    .data(geo.features)
+    .join('text')
+    .attr('class','state-label')
+    .attr('transform',feature => {
+      const c = path.centroid(feature);
+      return `translate(${c[0]},${c[1]})`;
+    })
+    .attr('text-anchor','middle')
+    .attr('font-size','8')
+    .attr('font-weight','600')
+    .attr('fill','#334155')
+    .attr('pointer-events','none')
+    .text(feature => {
+      const s = featureName(feature.properties);
+      return s.length > 14 ? s.slice(0,13)+'…' : s;
+    });
+}
+function renderAlerts(){
+  const rows=REPORT.mps.filter(x=>x.risk_level==='High'||x.risk_level==='Medium').sort((a,b)=>num(b.risk_points)-num(a.risk_points));
+  $('alerts').innerHTML=rows.map(x=>`<div class="alert ${x.risk_level==='Medium'?'medium':''}" onclick="openModal('${esc(x.mp_id)}')"><div class="alert-head"><div><strong>${esc(x.mp_name)}</strong><br><small>${esc(x.state)} · ${esc(x.constituency)}</small></div><span class="risk ${x.risk_level}">${esc(x.risk_level)}</span></div><p>${(x.reasons||['Risk signal detected']).map(esc).join(' · ')}</p></div>`).join('')||'<div class="empty">No High or Medium risk records.</div>';
+}
+function renderAll(){kpis();renderRiskTable();renderReport();renderCharts();renderMap();renderAlerts();}
+function openModal(id){
+  const x=REPORT.mps.find(r=>r.mp_id===id);if(!x)return;
+  $('modalName').textContent=x.mp_name;$('modalSub').textContent=`${x.constituency} · ${x.state} · ${x.house}`;
+  $('modalDetails').innerHTML=`<div class="detail"><small>Risk</small><b>${x.risk_level}</b></div><div class="detail"><small>Risk points</small><b>${x.risk_points??0}</b></div><div class="detail"><small>Own utilization</small><b>${pct(x.own_utilization_pct)}</b></div><div class="detail"><small>State average</small><b>${pct(x.state_avg_utilization_pct)}</b></div><div class="detail"><small>National average</small><b>${pct(x.national_avg_utilization_pct)}</b></div><div class="detail"><small>Year-end forecast</small><b>${pct(x.forecast?.projected_year_end_utilization_pct)}</b></div>`;
+  $('modalReasons').innerHTML=(x.reasons||[]).map(r=>`<li>${esc(r)}</li>`).join('')||'<li>No specific risk reason recorded.</li>';
+  $('modalBg').classList.add('open');
+}
+function closeModal(){$('modalBg').classList.remove('open')}
+function exportCSV(){
+  const rows=filtered(); const cols=['mp_id','mp_name','state','constituency','house','risk_level','risk_points','own_utilization_pct','state_avg_utilization_pct','national_avg_utilization_pct'];
+  const out=[cols.join(','),...rows.map(r=>cols.map(c=>`"${String(c==='risk_level'?r[c]??'':c==='forecast'?r.forecast?.projected_year_end_utilization_pct??'':r[c]??'').replaceAll('"','""')}"`).join(','))].join('\\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([out],{type:'text/csv'}));a.download='mplad_drishti_risk_report.csv';a.click();
+}
+function navigate(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.onclick=()=>{navigate(n.dataset.page);if(innerWidth<760)$('sidebar').classList.remove('open')});
+$('menuBtn').onclick=()=>{ $('sidebar').classList.toggle('closed');$('main').classList.toggle('expanded')};
+document.querySelectorAll('.role').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.role').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentRole=b.dataset.role;
+  const s=$('scope');
+  if(currentRole==='ministry'){s.style.display='none';$('pageTitle').textContent='National Overview';$('pageDesc').textContent='All available MPLADS records loaded from your local data folder.'}
+  else{
+    s.style.display='block';
+    if(currentRole==='mp'){s.innerHTML='<option value="">All MPs</option>'+REPORT.mps.map(x=>`<option value="${esc(x.mp_id)}">${esc(x.mp_name)}</option>`).join('')}
+    else{s.innerHTML='<option value="">All States</option>'+states().map(x=>`<option>${esc(x)}</option>`).join('')}
+    $('pageTitle').textContent=currentRole==='state'?'State Authority Overview':currentRole==='district'?'District Authority Overview':'MP Constituency Overview';
+    $('pageDesc').textContent=currentRole==='district'?'District view uses the state field currently present in the dataset; connect district-level records when available.':'Scoped intelligence from the same local data pipeline.';
+  }
+  renderAll();
 });
-
-renderTable();
-applyScope();
+$('stateFilter').onchange=renderAll;$('riskFilter').onchange=renderAll;$('scope').onchange=renderAll;$('search').oninput=renderReport;
+$('modalBg').onclick=e=>{if(e.target===$('modalBg'))closeModal()};
+loadData();
 </script>
-
 </body>
 </html>

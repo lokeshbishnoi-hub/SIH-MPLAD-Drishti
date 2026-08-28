@@ -1,183 +1,177 @@
 """
-MPLAD Drishti - Synthetic Data Generator
-==========================================
-Generates a MPLADS works dataset matching the schema of the public
-MoSPI/Dataful dataset, for use until we have full portal/API access.
-Column names match the real dataset so detect_anomalies.py can be
-pointed at live data later with no changes needed.
+MPLAD Drishti - Real Data Normalizer
+====================================
+Reads the real MPLADS CSV files stored in ../data/real/ and converts them
+into the stable files consumed by detect_anomalies.py and dashboard.html.
 
-Real data references:
-  - data.gov.in -> "Utilisation of MPLAD Scheme Funds"
-  - dataful.in/datasets/18542 (MoSPI)
-  - mplads.mospi.gov.in (eSAKSHI portal)
+Real data available:
+1) RS_Session_259_AU_2235_1.csv
+   MP + district + fund received + recommended work cost + actual expenditure
+2) RS_Session_256_AU_2872_2.csv
+   MP + state + nodal district + tenure + entitlement + GOI release + unreleased
+
+Important:
+- This version does NOT invent vendors, work categories, completion dates,
+  or SC/ST flags.
+- Features that require those fields are marked unavailable by the detector.
+- Financial risk analysis is calculated from the real records.
 """
 
+from pathlib import Path
+import re
 import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta
-import random
 
-np.random.seed(42)
-random.seed(42)
+SCRIPT_DIR = Path(__file__).resolve().parent
+ROOT_DIR = SCRIPT_DIR.parent
+REAL_DIR = ROOT_DIR / "data" / "real"
+DATA_DIR = ROOT_DIR / "data"
 
-STATES = [
-    "Uttar Pradesh", "Maharashtra", "West Bengal", "Bihar", "Tamil Nadu",
-    "Madhya Pradesh", "Karnataka", "Gujarat", "Rajasthan", "Andhra Pradesh",
-    "Odisha", "Telangana", "Kerala", "Jharkhand", "Assam", "Punjab",
-    "Chhattisgarh", "Haryana", "Delhi", "Uttarakhand"
-]
-
-# MPs per state roughly proportional to real Lok Sabha seat counts (simplified)
-MPS_PER_STATE = {
-    "Uttar Pradesh": 16, "Maharashtra": 10, "West Bengal": 8, "Bihar": 8,
-    "Tamil Nadu": 8, "Madhya Pradesh": 6, "Karnataka": 6, "Gujarat": 6,
-    "Rajasthan": 6, "Andhra Pradesh": 5, "Odisha": 5, "Telangana": 4,
-    "Kerala": 5, "Jharkhand": 4, "Assam": 4, "Punjab": 4,
-    "Chhattisgarh": 3, "Haryana": 3, "Delhi": 2, "Uttarakhand": 2,
-}
-
-CATEGORIES = [
-    "Roads, Pathways & Bridges", "Drinking Water", "Education",
-    "Health & Family Welfare", "Electricity Facility", "Irrigation",
-    "Other Public Facilities (Community Centres)", "Sports Infrastructure",
-    "Sanitation", "Rural Development",
-]
-
-# Real published national average: ~91% utilization (Deloitte/MoSPI eval report)
-NATIONAL_AVG_UTILIZATION = 0.91
-ANNUAL_ENTITLEMENT_CR = 5.0  # Rs 5 Crore per MP per year
-
-FIRST_NAMES = ["Rajesh", "Sunita", "Amit", "Priya", "Vikram", "Anjali", "Suresh",
-               "Kavita", "Manoj", "Deepa", "Ashok", "Meena", "Ravi", "Pooja",
-               "Sanjay", "Neha", "Arun", "Divya", "Vinod", "Shalini"]
-LAST_NAMES = ["Sharma", "Verma", "Reddy", "Patel", "Singh", "Iyer", "Gupta",
-              "Nair", "Yadav", "Chauhan", "Rao", "Das", "Mishra", "Joshi",
-              "Kumar", "Pillai"]
-
-VENDORS = [f"{a} Infrastructure {b}" for a, b in [
-    ("Shree", "Pvt Ltd"), ("National", "Constructions"), ("Bharat", "Builders"),
-    ("Om", "Enterprises"), ("Vishwakarma", "Contractors"), ("Ganesh", "Projects"),
-    ("Sai", "Developers"), ("Raj", "Infra"), ("Progressive", "Works"),
-    ("United", "Engineering Co"), ("Modern", "Construction"), ("Krishna", "Associates"),
-]]
+FILE_1 = REAL_DIR / "RS_Session_259_AU_2235_1.csv"
+FILE_2 = REAL_DIR / "RS_Session_256_AU_2872_2.csv"
 
 
-def make_mp_roster():
-    mps = []
-    mp_id = 1
-    for state, count in MPS_PER_STATE.items():
-        for i in range(count):
-            name = f"{random.choice(FIRST_NAMES)} {random.choice(LAST_NAMES)}"
-            mps.append({
-                "mp_id": f"MP{mp_id:04d}",
-                "mp_name": name,
-                "state": state,
-                "constituency": f"{state} Constituency {i+1}",
-                "house": "Lok Sabha" if random.random() > 0.15 else "Rajya Sabha",
-            })
-            mp_id += 1
-    return pd.DataFrame(mps)
+def clean_number(series):
+    return pd.to_numeric(
+        series.astype(str).str.replace(",", "", regex=False).str.replace("₹", "", regex=False).str.strip(),
+        errors="coerce"
+    ).fillna(0.0)
 
 
-def generate_works(mp_roster, years=(2021, 2022, 2023, 2024, 2025)):
-    """Generate individual sanctioned works per MP per year."""
-    works = []
-    work_id = 1
+def clean_name(value):
+    value = str(value).strip()
+    value = re.sub(r"^(Shri|Smt\.?|Dr\.?|Ms\.?|Mr\.?|Prof\.?|Adv\.?)\s+", "", value, flags=re.I)
+    return re.sub(r"\s+", " ", value).strip()
 
-    # Most MPs behave normally; a small set is seeded with a specific
-    # anomaly type so the detection engine has real signal to catch.
-    n_mps = len(mp_roster)
-    anomaly_types_cycle = ["low_utilization", "cost_overrun", "vendor_concentration", "delayed_works"]
-    n_anomalous = max(len(anomaly_types_cycle) * 2, n_mps // 12)
-    anomalous_ids = list(mp_roster.sample(n_anomalous, random_state=1)["mp_id"])
-    # cycle through types deterministically so every anomaly type is
-    # guaranteed to appear (pure random assignment could skip a type)
-    anomaly_type_map = {
-        mp_id: anomaly_types_cycle[i % len(anomaly_types_cycle)]
-        for i, mp_id in enumerate(anomalous_ids)
-    }
 
-    for _, mp in mp_roster.iterrows():
-        anomaly_type = anomaly_type_map.get(mp["mp_id"])
+def norm_key(value):
+    return re.sub(r"[^a-z0-9]", "", clean_name(value).lower())
 
-        # vendor concentration setup
-        if anomaly_type == "vendor_concentration":
-            preferred_vendor = random.choice(VENDORS)
 
-        for year in years:
-            entitlement = ANNUAL_ENTITLEMENT_CR
-            if anomaly_type == "low_utilization":
-                utilization_rate = np.random.uniform(0.15, 0.35)
-            else:
-                utilization_rate = np.clip(np.random.normal(NATIONAL_AVG_UTILIZATION, 0.07), 0.4, 1.0)
+def load_real_files():
+    if not FILE_1.exists():
+        raise FileNotFoundError(f"Missing real data file: {FILE_1}")
+    if not FILE_2.exists():
+        raise FileNotFoundError(f"Missing real data file: {FILE_2}")
 
-            n_works = np.random.randint(3, 9)
-            year_budget = entitlement * utilization_rate
+    a = pd.read_csv(FILE_1)
+    b = pd.read_csv(FILE_2)
 
-            for _ in range(n_works):
-                category = random.choice(CATEGORIES)
-                sanctioned_amt = round(year_budget / n_works * np.random.uniform(0.7, 1.3), 3)
+    a["mp_key"] = a["MP Name"].map(norm_key)
+    b["mp_key"] = b["Name of MP (Shri/Smt/Dr./Ms/Prof./Adv.)"].map(norm_key)
+    return a, b
 
-                if anomaly_type == "cost_overrun" and random.random() < 0.6:
-                    final_expenditure = round(sanctioned_amt * np.random.uniform(1.4, 2.2), 3)
-                else:
-                    final_expenditure = round(sanctioned_amt * np.random.uniform(0.85, 1.05), 3)
 
-                sanction_date = datetime(year, random.randint(1, 12), random.randint(1, 28))
+def build_roster(a, b):
+    rows = []
 
-                if anomaly_type == "delayed_works" and random.random() < 0.65:
-                    status = "In Progress"
-                    completion_date = None
-                elif sanction_date < datetime(2024, 8, 1):
-                    status = "Completed"
-                    completion_date = sanction_date + timedelta(days=np.random.randint(90, 330))
-                else:
-                    status = random.choices(["Completed", "In Progress"], weights=[0.7, 0.3])[0]
-                    completion_date = (sanction_date + timedelta(days=np.random.randint(90, 300))
-                                        if status == "Completed" else None)
+    # Dataset 1 is the primary source for state + district + MP.
+    for _, r in a.iterrows():
+        name = clean_name(r["MP Name"])
+        rows.append({
+            "mp_id": "",
+            "mp_name": name,
+            "state": str(r["State/UT"]).strip(),
+            "constituency": str(r["District"]).strip(),
+            "district": str(r["District"]).strip(),
+            "house": "Parliamentary Member",
+            "data_source": "RS_Session_259_AU_2235_1.csv",
+        })
 
-                if anomaly_type == "vendor_concentration" and random.random() < 0.75:
-                    vendor = preferred_vendor
-                else:
-                    vendor = random.choice(VENDORS)
+    roster = pd.DataFrame(rows).drop_duplicates(subset=["mp_key"] if "mp_key" in rows[0] else ["mp_name"])
 
-                sc_st_area = random.random() < 0.25
-                works.append({
-                    "work_id": f"W{work_id:06d}",
-                    "mp_id": mp["mp_id"],
-                    "mp_name": mp["mp_name"],
-                    "state": mp["state"],
-                    "constituency": mp["constituency"],
-                    "house": mp["house"],
-                    "year": year,
-                    "category": category,
-                    "sanctioned_amount_cr": sanctioned_amt,
-                    "final_expenditure_cr": final_expenditure,
-                    "sanction_date": sanction_date.date().isoformat(),
-                    "status": status,
-                    "completion_date": completion_date.date().isoformat() if completion_date else None,
-                    "implementing_agency": vendor,
-                    "sc_st_area": sc_st_area,
-                })
-                work_id += 1
+    # Assign stable IDs.
+    roster = roster.reset_index(drop=True)
+    roster["mp_id"] = [f"MP{n:04d}" for n in range(1, len(roster) + 1)]
 
-    return pd.DataFrame(works)
+    # Add release/entitlement information from dataset 2.
+    release = b[[
+        "mp_key",
+        "Entitlement till his tenure",
+        "GOI Release (in Cr)",
+        "Unreleased Amount (in Cr)",
+        "Tenure of MP",
+        "Nodal District",
+    ]].copy()
+    release.columns = [
+        "mp_key", "entitlement_cr", "goi_release_cr",
+        "unreleased_cr", "tenure", "nodal_district"
+    ]
+
+    roster["mp_key"] = roster["mp_name"].map(norm_key)
+    roster = roster.merge(release, on="mp_key", how="left")
+
+    # Prefer nodal district where available, otherwise use dataset-1 district.
+    roster["district"] = roster["nodal_district"].fillna(roster["district"])
+    roster["entitlement_cr"] = roster["entitlement_cr"].fillna(0)
+    roster["goi_release_cr"] = roster["goi_release_cr"].fillna(0)
+    roster["unreleased_cr"] = roster["unreleased_cr"].fillna(0)
+    roster["tenure"] = roster["tenure"].fillna("")
+
+    return roster
+
+
+def build_financial_records(a, roster):
+    # Dataset 1 contains one financial aggregate per MP/district record.
+    a = a.copy()
+    a["mp_key"] = a["MP Name"].map(norm_key)
+    a["fund_received_cr"] = clean_number(a["Fund Received Goi (Rs. Crore)"])
+    a["recommended_cost_cr"] = clean_number(a["Works Recommended Cost (Rs. Crore)"])
+    a["actual_expenditure_cr"] = clean_number(
+        a["Actual Expenditure Incurred with Exp_Admin (Rs. Crore)"]
+    )
+
+    a = a.merge(roster[["mp_id", "mp_key"]], on="mp_key", how="left")
+
+    # One normalized "financial record" per real source row.
+    records = pd.DataFrame({
+        "work_id": ["REAL-" + str(x) for x in a["Sl. No."]],
+        "mp_id": a["mp_id"],
+        "mp_name": a["MP Name"].map(clean_name),
+        "state": a["State/UT"].astype(str).str.strip(),
+        "constituency": a["District"].astype(str).str.strip(),
+        "district": a["District"].astype(str).str.strip(),
+        "house": "Parliamentary Member",
+        "year": 2025,
+        "category": "All recommended works",
+        "fund_received_cr": a["fund_received_cr"],
+        "sanctioned_amount_cr": a["recommended_cost_cr"],
+        "final_expenditure_cr": a["actual_expenditure_cr"],
+        "sanction_date": pd.NaT,
+        "status": "Unknown",
+        "completion_date": pd.NaT,
+        "implementing_agency": "Not available in source",
+        "sc_st_area": pd.NA,
+        "data_source": "RS_Session_259_AU_2235_1.csv",
+    })
+
+    # Useful derived metric.
+    records["utilization_pct"] = (
+        records["final_expenditure_cr"] / records["fund_received_cr"].replace(0, pd.NA) * 100
+    ).fillna(0).round(1)
+
+    return records
+
+
+def main():
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    a, b = load_real_files()
+
+    roster = build_roster(a, b)
+    records = build_financial_records(a, roster)
+
+    roster_cols = [
+        "mp_id", "mp_name", "state", "constituency", "district", "house",
+        "entitlement_cr", "goi_release_cr", "unreleased_cr", "tenure", "nodal_district",
+        "data_source"
+    ]
+    roster[roster_cols].to_csv(DATA_DIR / "mp_roster.csv", index=False)
+    records.to_csv(DATA_DIR / "mplads_works.csv", index=False)
+
+    print(f"Real records loaded: {len(records)}")
+    print(f"Unique MPs: {roster['mp_id'].nunique()}")
+    print(f"Saved: {DATA_DIR / 'mp_roster.csv'}")
+    print(f"Saved: {DATA_DIR / 'mplads_works.csv'}")
 
 
 if __name__ == "__main__":
-    import os
-    # resolve paths relative to this script so it runs from any machine
-    # expects: <project_root>/backend/generate_data.py, <project_root>/data/
-    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data")
-    os.makedirs(DATA_DIR, exist_ok=True)
-
-    roster = make_mp_roster()
-    works = generate_works(roster)
-    roster.to_csv(os.path.join(DATA_DIR, "mp_roster.csv"), index=False)
-    works.to_csv(os.path.join(DATA_DIR, "mplads_works.csv"), index=False)
-    print(f"Generated {len(roster)} MPs and {len(works)} works records.")
-    print(f"Saved to: {os.path.abspath(DATA_DIR)}")
-    print(works.head())
-
-    3
+    main()

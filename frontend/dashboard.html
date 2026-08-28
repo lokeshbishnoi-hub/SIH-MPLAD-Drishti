@@ -224,12 +224,24 @@ async function loadCSV(path){
 }
 async function loadData(){
   try{
-    REPORT=await loadJSON('../data/mp_risk_report.json');
+    REPORT=await loadJSON('/data/mp_risk_report.json');
   }catch(e){
-    try{REPORT=await loadJSON('data/mp_risk_report.json')}catch(_){REPORT={summary:{},mps:[]}}
+    try{REPORT=await loadJSON('/data/mp_risk_report.json')}catch(_){REPORT={summary:{},mps:[]}}
   }
-  for(const p of ['../data/mplads_works.csv','data/mplads_works.csv']){try{WORKS=await loadCSV(p);break}catch(e){}}
-  for(const p of ['../data/mp_roster.csv','data/mp_roster.csv']){try{ROSTER=await loadCSV(p);break}catch(e){}}
+  for(const p of ['/data/mplads_works.csv']) {
+  try {
+    WORKS = await loadCSV(p);
+    break;
+  } catch(e) {}
+}
+
+for(const p of ['/data/mp_roster.csv']) {
+  try {
+    ROSTER = await loadCSV(p);
+    break;
+  } catch(e) {}
+}
+
   if(!Array.isArray(REPORT.mps)) REPORT.mps=[];
   if(!REPORT.mps.length){$('dataStatus').textContent='Data not found — check ../data/ paths';}
   $('dataStatus').textContent=`${REPORT.mps.length} MP records loaded`;

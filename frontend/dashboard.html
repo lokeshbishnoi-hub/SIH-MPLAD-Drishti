@@ -223,32 +223,47 @@ async function loadCSV(path){
   return new Promise((resolve,reject)=>Papa.parse(t,{header:true,skipEmptyLines:true,complete:x=>resolve(x.data),error:reject}));
 }
 async function loadData(){
-  try{
-    REPORT=await loadJSON('/data/mp_risk_report.json');
-  }catch(e){
-    try{REPORT=await loadJSON('/data/mp_risk_report.json')}catch(_){REPORT={summary:{},mps:[]}}
+
+  try {
+    REPORT = await loadJSON('/data/mp_risk_report.json');
+  } catch(e) {
+    console.error('Could not load risk report:', e);
+    REPORT = {summary:{}, mps:[]};
   }
-  for(const p of ['/data/mplads_works.csv']) {
+
   try {
-    WORKS = await loadCSV(p);
-    break;
-  } catch(e) {}
+    WORKS = await loadCSV('/data/mplads_works.csv');
+  } catch(e) {
+    console.error('Could not load works:', e);
+    WORKS = [];
+  }
+
+  try {
+    ROSTER = await loadCSV('/data/mp_roster.csv');
+  } catch(e) {
+    console.error('Could not load roster:', e);
+    ROSTER = [];
+  }
+
+  if (!Array.isArray(REPORT.mps)) {
+    REPORT.mps = [];
+  }
+
+  $('dataStatus').textContent =
+    REPORT.mps.length + ' MP records loaded';
+
+  $('sourceBadge').textContent =
+    REPORT.mps.length ? 'CONNECTED' : 'NO DATA';
+
+  $('updated').textContent =
+    REPORT.generated_at
+      ? new Date(REPORT.generated_at).toLocaleString()
+      : '';
+
+  buildStateFilter();
+  renderAll();
 }
 
-for(const p of ['/data/mp_roster.csv']) {
-  try {
-    ROSTER = await loadCSV(p);
-    break;
-  } catch(e) {}
-}
-
-  if(!Array.isArray(REPORT.mps)) REPORT.mps=[];
-  if(!REPORT.mps.length){$('dataStatus').textContent='Data not found — check ../data/ paths';}
-  $('dataStatus').textContent=`${REPORT.mps.length} MP records loaded`;
-  $('sourceBadge').textContent=REPORT.mps.length?'CONNECTED':'NO DATA';
-  $('updated').textContent=REPORT.generated_at?new Date(REPORT.generated_at).toLocaleString():'';
-  buildStateFilter(); renderAll();
-}
 function states(){return [...new Set(REPORT.mps.map(x=>x.state).filter(Boolean))].sort()}
 function buildStateFilter(){
   $('stateFilter').innerHTML='<option value="">All States</option>'+states().map(s=>`<option>${esc(s)}</option>`).join('');

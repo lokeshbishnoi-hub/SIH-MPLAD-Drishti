@@ -538,8 +538,16 @@ function navigate(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+page).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
 }
-document.querySelectorAll('.nav-item').forEach(n=>n.onclick=()=>{navigate(n.dataset.page);if(innerWidth<760)$('sidebar').classList.remove('open')});
-$('menuBtn').onclick=()=>{ $('sidebar').classList.toggle('closed');$('main').classList.toggle('expanded')};
+document.querySelectorAll('.nav-item').forEach(n=>n.onclick=()=>{navigate(n.dataset.page);if(innerWidth<760){$('sidebar').classList.add('closed');$('main').classList.add('expanded')}});
+$('menuBtn').onclick=(e)=>{ e.stopPropagation(); $('sidebar').classList.toggle('closed');$('main').classList.toggle('expanded')};
+document.addEventListener('click',(e)=>{
+  const sidebarOpen = !$('sidebar').classList.contains('closed');
+  const clickedOutside = !$('sidebar').contains(e.target) && !$('menuBtn').contains(e.target);
+  if(sidebarOpen && clickedOutside){
+    $('sidebar').classList.add('closed');
+    $('main').classList.add('expanded');
+  }
+});
 document.querySelectorAll('.role').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.role').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentRole=b.dataset.role;
   const s=$('scope');

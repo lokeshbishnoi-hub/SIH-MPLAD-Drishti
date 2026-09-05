@@ -29,6 +29,17 @@ DATA_DIR = ROOT_DIR / "data"
 FILE_1 = REAL_DIR / "RS_Session_259_AU_2235_1.csv"
 FILE_2 = REAL_DIR / "RS_Session_256_AU_2872_2.csv"
 
+# The raw government CSVs include trailing summary rows ("Total", "Grand
+# Total") that are NOT real MPs. Applied consistently everywhere a row
+# from the raw source is turned into an MP or a work/financial record —
+# missing this in even one place lets a junk row leak back in via a
+# different code path (confirmed: it did, via build_financial_records).
+SUMMARY_ROW_NAMES = {"total", "grand total", "sub total", "subtotal"}
+
+
+def is_summary_row(name):
+    return str(name).strip().lower() in SUMMARY_ROW_NAMES
+
 
 def clean_number(series):
     return pd.to_numeric(
@@ -65,8 +76,11 @@ def build_roster(a, b):
     rows = []
 
     # Dataset 1 is the primary source for state + district + MP.
+    # See SUMMARY_ROW_NAMES above for why summary rows are skipped here.
     for _, r in a.iterrows():
         name = clean_name(r["MP Name"])
+        if is_summary_row(name):
+            continue
         rows.append({
             "mp_id": "",
             "mp_name": name,
@@ -113,6 +127,7 @@ def build_roster(a, b):
 def build_financial_records(a, roster):
     # Dataset 1 contains one financial aggregate per MP/district record.
     a = a.copy()
+    a = a[~a["MP Name"].map(is_summary_row)]  # drop the same junk rows here too
     a["mp_key"] = a["MP Name"].map(norm_key)
     a["fund_received_cr"] = clean_number(a["Fund Received Goi (Rs. Crore)"])
     a["recommended_cost_cr"] = clean_number(a["Works Recommended Cost (Rs. Crore)"])

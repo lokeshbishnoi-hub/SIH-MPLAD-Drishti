@@ -68,6 +68,8 @@ create table if not exists profiles (
 -- (Enforced here as a check constraint, not just convention — matches the
 -- "don't rely on frontend-only enforcement" principle, applied to data
 -- integrity too, not just access control.)
+-- drop-then-add makes this safe to re-run this file on an existing database.
+alter table profiles drop constraint if exists profile_jurisdiction_matches_role;
 alter table profiles add constraint profile_jurisdiction_matches_role check (
   (role = 'ministry') or
   (role = 'state_authority' and state_id is not null) or
@@ -91,7 +93,10 @@ begin
   values (
     new.id,
     coalesce(new.raw_user_meta_data->>'full_name', new.email),
-    coalesce(new.raw_user_meta_data->>'role', 'mp'),  -- safe default; must be corrected before real access
+    'ministry',  -- placeholder role satisfying the check constraint with
+                 -- no jurisdiction field needed; NOT a real permission
+                 -- grant, since is_active is false until an admin
+                 -- assigns the real role + jurisdiction (see 04_demo_users.sql)
     false  -- inactive until an admin assigns a real role + jurisdiction
   )
   on conflict (id) do nothing;

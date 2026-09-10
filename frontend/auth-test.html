@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MPLAD Drishti — Authenticated Console (Phase 1 test)</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body{font-family:system-ui,sans-serif;max-width:640px;margin:40px auto;padding:0 20px;color:#1A1A1A}
+  h1{font-size:20px}
+  input{display:block;width:100%;padding:10px;margin:8px 0;box-sizing:border-box;border:1px solid #ccc;border-radius:6px}
+  button{padding:10px 18px;border:0;background:#2563EB;color:#fff;border-radius:6px;cursor:pointer;font-weight:600}
+  button:hover{background:#1D4ED8}
+  .card{border:1px solid #E5E7EB;border-radius:10px;padding:16px;margin-top:20px}
+  .error{color:#DC2626;margin-top:10px}
+  .muted{color:#666;font-size:13px}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  td,th{text-align:left;padding:6px 8px;border-bottom:1px solid #eee;font-size:14px}
+  #logoutBtn{background:#666;margin-left:8px}
+</style>
+</head>
+<body>
+
+<h1>MPLAD Drishti — Authenticated Console <span class="muted">(Phase 1 test page)</span></h1>
+<p class="muted">This is NOT the final UI — it's a minimal test harness to prove that Supabase Auth + RLS actually restrict data per role, before we build the real authenticated dashboard on top of it.</p>
+
+<div id="loginBox" class="card">
+  <h3>Log in</h3>
+  <input type="email" id="email" placeholder="e.g. state@demo.test">
+  <input type="password" id="password" placeholder="password">
+  <button onclick="login()">Log in</button>
+  <div id="loginError" class="error"></div>
+</div>
+
+<div id="dashBox" class="card" style="display:none">
+  <h3>Logged in as: <span id="whoami"></span></h3>
+  <p><b>Role:</b> <span id="role"></span> &nbsp; <button id="logoutBtn" onclick="logout()">Log out</button></p>
+
+  <h4>MPs visible to this account (proves RLS scoping):</h4>
+  <table id="mpTable"><thead><tr><th>MP Name</th><th>State</th><th>District</th></tr></thead><tbody></tbody></table>
+  <p class="muted" id="countNote"></p>
+</div>
+
+<script>
+// ---------- FILL THESE IN FROM YOUR SUPABASE PROJECT SETTINGS ----------
+// Project Settings → API → Project URL and anon public key.
+// The anon key is SAFE to expose in frontend code by design — RLS is
+// what actually protects data, not hiding this key.
+const SUPABASE_URL = "https://fxmjujozxvpmhdmvrrmi.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4bWp1am96eHZwbWhkbXZycm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MDExMjcsImV4cCI6MjEwNDE3NzEyN30.eHxqa8Gv3OVeWGO7BIe7WQxFncZC2k1ySGuUNiIf9U8";
+// -------------------------------------------------------------------
+
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function login(){
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  const errBox = document.getElementById('loginError');
+  if (error) {
+    errBox.textContent = error.message;
+    return;
+  }
+  errBox.textContent = '';
+  await showDashboard();
+}
+
+async function logout(){
+  await supabaseClient.auth.signOut();
+  document.getElementById('dashBox').style.display = 'none';
+  document.getElementById('loginBox').style.display = 'block';
+}
+
+async function showDashboard(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
+
+  document.getElementById('whoami').textContent = user.email;
+  document.getElementById('loginBox').style.display = 'none';
+  document.getElementById('dashBox').style.display = 'block';
+
+  // Fetch this user's own profile — shows what role/jurisdiction Supabase
+  // thinks they have (for display only; RLS enforces the real access
+  // control regardless of what we show here).
+  const { data: profile, error: profErr } = await supabaseClient
+    .from('profiles').select('role, is_active').eq('id', user.id).single();
+
+  document.getElementById('role').textContent = profErr
+    ? ('error loading profile: ' + profErr.message)
+    : `${profile.role} (active: ${profile.is_active})`;
+
+  // THE ACTUAL RLS TEST: query mps directly. If RLS is working, a
+  // state_authority account will only get back MPs from their state,
+  // a district_authority only their district, an mp only themself,
+  // and ministry will get everyone.
+  const { data: mps, error: mpsErr } = await supabaseClient
+    .from('mps')
+    .select('mp_name, constituency, states(name), districts(name)')
+    .limit(50);
+
+  const tbody = document.querySelector('#mpTable tbody');
+  tbody.innerHTML = '';
+  const countNote = document.getElementById('countNote');
+
+  if (mpsErr) {
+    countNote.textContent = 'Query error: ' + mpsErr.message;
+    return;
+  }
+
+  mps.forEach(m => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${m.mp_name}</td><td>${m.states?.name ?? ''}</td><td>${m.districts?.name ?? ''}</td>`;
+    tbody.appendChild(tr);
+  });
+  countNote.textContent = `${mps.length} MP row(s) returned (capped at 50 for this test page). ` +
+    `This number is what RLS decided this account is allowed to see — not something the frontend filtered.`;
+}
+
+// If already logged in on page load (session persisted), skip straight to dashboard.
+supabaseClient.auth.getSession().then(({ data: { session } }) => {
+  if (session) showDashboard();
+});
+</script>
+
+</body>
+</html>
